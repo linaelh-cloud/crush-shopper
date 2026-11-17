@@ -12,6 +12,12 @@ on:
 permissions:
   contents: write   # pour enregistrer la mémoire du robot (etat.json)
 
+# Un seul robot à la fois : si un lancement est en cours, le suivant attend son tour
+# (sinon deux robots écrivent la mémoire en même temps et GitHub refuse le second).
+concurrency:
+  group: surveillance
+  cancel-in-progress: false
+
 jobs:
   surveiller:
     # Ubuntu 24.04 et pas « ubuntu-latest » : depuis octobre 2026, « latest » = Ubuntu 26,
@@ -54,4 +60,5 @@ jobs:
           git config user.name "Crush Shopper"
           git config user.email "actions@users.noreply.github.com"
           git add etat.json
-          git diff --cached --quiet || (git commit -m "Mémoire du robot mise à jour" && git push)
+          # Relire le carnet juste avant d'écrire (au cas où il a changé entre-temps), puis envoyer
+          git diff --cached --quiet || (git commit -m "Mémoire du robot mise à jour" && git pull --rebase && git push)
