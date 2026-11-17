@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Crush Shopper</title>
+<!-- Crush Shopper en ligne : la page vit sur GitHub Pages, la liste dans wishlist.json du dépôt,
+     et le robot GitHub lit le stock. Plus besoin du Mac. -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Crush Shopper">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Jost:wght@300;400;500&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root {
+  --blanc: #ffffff; --noir: #0e0e0e; --beige: #d9c1ac; --sable: #f3ece4; --taupe: #7d6b5d; --ligne: #e8e0d7;
+  --dispo: #2f6b4a; --rupture: #a23a2c; --attente: #b07a2a;
+  --font-logo: "Michroma", "Eurostile", "Arial Black", sans-serif;
+  --font-sign: "Jost", "Futura", "Century Gothic", sans-serif;
+  --font-body: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--blanc); color: var(--noir); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1100px; margin: 0 auto; padding-inline: 20px; }
+:focus-visible { outline: 2px solid var(--noir); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+header { border-bottom: 1px solid var(--ligne); }
+header .wrap { display: flex; align-items: center; gap: 14px; padding-block: 18px; flex-wrap: wrap; }
+header img { width: 46px; height: 46px; border-radius: 12px; }
+header h1 { margin: 0; font-family: var(--font-logo); font-weight: 400; font-size: 1.35rem; letter-spacing: 0.02em; }
+header .sign { font-family: var(--font-sign); font-weight: 300; letter-spacing: 0.08em; color: var(--taupe); }
+header .right { margin-left: auto; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.live { font-family: var(--font-sign); font-size: 0.82rem; letter-spacing: 0.06em; color: var(--taupe); display: flex; align-items: center; gap: 8px; }
+.live i { width: 8px; height: 8px; border-radius: 50%; background: var(--dispo); animation: pulse 2s infinite; }
+.live.off i { background: var(--attente); animation: none; }
+@keyframes pulse { 50% { opacity: 0.3; } }
+.link-btn { border: 1px solid var(--noir); background: var(--blanc); color: var(--noir); border-radius: 999px; padding: 7px 14px; font-family: var(--font-sign); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.76rem; cursor: pointer; text-decoration: none; }
+
+.title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 28px 14px; }
+.title-row h2 { margin: 0; font-family: var(--font-sign); font-weight: 400; font-size: 1.9rem; }
+.counts { font-family: var(--font-sign); letter-spacing: 0.06em; color: var(--taupe); font-size: 0.9rem; }
+
+form.add { display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; background: var(--sable); padding: 14px; border-radius: 6px; align-items: center; }
+input[type=text], input[type=url], input[type=password] { min-width: 0; width: 100%; border: 1px solid var(--ligne); background: var(--blanc); border-radius: 6px; padding: 10px 12px; font: inherit; }
+.btn { border: 0; background: var(--noir); color: var(--blanc); border-radius: 6px; padding: 10px 18px; font-family: var(--font-sign); letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.82rem; cursor: pointer; text-decoration: none; display: inline-block; }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.hint { font-size: 0.82rem; color: var(--taupe); margin: 8px 2px 0; }
+.err { color: var(--rupture); }
+@media (max-width: 860px) { form.add { grid-template-columns: 1fr; } }
+
+/* Panneau « Ma clé » */
+.panel { margin-top: 18px; border: 1px solid var(--ligne); border-radius: 8px; padding: 18px; display: grid; gap: 12px; }
+.panel h3 { margin: 0; font-family: var(--font-sign); font-weight: 400; font-size: 1.3rem; }
+.panel .safe { background: var(--sable); border-radius: 6px; padding: 10px 12px; font-size: 0.86rem; margin: 0; }
+.panel .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.panel label { display: grid; gap: 4px; font-size: 0.8rem; color: var(--taupe); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; padding-block: 24px 40px; }
+.card { display: grid; gap: 8px; align-content: start; }
+.ph { position: relative; aspect-ratio: 1 / 1; background: var(--sable); border-radius: 8px; overflow: hidden; }
+.ph img { width: 100%; height: 100%; object-fit: contain; }
+.ph .empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-family: var(--font-sign); letter-spacing: 0.08em; font-size: 0.8rem; color: var(--taupe); padding: 20px; }
+.ph::after { content: ""; position: absolute; inset: 12px; pointer-events: none; color: var(--noir); opacity: 0.55;
+  background: linear-gradient(currentColor,currentColor) left top/16px 1.5px no-repeat, linear-gradient(currentColor,currentColor) left top/1.5px 16px no-repeat,
+  linear-gradient(currentColor,currentColor) right top/16px 1.5px no-repeat, linear-gradient(currentColor,currentColor) right top/1.5px 16px no-repeat,
+  linear-gradient(currentColor,currentColor) left bottom/16px 1.5px no-repeat, linear-gradient(currentColor,currentColor) left bottom/1.5px 16px no-repeat,
+  linear-gradient(currentColor,currentColor) right bottom/16px 1.5px no-repeat, linear-gradient(currentColor,currentColor) right bottom/1.5px 16px no-repeat; }
+.pill { position: absolute; left: 10px; top: 10px; z-index: 1; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.94); border-radius: 999px; padding: 3px 10px; font-size: 0.74rem; font-weight: 600; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--taupe); }
+.pill.dispo::before { background: var(--dispo); } .pill.rupture::before { background: var(--rupture); }
+.pill.attente::before { background: var(--attente); animation: pulse 1.4s infinite; } .pill.bloque::before, .pill.inconnu::before { background: var(--attente); }
+.site { font-family: var(--font-sign); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); }
+.name { font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; color: inherit; text-decoration: none; }
+.opt { font-size: 0.85rem; color: var(--taupe); }
+.when { font-size: 0.76rem; color: var(--taupe); }
+.alert { border: 1px solid var(--noir); background: var(--blanc); color: var(--noir); border-radius: 999px; padding: 8px 12px; font-family: var(--font-sign); letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.78rem; cursor: pointer; }
+.alert.on { background: var(--noir); color: var(--blanc); }
+.alert:disabled { border-color: var(--ligne); color: var(--taupe); cursor: default; }
+.tools { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.tools button { background: none; border: 0; padding: 0; font: inherit; font-size: 0.78rem; color: var(--taupe); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.empty-state { grid-column: 1 / -1; border: 1px dashed var(--ligne); border-radius: 8px; padding: 40px 20px; text-align: center; color: var(--taupe); font-family: var(--font-sign); letter-spacing: 0.04em; }
+
+.toast { position: fixed; right: 20px; bottom: 20px; max-width: 360px; background: var(--blanc); border: 1px solid var(--ligne); border-radius: 16px; box-shadow: 0 14px 36px -12px rgba(40,30,20,0.35); padding: 12px 14px; display: grid; grid-template-columns: 38px 1fr; gap: 10px; align-items: center; z-index: 9; }
+.toast img { width: 38px; height: 38px; border-radius: 9px; }
+.toast b { display: block; font-size: 0.88rem; }
+.toast span { font-size: 0.82rem; }
+.verdict { position: fixed; left: 50%; top: 90px; transform: translateX(-50%); width: min(440px, calc(100vw - 28px)); background: var(--blanc); border: 1px solid var(--ligne); border-radius: 18px; box-shadow: 0 24px 60px -18px rgba(40,30,20,0.45); padding: 16px; display: grid; grid-template-columns: 64px 1fr; gap: 14px; z-index: 10; }
+.verdict img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; background: var(--sable); }
+.verdict .t { font-weight: 600; line-height: 1.35; }
+.verdict .s { font-size: 0.85rem; color: var(--taupe); margin-top: 3px; }
+.verdict .acts { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+footer { border-top: 1px solid var(--ligne); padding-block: 18px; font-size: 0.8rem; color: var(--taupe); }
+footer a { color: inherit; }
+
+/* ---------- Sur téléphone ---------- */
+.wrap { padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); }
+header { padding-top: env(safe-area-inset-top); }
+footer { padding-bottom: max(18px, env(safe-area-inset-bottom)); }
+@media (max-width: 600px) {
+  .wrap { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
+  header .wrap { gap: 10px; padding-block: 12px; }
+  header img { width: 38px; height: 38px; border-radius: 10px; }
+  header h1 { font-size: 1.05rem; }
+  header .sign { font-size: 0.82rem; }
+  header .right { margin-left: 0; width: 100%; justify-content: space-between; }
+  .title-row { padding-block: 18px 10px; }
+  .title-row h2 { font-size: 1.5rem; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .name { font-size: 0.88rem; }
+  .alert { padding: 8px 6px; font-size: 0.7rem; letter-spacing: 0.06em; }
+  .tools button { font-size: 0.74rem; }
+  .toast { left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); max-width: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <img src="logo.jpg" alt="Logo Crush Shopper">
+    <div><h1>CRUSH SHOPPER</h1><div class="sign">L'assistant de ta wishlist.</div></div>
+    <div class="right">
+      <span class="live off" id="live"><i></i><span id="live-txt">Connexion…</span></span>
+      <button class="link-btn" id="open-cle" type="button">Ma clé</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel" id="cle-panel" hidden>
+    <h3>Ma clé GitHub</h3>
+    <p class="safe">Ta wishlist vit sur GitHub. Pour la lire et la modifier, cette page a besoin de ta <b>clé d'accès</b> (elle commence par <b>github_pat_</b>). Tu la tapes <b>une seule fois sur chaque appareil</b> : elle reste rangée dans cet appareil, jamais sur le site.</p>
+    <form id="cle-form" class="row">
+      <label style="flex:1;min-width:220px">Clé d'accès GitHub<input id="cle" type="password" autocomplete="off" placeholder="github_pat_…"></label>
+      <button class="btn" type="submit">Enregistrer</button>
+      <button class="link-btn" type="button" id="cle-off">Oublier la clé</button>
+    </form>
+    <p class="hint" id="cle-msg" style="margin:0"></p>
+  </section>
+
+  <div class="title-row"><h2>Ma wishlist</h2><span class="counts" id="counts"></span></div>
+
+  <form class="add" id="add">
+    <input id="f-url" type="url" placeholder="Lien de l'article (https://…)" aria-label="Lien de l'article" required>
+    <input id="f-opt" type="text" placeholder="Taille ou teinte (ex. Taille L)" aria-label="Taille ou teinte">
+    <button class="btn" type="submit" id="f-btn">Ajouter</button>
+  </form>
+  <p class="hint" id="hint">Colle le <b>lien</b> de l'article et indique ta <b>taille</b> (ou ta teinte). Le robot GitHub lit la page : le nom, la photo et le stock apparaissent en 1 à 2 minutes.</p>
+
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer><div class="wrap">Ta wishlist et le robot vivent sur GitHub : cette page marche pareil sur le Mac et sur l'iPhone, de partout, même Mac éteint. Quand un article revient, tu reçois « Crush Alert 💌 » sur Telegram et par e-mail, puis Crush Alert s'éteint toute seule. · <a href="https://github.com/linaelh-cloud/crush-shopper/actions" target="_blank" rel="noopener">Voir le robot travailler</a></div></footer>
+
+<div class="verdict" id="verdict" hidden role="dialog" aria-live="polite"><img id="v-img" alt=""><div><div class="t" id="v-titre"></div><div class="s" id="v-sous"></div></div><div class="acts" id="v-acts"></div></div>
+<div class="toast" id="toast" hidden><img src="logo.jpg" alt=""><div><b id="t-title"></b><span id="t-body"></span></div></div>
+
+<script>
+// ---------------------------------------------------------------- réglages
+const DEPOT = "linaelh-cloud/crush-shopper";
+// Pour les tests sur l'ordinateur seulement : ?api=http://127.0.0.1:… (refusé partout ailleurs,
+// pour que la clé ne parte jamais vers un autre site que GitHub).
+const local = ["127.0.0.1", "localhost"].includes(location.hostname);
+const apiTest = new URLSearchParams(location.search).get("api");
+const API = (local && apiTest && /^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(apiTest)) ? apiTest : "https://api.github.com";
+const STATUTS = { dispo: "Disponible", rupture: "En rupture", attente: "Le robot lit…", bloque: "Site bloqué", inconnu: "Stock illisible" };
+
+// La clé est rangée dans CET appareil (stockage du navigateur), jamais sur le site.
+function lireCle() { try { return localStorage.getItem("crush_cle") || ""; } catch (e) { return ""; } }
+function rangerCle(v) { try { v ? localStorage.setItem("crush_cle", v) : localStorage.removeItem("crush_cle"); } catch (e) {} }
+const cleValide = (t) => /^(github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,})$/.test(t || "");
+
+let liste = { articles: [] }, sha = "", memoire = {}, ajoutes = new Set(), dejaMontres = new Set(), occupe = false;
+const grid = document.getElementById("grid");
+
+// ---------------------------------------------------------------- petits outils
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+let toastTimer;
+function toast(title, body) {
+  document.getElementById("t-title").textContent = title;
+  document.getElementById("t-body").textContent = body;
+  const t = document.getElementById("toast"); t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.hidden = true, 5000);
+}
+// Le contenu des fichiers GitHub est « emballé » en base64 : on le déballe / remballe (accents compris).
+const deballer = (b64) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\n/g, "")), c => c.charCodeAt(0)));
+const emballer = (texte) => { let s = ""; new TextEncoder().encode(texte).forEach(b => s += String.fromCharCode(b)); return btoa(s); };
+
+// ---------------------------------------------------------------- le guichet de GitHub (API)
+async function guichet(fichier, options = {}) {
+  const r = await fetch(`${API}/repos/${DEPOT}/contents/${fichier}`, {
+    ...options, cache: "no-store",
+    headers: { "Authorization": `Bearer ${lireCle()}`, "Accept": "application/vnd.github+json", ...(options.body ? { "Content-Type": "application/json" } : {}) },
+  });
+  if (r.ok) return r.json();
+  const raisons = { 401: "la clé n'est pas valide ou a expiré", 403: "la clé n'a pas le droit d'écrire (« Contents : Read and write »)",
+                    404: "la clé ne voit pas le dépôt crush-shopper", 409: "conflit", 422: "conflit" };
+  const err = new Error(`GitHub refuse : ${raisons[r.status] || "erreur " + r.status}.`); err.code = r.status; throw err;
+}
+async function lireFichier(fichier, defaut) {
+  try { const f = await guichet(fichier); return { data: JSON.parse(deballer(f.content)), sha: f.sha }; }
+  catch (e) { if (e.code === 404 && fichier === "etat.json") return { data: defaut, sha: "" }; throw e; }
+}
+
+// Modifier la liste : on relit toujours la version la plus récente, on applique le changement,
+// puis on la redépose avec son « empreinte » (sha). Si quelqu'un (le robot) l'a changée entre-temps, on recommence.
+async function modifierListe(changement, mot) {
+  for (let essai = 0; essai < 3; essai++) {
+    const frais = await lireFichier("wishlist.json");
+    const nouvelle = frais.data; nouvelle.articles = nouvelle.articles || [];
+    changement(nouvelle);
+    try {
+      const r = await guichet("wishlist.json", { method: "PUT", body: JSON.stringify({
+        message: mot, content: emballer(JSON.stringify(nouvelle, null, 2) + "\n"), sha: frais.sha }) });
+      liste = nouvelle; sha = r.content.sha; dessiner(); return;
+    } catch (e) { if (e.code !== 409 && e.code !== 422) throw e; }
+  }
+  throw new Error("GitHub était occupé, réessaie dans un instant.");
+}
+
+// ---------------------------------------------------------------- lecture et affichage
+function siteDe(url) {
+  try { const h = new URL(url).hostname.toLowerCase(); return h.includes("maccosmetics.") ? "MAC Cosmetics" : h.replace(/^www\./, ""); }
+  catch (e) { return ""; }
+}
+function etatDe(a) {
+  const m = memoire[a.url] || {};   // ce que le robot a noté dans sa mémoire pour ce lien
+  return { ...m, statut: m.statut || "attente", attend: !m.statut };
+}
+
+async function charger() {
+  if (!cleValide(lireCle())) { montrerCle("Entre ta clé pour voir ta wishlist."); dessiner(); return; }
+  try {
+    const [w, e] = await Promise.all([lireFichier("wishlist.json"), lireFichier("etat.json", {})]);
+    liste = w.data; liste.articles = liste.articles || []; sha = w.sha; memoire = e.data || {};
+    live(true, "GitHub veille");
+    dessiner(); verdicts();
+  } catch (err) {
+    live(false, "Pas connectée");
+    if (err.code === 401 || err.code === 403 || err.code === 404) montrerCle(err.message);
+    else toast("Pas de connexion", "Je réessaie dans un instant.");
+  }
+}
+
+function card(a, index) {
+  const m = etatDe(a);
+  const c = el("article", "card");
+  const ph = el("div", "ph");
+  ph.append(el("span", "pill " + m.statut, STATUTS[m.statut] || m.statut));
+  if (m.photo) { const img = el("img"); img.src = m.photo; img.alt = a.nom || m.nom || "Article"; img.referrerPolicy = "no-referrer"; ph.append(img); }
+  else ph.append(el("div", "empty", m.attend ? "Le robot lit la page… (1 à 2 min)" : "Pas de photo"));
+  c.append(ph);
+
+  c.append(el("span", "site", siteDe(a.url)));
+  const n = el("a", "name", a.nom || m.nom || "Nouvel article"); n.href = a.url; n.target = "_blank"; n.rel = "noopener";
+  c.append(n);
+  if (a.option) c.append(el("span", "opt", a.option));
+
+  const b = el("button", "alert" + (a.crush_alert ? " on" : ""), a.crush_alert ? "Crush Alert ✓" : "Crush Alert");
+  const lisible = m.statut === "dispo" || m.statut === "rupture";
+  b.disabled = occupe || (!lisible && !a.crush_alert);
+  b.title = lisible || a.crush_alert ? "Surveiller cet article" : (m.attend ? "Attends que le robot ait lu la page" : "Le robot n'arrive pas à lire le stock de cet article");
+  b.onclick = () => basculer(a.url);
+  c.append(b);
+
+  if (m.precision) c.append(el("span", "when", "🔎 " + m.precision));
+  let when = m.attend ? "Le robot GitHub va lire la page (1 à 2 min)…" : (m.depuis ? `${STATUTS[m.statut] || m.statut} depuis le ${m.depuis.replace(" (heure UTC)", " UTC")}` : "");
+  if (m.eteinte_le && !a.crush_alert) when += ` · alerte envoyée le ${m.eteinte_le.replace(" (heure UTC)", " UTC")} · Crush Alert éteinte toute seule 🔕`;
+  if (when) c.append(el("span", "when", when));
+
+  const tools = el("div", "tools");
+  const v = el("button", null, "Vérifier maintenant"); v.onclick = () => verifier();
+  const d = el("button", null, "Retirer"); d.onclick = () => retirer(a.url);
+  tools.append(v, d); c.append(tools);
+  return c;
+}
+
+function dessiner() {
+  const articles = [...(liste.articles || [])].reverse(); // le plus récent d'abord
+  grid.replaceChildren(...(articles.length ? articles.map(card)
+    : [el("div", "empty-state", lireCle() ? "Ta wishlist est vide. Colle le lien d'un article pour commencer." : "Entre ta clé (bouton « Ma clé ») pour voir ta wishlist.")]));
+  const surveilles = articles.filter(a => a.crush_alert).length;
+  document.getElementById("counts").textContent = `${articles.length} article${articles.length > 1 ? "s" : ""} · ${surveilles} Crush Alert`;
+}
+
+function live(ok, texte) { document.getElementById("live").classList.toggle("off", !ok); document.getElementById("live-txt").textContent = texte; }
+
+// ---------------------------------------------------------------- actions
+async function action(fn, okTitre, okTexte) {
+  if (occupe) return; occupe = true; dessiner();
+  try { await fn(); guetterLeRobot(); if (okTitre) toast(okTitre, okTexte); }
+  catch (e) { toast("Oups", e.message); }
+  finally { occupe = false; dessiner(); }
+}
+
+function teinteDuLien(url) { const m = url.match(/[?&]shade=([^&#]+)/); return m ? decodeURIComponent(m[1].replace(/\+/g, " ")) : ""; }
+
+document.getElementById("add").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const url = document.getElementById("f-url").value.trim();
+  let option = document.getElementById("f-opt").value.trim();
+  const hint = document.getElementById("hint");
+  if (!/^https?:\/\//.test(url)) { hint.textContent = "Colle un lien qui commence par https://"; hint.classList.add("err"); return; }
+  if (!cleValide(lireCle())) { montrerCle("Entre d'abord ta clé."); return; }
+  const teinte = siteDe(url) === "MAC Cosmetics" ? teinteDuLien(url) : "";
+  if (!option && teinte) option = "Teinte " + teinte;
+  action(async () => {
+    await modifierListe((w) => {
+      if (w.articles.some(a => a.url === url && (a.option || "") === option)) throw new Error("Cet article est déjà dans ta wishlist.");
+      w.articles.push({ nom: "", option, teinte, url, crush_alert: false, ajoute_le: new Date().toISOString() });
+    }, "Article ajouté depuis la page wishlist");
+    ajoutes.add(url);
+    e.target.reset(); hint.classList.remove("err");
+    hint.textContent = "Article ajouté ✅ Le robot GitHub se réveille et lit la page : résultat dans 1 à 2 minutes.";
+  });
+});
+
+function basculer(url) {
+  let allume = false;
+  action(async () => {
+    await modifierListe((w) => { const a = w.articles.find(x => x.url === url); if (a) { a.crush_alert = !a.crush_alert; allume = a.crush_alert; } }, "Crush Alert changée depuis la page wishlist");
+  }).then(() => toast(allume ? "Crush Alert activée 💌" : "Crush Alert désactivée", allume ? "Le robot GitHub surveille cet article jour et nuit." : "Je ne surveille plus cet article."));
+}
+function retirer(url) {
+  if (!confirm("Retirer cet article de ta wishlist ?")) return;
+  action(() => modifierListe((w) => { w.articles = w.articles.filter(a => a.url !== url); }, "Article retiré depuis la page wishlist"), "Article retiré", "Il n'est plus dans ta wishlist.");
+}
+function verifier() {
+  // On note l'heure de la demande dans la liste : ce changement réveille le robot GitHub.
+  action(() => modifierListe((w) => { w.verification_demandee = new Date().toISOString(); }, "Vérification demandée depuis la page wishlist"),
+         "Vérification lancée", "Le robot GitHub se réveille : résultat dans 1 à 2 minutes.");
+}
+
+// Juste après un ajout : dès que le robot a lu la page, on affiche le verdict 🔴 / 🟢
+function verdicts() {
+  for (const url of ajoutes) {
+    const m = memoire[url]; const a = (liste.articles || []).find(x => x.url === url);
+    if (!a || !m || !m.statut || dejaMontres.has(url)) continue;
+    dejaMontres.add(url); ajoutes.delete(url); afficherVerdict(a, m); break;
+  }
+}
+function afficherVerdict(a, m) {
+  const v = document.getElementById("verdict"), acts = document.getElementById("v-acts"), sous = document.getElementById("v-sous");
+  const nom = a.nom || m.nom || "Cet article", opt = a.option ? ` (${a.option})` : "";
+  document.getElementById("v-img").src = m.photo || "icon-192.png";
+  acts.replaceChildren();
+  const fermer = el("button", "link-btn", "Fermer"); fermer.type = "button"; fermer.onclick = () => v.hidden = true;
+  if (m.statut === "rupture") {
+    document.getElementById("v-titre").textContent = `🔴 ${nom}${opt} est en rupture.`;
+    sous.textContent = "Active Crush Alert : tu seras prévenue dès qu'il revient. " + (m.precision ? `(${m.precision})` : "");
+    const go = el("button", "btn", "💌 Activer Crush Alert"); go.type = "button";
+    go.onclick = () => { v.hidden = true; if (!a.crush_alert) basculer(a.url); };
+    acts.append(fermer, go);
+  } else if (m.statut === "dispo") {
+    document.getElementById("v-titre").textContent = `🟢 ${nom}${opt} est disponible !`;
+    sous.textContent = "Tu peux l'acheter maintenant. " + (m.precision ? `(${m.precision})` : "");
+    const lien = el("a", "btn", "Voir l'article"); lien.href = a.url; lien.target = "_blank"; lien.rel = "noopener";
+    acts.append(fermer, lien);
+  } else {
+    document.getElementById("v-titre").textContent = m.statut === "bloque" ? "⛔ Ce site bloque le robot." : "⚪️ Le robot n'arrive pas à lire le stock.";
+    sous.textContent = (m.precision ? m.precision + ". " : "") + "L'article reste dans ta wishlist, mais Crush Alert n'est pas possible sur ce site.";
+    acts.append(fermer);
+  }
+  v.hidden = false;
+}
+
+// ---------------------------------------------------------------- Ma clé
+const panneau = document.getElementById("cle-panel");
+function montrerCle(msg) { panneau.hidden = false; document.getElementById("cle-msg").textContent = msg || ""; }
+document.getElementById("open-cle").onclick = () => { panneau.hidden = !panneau.hidden; document.getElementById("cle-msg").textContent = lireCle() ? "✅ Une clé est rangée dans cet appareil." : ""; };
+document.getElementById("cle-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const v = document.getElementById("cle").value.trim();
+  if (!cleValide(v)) { document.getElementById("cle-msg").textContent = "Ce n'est pas une clé GitHub : elle doit commencer par github_pat_"; return; }
+  rangerCle(v); document.getElementById("cle").value = "";
+  document.getElementById("cle-msg").textContent = "Clé rangée dans cet appareil. Connexion à GitHub…";
+  await charger(); planifier(60000);
+  if (sha) { panneau.hidden = true; toast("Connectée ✅", "Ta wishlist arrive de GitHub."); }
+});
+document.getElementById("cle-off").onclick = () => { rangerCle(""); liste = { articles: [] }; memoire = {}; live(false, "Pas connectée"); dessiner(); montrerCle("Clé oubliée sur cet appareil."); };
+
+// ---------------------------------------------------------------- relecture régulière
+// Toutes les 15 s quand le robot doit lire un article, sinon toutes les minutes.
+let minuteur;
+function planifier(delai) { clearTimeout(minuteur); minuteur = setTimeout(boucle, delai); }
+async function boucle() {
+  if (!occupe && !document.hidden) await charger();
+  const attente = (liste.articles || []).some(a => !(memoire[a.url] || {}).statut) || ajoutes.size || Date.now() < reveilJusqua;
+  planifier(attente ? 15000 : 60000);
+}
+// Après un changement, le robot va passer : on relit souvent pendant 4 minutes.
+let reveilJusqua = 0;
+function guetterLeRobot() { reveilJusqua = Date.now() + 4 * 60000; planifier(15000); }
+document.addEventListener("visibilitychange", () => { if (!document.hidden && !occupe) charger(); });
+dessiner();
+boucle();
+</script>
+</body>
+</html>

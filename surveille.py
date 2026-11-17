@@ -9,7 +9,11 @@ GitHub lance ce fichier tout seul, régulièrement, sur un de ses ordinateurs.
   4. si un article sous Crush Alert est revenu en stock : envoie le message
      « Crush Alert 💌 - De retour dans ton panier ! » sur Telegram et par e-mail,
      puis éteint Crush Alert pour cet article (mission accomplie) ;
-  5. note ce qu'il a vu dans etat.json (sa mémoire d'un passage à l'autre).
+  5. note ce qu'il a vu dans etat.json (sa mémoire d'un passage à l'autre),
+     avec le nom et la photo de chaque article, que la page wishlist en ligne affiche.
+
+GitHub le lance toutes les 5 minutes (en vrai, plus irrégulier) ET dès que ma page
+wishlist change wishlist.json (ajout d'un lien, Crush Alert, bouton « Vérifier »).
 
 Les clés Telegram ne sont PAS dans ce fichier : GitHub les donne en secret
 (variables TELEGRAM_TOKEN et TELEGRAM_CHAT_ID).
@@ -79,7 +83,7 @@ def envoyer_telegram(texte):
     return False
 
 
-def envoyer_email(article):
+def envoyer_email(article, texte=None):
     """Envoie l'alerte par e-mail avec Gmail. L'adresse et le mot de passe d'application
     viennent du coffre-fort de GitHub (EMAIL_ADRESSE, EMAIL_MOT_DE_PASSE)."""
     adresse = os.environ.get("EMAIL_ADRESSE", "")
@@ -93,7 +97,7 @@ def envoyer_email(article):
     # Destinataire : EMAIL_DESTINATAIRE si on l'a rangé (envoi depuis l'adresse de Crush Shopper),
     # sinon on s'écrit à soi-même (Gmail affiche alors « me »).
     mail["To"] = os.environ.get("EMAIL_DESTINATAIRE", "").strip() or adresse
-    mail.set_content(message(article))
+    mail.set_content(texte or message(article))
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=20) as serveur:
             serveur.login(adresse, mot_de_passe.replace(" ", ""))
@@ -104,9 +108,17 @@ def envoyer_email(article):
         return False
 
 
-def message(article):
+def message(article, nom=""):
     option = f" – {article['option']}" if article.get("option") else ""
-    return f"{ACCROCHE}\n{article['nom']}{option}\n{article['url']}"
+    return f"{ACCROCHE}\n{article.get('nom') or nom or 'Ton article'}{option}\n{article['url']}"
+
+
+def teinte_de(a):
+    """La teinte MAC : rangée dans la liste, sinon lue dans le lien (…?shade=Modesty)."""
+    if a.get("teinte"):
+        return a["teinte"]
+    m = re.search(r"[?&]shade=([^&#]+)", a.get("url", ""))
+    return urllib.parse.unquote_plus(m.group(1)) if m else ""
 
 
 def main():
@@ -115,7 +127,7 @@ def main():
     etat = lire_json(ETAT, {})
     CAPTURES.mkdir(exist_ok=True)
     bloque = False
-    wishlist_changee = False
+    eteintes = []  # liens des articles dont Crush Alert s'est éteinte pendant ce passage
 
     with sync_playwright() as pw:
         # Fenêtre visible (sur GitHub, dans un « écran imaginaire ») : MAC refuse les navigateurs invisibles.
@@ -123,12 +135,14 @@ def main():
         page = navigateur.new_page(locale="fr-FR", viewport={"width": 1280, "height": 900})
         for i, a in enumerate(articles):
             avant = etat.get(a["url"], {})
-            print(f"→ {a['nom']} ({a.get('option', '')})")
+            print(f"→ {a.get('nom') or avant.get('nom') or a['url'][:60]} ({a.get('option', '')})")
             try:
                 reponse = page.goto(a["url"], wait_until="domcontentloaded", timeout=45_000)
                 page.wait_for_timeout(4000)
             except Exception as e:
                 print(f"  page impossible à ouvrir ({e.__class__.__name__})")
+                if not avant.get("statut"):  # nouvel article : on le dit à la page, pour ne pas la laisser attendre
+                    etat[a["url"]] = dict(avant, statut="inconnu", precision="page impossible à ouvrir", depuis=maintenant())
                 continue
             code = reponse.status if reponse else 0
             try:  # la photo sert juste à vérifier : elle ne doit jamais bloquer le robot
@@ -137,33 +151,39 @@ def main():
                 print("  (capture d'écran ratée, on continue)")
             if sites.page_bloquee(page.title(), code):
                 print(f"  ⛔ Le site a refusé l’accès au robot (code {code})")
-                etat[a["url"]] = dict(avant, statut="bloque", depuis=avant.get("depuis") if avant.get("statut") == "bloque" else maintenant())
+                etat[a["url"]] = dict(avant, statut="bloque", precision="le site bloque les robots",
+                                      depuis=avant.get("depuis") if avant.get("statut") == "bloque" else maintenant())
                 bloque = True
                 continue
 
             # Le bon lecteur selon le site : MAC (appris) ou universel (fiche standard)
-            infos = sites.lire(a["url"], page.content(), a.get("option", ""), a.get("teinte", ""))
+            infos = sites.lire(a["url"], page.content(), a.get("option", ""), teinte_de(a))
             statut = infos["statut"]
             print(f"  statut : {statut}")
-            # La mémoire ne change que si l'état change : pas de sauvegarde inutile toutes les 15 min.
+            # La mémoire ne change que si quelque chose change : pas de sauvegarde inutile.
             nouveau = dict(avant, statut=statut)
             if avant.get("statut") != statut:
                 nouveau["depuis"] = maintenant()
             nouveau.pop("verifie_le", None)
+            # Le nom, la photo et la précision servent à la page wishlist en ligne.
+            for cle in ("nom", "photo", "precision"):
+                if infos.get(cle):
+                    nouveau[cle] = infos[cle]
 
             revenu = avant.get("statut") == sites.RUPTURE and statut == sites.DISPO
             if a.get("crush_alert") and statut == sites.DISPO and (revenu or not avant.get("alerte_envoyee")):
-                telegram = envoyer_telegram(message(a))
-                email = envoyer_email(a)
+                texte = message(a, nouveau.get("nom", ""))
+                telegram = envoyer_telegram(texte)
+                email = envoyer_email(a, texte)
                 print(f"  💌 Crush Alert : Telegram={'oui' if telegram else 'non'}, e-mail={'oui' if email else 'non'}")
                 if telegram or email:
                     nouveau["alerte_envoyee"] = True
                     # Mission accomplie : Crush Alert s'éteint toute seule pour cet article.
                     # On l'écrit dans la wishlist (le robot ne surveille plus) et dans la mémoire
-                    # (« eteinte_le ») pour que l'appli du Mac éteigne aussi le bouton.
+                    # (« eteinte_le ») pour que la page éteigne aussi le bouton.
                     a["crush_alert"] = False
                     nouveau["eteinte_le"] = maintenant()
-                    wishlist_changee = True
+                    eteintes.append(a["url"])
                     print("  🔕 Crush Alert éteinte toute seule (message envoyé)")
             # On efface la coche « déjà prévenue » quand l'article repart en rupture,
             # ou quand Crush Alert est éteinte : si je la rallume, le robot est prêt à prévenir.
@@ -172,9 +192,14 @@ def main():
             etat[a["url"]] = nouveau
         navigateur.close()
 
+    # On oublie les articles que j'ai retirés de ma wishlist.
+    liens = {a["url"] for a in articles}
+    etat = {url: e for url, e in etat.items() if url in liens}
     ETAT.write_text(json.dumps(etat, ensure_ascii=False, indent=2), encoding="utf-8")
-    if wishlist_changee:
+    if eteintes:
         WISHLIST.write_text(json.dumps(wishlist, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Gardé de côté : si la page a changé la liste pendant ce passage, on réappliquera ces extinctions.
+    (CAPTURES / "eteintes.json").write_text(json.dumps(eteintes), encoding="utf-8")
     if bloque:
         # On le signale, sans faire échouer tout le lancement : les autres sites ont bien été lus.
         print("⚠️ Au moins un site bloque les ordinateurs de GitHub (voir « Le site a refusé » plus haut).")
@@ -182,9 +207,21 @@ def main():
     print("Résultat : le robot a pu lire les sites depuis GitHub ✅")
 
 
+def reappliquer():
+    """Appelé seulement si j'ai changé ma liste (depuis la page) pendant que le robot travaillait :
+    on repart de la liste la plus récente et on y réapplique les Crush Alert éteintes."""
+    eteintes = set(lire_json(CAPTURES / "eteintes.json", []))
+    wishlist = lire_json(WISHLIST, {"articles": []})
+    for a in wishlist["articles"]:
+        if a["url"] in eteintes:
+            a["crush_alert"] = False
+    WISHLIST.write_text(json.dumps(wishlist, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Liste la plus récente reprise, {len(eteintes)} extinction(s) réappliquée(s).")
+
+
 def maintenant():
     return datetime.now(timezone.utc).strftime("%d/%m %H:%M (heure UTC)")
 
 
 if __name__ == "__main__":
-    main()
+    reappliquer() if "--reappliquer" in sys.argv else main()

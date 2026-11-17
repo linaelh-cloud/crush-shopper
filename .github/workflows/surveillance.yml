@@ -8,6 +8,12 @@ on:
   # Toutes les 5 minutes, le minimum autorisé par GitHub (il peut avoir quelques minutes de retard).
   schedule:
     - cron: "*/5 * * * *"
+  # Le réveil « sonnette » : dès que ma page wishlist change la liste (ajout, Crush Alert,
+  # bouton « Vérifier »), le robot part tout de suite. Ses propres enregistrements ne le
+  # réveillent pas (GitHub l'interdit, pour éviter une boucle sans fin).
+  push:
+    branches: [main]
+    paths: [wishlist.json]
 
 permissions:
   contents: write   # pour enregistrer la mémoire du robot (etat.json)
@@ -77,5 +83,20 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           # etat.json = sa mémoire ; wishlist.json = Crush Alert éteinte après un message envoyé
           git add etat.json wishlist.json
-          # Relire le carnet juste avant d'écrire (au cas où il a changé entre-temps), puis envoyer
-          git diff --cached --quiet || (git commit -m "Mémoire du robot mise à jour" && git pull --rebase && git push)
+          git diff --cached --quiet && exit 0
+          git commit -m "Mémoire du robot mise à jour"
+          for essai in 1 2 3; do
+            # Relire le carnet juste avant d'écrire (au cas où il a changé entre-temps), puis envoyer
+            if git pull --rebase && git push; then exit 0; fi
+            # J'ai changé ma liste depuis la page pendant que le robot travaillait :
+            # on garde SA mémoire, on reprend MA liste la plus récente, et on y remet ses extinctions.
+            git rebase --abort || true
+            cp etat.json /tmp/etat.json
+            git fetch origin main && git reset --hard origin/main
+            cp /tmp/etat.json etat.json
+            python surveille.py --reappliquer
+            git add etat.json wishlist.json
+            git diff --cached --quiet && exit 0
+            git commit -m "Mémoire du robot mise à jour"
+          done
+          exit 1
