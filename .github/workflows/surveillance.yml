@@ -53,8 +53,13 @@ jobs:
         run: |
           pip install -r requirements.txt
           if [ "${{ steps.placard.outputs.cache-hit }}" = "true" ]; then
-            echo "Chrome trouvé dans le placard : on installe seulement ce qui l'entoure."
-            python -m playwright install-deps chromium
+            echo "Chrome trouvé dans le placard."
+            # L'ordinateur de GitHub a déjà presque tout ce qu'il faut autour de Chrome.
+            # On essaie d'abord de lancer Chrome (quelques secondes) ; on n'installe le reste
+            # (plus de 4 minutes) que si ça ne marche pas.
+            python -c "from playwright.sync_api import sync_playwright as s; p = s().start(); p.chromium.launch().close(); p.stop()" \
+              && echo "Chrome démarre : rien d'autre à installer." \
+              || python -m playwright install-deps chromium
           else
             echo "Placard vide : on télécharge Chrome (une seule fois)."
             python -m playwright install --with-deps chromium
