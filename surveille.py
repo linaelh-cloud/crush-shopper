@@ -154,7 +154,9 @@ def main():
                 print(f"  💌 Crush Alert : Telegram={'oui' if telegram else 'non'}, e-mail={'oui' if email else 'non'}")
                 if telegram or email:
                     nouveau["alerte_envoyee"] = True
-            if statut == sites.RUPTURE:
+            # On efface la coche « déjà prévenue » quand l'article repart en rupture,
+            # ou quand Crush Alert est éteinte : si je la rallume, le robot est prêt à prévenir.
+            if statut == sites.RUPTURE or not a.get("crush_alert"):
                 nouveau["alerte_envoyee"] = False
             etat[a["url"]] = nouveau
         navigateur.close()
