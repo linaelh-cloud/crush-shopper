@@ -15,11 +15,13 @@ Les clés Telegram ne sont PAS dans ce fichier : GitHub les donne en secret
 """
 import json
 import os
+import smtplib
 import sys
 import time
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
+from email.message import EmailMessage
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -59,6 +61,29 @@ def envoyer_telegram(texte):
     return False
 
 
+def envoyer_email(article):
+    """Envoie l'alerte par e-mail avec Gmail. L'adresse et le mot de passe d'application
+    viennent du coffre-fort de GitHub (EMAIL_ADRESSE, EMAIL_MOT_DE_PASSE)."""
+    adresse = os.environ.get("EMAIL_ADRESSE", "")
+    mot_de_passe = os.environ.get("EMAIL_MOT_DE_PASSE", "")
+    if not adresse or not mot_de_passe:
+        print("  (pas d'adresse e-mail : e-mail non envoyé)")
+        return False
+    mail = EmailMessage()
+    mail["Subject"] = ACCROCHE
+    mail["From"] = f"Crush Shopper <{adresse}>"
+    mail["To"] = adresse  # on s'écrit à soi-même
+    mail.set_content(message(article))
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=20) as serveur:
+            serveur.login(adresse, mot_de_passe.replace(" ", ""))
+            serveur.send_message(mail)
+        return True
+    except Exception as e:
+        print(f"  e-mail raté ({e.__class__.__name__})")
+        return False
+
+
 def message(article):
     option = f" – {article['option']}" if article.get("option") else ""
     return f"{ACCROCHE}\n{article['nom']}{option}\n{article['url']}"
@@ -84,7 +109,10 @@ def main():
                 print(f"  page impossible à ouvrir ({e.__class__.__name__})")
                 continue
             code = reponse.status if reponse else 0
-            page.screenshot(path=str(CAPTURES / f"article-{i + 1}.png"))
+            try:  # la photo sert juste à vérifier : elle ne doit jamais bloquer le robot
+                page.screenshot(path=str(CAPTURES / f"article-{i + 1}.png"), timeout=10_000)
+            except Exception:
+                print("  (capture d'écran ratée, on continue)")
             if code == 403 or "access denied" in page.title().lower():
                 print(f"  ⛔ MAC a refusé l'accès au robot (code {code})")
                 etat[a["url"]] = dict(avant, statut="bloque", verifie_le=maintenant())
@@ -98,8 +126,10 @@ def main():
 
             revenu = avant.get("statut") == sites.RUPTURE and statut == sites.DISPO
             if a.get("crush_alert") and statut == sites.DISPO and (revenu or not avant.get("alerte_envoyee")):
-                if envoyer_telegram(message(a)):
-                    print("  💌 Crush Alert envoyée sur Telegram")
+                telegram = envoyer_telegram(message(a))
+                email = envoyer_email(a)
+                print(f"  💌 Crush Alert : Telegram={'oui' if telegram else 'non'}, e-mail={'oui' if email else 'non'}")
+                if telegram or email:
                     nouveau["alerte_envoyee"] = True
             if statut == sites.RUPTURE:
                 nouveau["alerte_envoyee"] = False
