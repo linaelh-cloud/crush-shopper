@@ -13,6 +13,20 @@
       "teinte": "Fleshpot",
       "url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
       "crush_alert": false
+    },
+    {
+      "nom": "Veste PAULIN",
+      "option": "Taille 34",
+      "teinte": "",
+      "url": "https://www.rouje.com/products/paulin-veste-laine-bleu",
+      "crush_alert": false
+    },
+    {
+      "nom": "Veste PAULIN",
+      "option": "Taille 36",
+      "teinte": "",
+      "url": "https://www.rouje.com/products/paulin-veste-laine-bleu",
+      "crush_alert": false
     }
   ]
 }
