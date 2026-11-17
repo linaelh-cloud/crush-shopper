@@ -75,6 +75,7 @@ jobs:
         run: |
           git config user.name "Crush Shopper"
           git config user.email "actions@users.noreply.github.com"
-          git add etat.json
+          # etat.json = sa mémoire ; wishlist.json = Crush Alert éteinte après un message envoyé
+          git add etat.json wishlist.json
           # Relire le carnet juste avant d'écrire (au cas où il a changé entre-temps), puis envoyer
           git diff --cached --quiet || (git commit -m "Mémoire du robot mise à jour" && git pull --rebase && git push)

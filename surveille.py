@@ -7,7 +7,8 @@ GitHub lance ce fichier tout seul, régulièrement, sur un de ses ordinateurs.
   2. ouvre la page de chaque article dans Chrome ;
   3. lit si la couleur voulue est disponible ;
   4. si un article sous Crush Alert est revenu en stock : envoie le message
-     « Crush Alert 💌 - De retour dans ton panier ! » sur Telegram ;
+     « Crush Alert 💌 - De retour dans ton panier ! » sur Telegram et par e-mail,
+     puis éteint Crush Alert pour cet article (mission accomplie) ;
   5. note ce qu'il a vu dans etat.json (sa mémoire d'un passage à l'autre).
 
 Les clés Telegram ne sont PAS dans ce fichier : GitHub les donne en secret
@@ -109,10 +110,12 @@ def message(article):
 
 
 def main():
-    articles = lire_json(WISHLIST, {"articles": []})["articles"]
+    wishlist = lire_json(WISHLIST, {"articles": []})
+    articles = wishlist["articles"]
     etat = lire_json(ETAT, {})
     CAPTURES.mkdir(exist_ok=True)
     bloque = False
+    wishlist_changee = False
 
     with sync_playwright() as pw:
         # Fenêtre visible (sur GitHub, dans un « écran imaginaire ») : MAC refuse les navigateurs invisibles.
@@ -155,6 +158,13 @@ def main():
                 print(f"  💌 Crush Alert : Telegram={'oui' if telegram else 'non'}, e-mail={'oui' if email else 'non'}")
                 if telegram or email:
                     nouveau["alerte_envoyee"] = True
+                    # Mission accomplie : Crush Alert s'éteint toute seule pour cet article.
+                    # On l'écrit dans la wishlist (le robot ne surveille plus) et dans la mémoire
+                    # (« eteinte_le ») pour que l'appli du Mac éteigne aussi le bouton.
+                    a["crush_alert"] = False
+                    nouveau["eteinte_le"] = maintenant()
+                    wishlist_changee = True
+                    print("  🔕 Crush Alert éteinte toute seule (message envoyé)")
             # On efface la coche « déjà prévenue » quand l'article repart en rupture,
             # ou quand Crush Alert est éteinte : si je la rallume, le robot est prêt à prévenir.
             if statut == sites.RUPTURE or not a.get("crush_alert"):
@@ -163,6 +173,8 @@ def main():
         navigateur.close()
 
     ETAT.write_text(json.dumps(etat, ensure_ascii=False, indent=2), encoding="utf-8")
+    if wishlist_changee:
+        WISHLIST.write_text(json.dumps(wishlist, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if bloque:
         # On le signale, sans faire échouer tout le lancement : les autres sites ont bien été lus.
         print("⚠️ Au moins un site bloque les ordinateurs de GitHub (voir « Le site a refusé » plus haut).")
