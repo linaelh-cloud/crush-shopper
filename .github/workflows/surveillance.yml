@@ -38,6 +38,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           EMAIL_ADRESSE: ${{ secrets.EMAIL_ADRESSE }}
           EMAIL_MOT_DE_PASSE: ${{ secrets.EMAIL_MOT_DE_PASSE }}
+          EMAIL_DESTINATAIRE: ${{ secrets.EMAIL_DESTINATAIRE }}
         run: xvfb-run --auto-servernum python surveille.py
 
       - name: Garder les captures d'écran du robot

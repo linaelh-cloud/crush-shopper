@@ -72,7 +72,9 @@ def envoyer_email(article):
     mail = EmailMessage()
     mail["Subject"] = ACCROCHE
     mail["From"] = f"Crush Shopper <{adresse}>"
-    mail["To"] = adresse  # on s'écrit à soi-même
+    # Destinataire : EMAIL_DESTINATAIRE si on l'a rangé (envoi depuis l'adresse de Crush Shopper),
+    # sinon on s'écrit à soi-même (Gmail affiche alors « me »).
+    mail["To"] = os.environ.get("EMAIL_DESTINATAIRE", "").strip() or adresse
     mail.set_content(message(article))
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=20) as serveur:
