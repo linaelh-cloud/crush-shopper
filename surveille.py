@@ -115,14 +115,18 @@ def main():
                 print("  (capture d'écran ratée, on continue)")
             if code == 403 or "access denied" in page.title().lower():
                 print(f"  ⛔ MAC a refusé l'accès au robot (code {code})")
-                etat[a["url"]] = dict(avant, statut="bloque", verifie_le=maintenant())
+                etat[a["url"]] = dict(avant, statut="bloque", depuis=avant.get("depuis") if avant.get("statut") == "bloque" else maintenant())
                 bloque = True
                 continue
 
             infos = sites.lire_mac(page.content(), a.get("teinte", ""))
             statut = infos["statut"]
             print(f"  statut : {statut}")
-            nouveau = dict(avant, statut=statut, verifie_le=maintenant())
+            # La mémoire ne change que si l'état change : pas de sauvegarde inutile toutes les 15 min.
+            nouveau = dict(avant, statut=statut)
+            if avant.get("statut") != statut:
+                nouveau["depuis"] = maintenant()
+            nouveau.pop("verifie_le", None)
 
             revenu = avant.get("statut") == sites.RUPTURE and statut == sites.DISPO
             if a.get("crush_alert") and statut == sites.DISPO and (revenu or not avant.get("alerte_envoyee")):

@@ -4,10 +4,10 @@ name: Surveillance Crush Shopper
 on:
   # Le bouton « Run workflow » dans l'onglet Actions, pour lancer un test à la main.
   workflow_dispatch:
-  # Le réveil automatique : activé seulement APRÈS un test réussi.
-  # Pour l'activer, enlever le # devant les deux lignes suivantes (toutes les 15 minutes) :
-  # schedule:
-  #   - cron: "*/15 * * * *"
+  # Le réveil automatique : activé le 17/11 après le test réussi (lancement #3).
+  # Toutes les 5 minutes, le minimum autorisé par GitHub (il peut avoir quelques minutes de retard).
+  schedule:
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: write   # pour enregistrer la mémoire du robot (etat.json)
