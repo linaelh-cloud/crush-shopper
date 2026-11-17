@@ -15,6 +15,7 @@ Les clés Telegram ne sont PAS dans ce fichier : GitHub les donne en secret
 """
 import json
 import os
+import re
 import smtplib
 import sys
 import time
@@ -43,11 +44,18 @@ def lire_json(chemin, defaut):
 
 
 def envoyer_telegram(texte):
-    token = os.environ.get("TELEGRAM_TOKEN", "")
-    chat = os.environ.get("TELEGRAM_CHAT_ID", "")
-    if not token or not chat:
-        print("  (pas de clé Telegram : message non envoyé)")
+    # On retrouve la clé et le numéro même s'il y a du texte ou des espaces autour
+    # (par exemple si tout le message de BotFather a été collé dans le coffre-fort).
+    brut_token = os.environ.get("TELEGRAM_TOKEN", "")
+    brut_chat = os.environ.get("TELEGRAM_CHAT_ID", "")
+    m_token = re.search(r"\d{6,}:[A-Za-z0-9_-]{30,}", brut_token)
+    m_chat = re.search(r"-?\d{5,}", brut_chat)
+    if not m_token or not m_chat:
+        print(f"  Telegram : clé trouvée = {'oui' if m_token else 'NON'}, "
+              f"numéro de conversation trouvé = {'oui' if m_chat else 'NON'} "
+              "→ vérifier les secrets TELEGRAM_TOKEN et TELEGRAM_CHAT_ID")
         return False
+    token, chat = m_token.group(0), m_chat.group(0)
     donnees = urllib.parse.urlencode({"chat_id": chat, "text": texte}).encode()
     for essai in range(3):  # la connexion coupe parfois : on réessaie
         try:
@@ -55,6 +63,15 @@ def envoyer_telegram(texte):
                                         data=donnees, timeout=15) as r:
                 if json.loads(r.read()).get("ok"):
                     return True
+        except urllib.error.HTTPError as e:
+            # Telegram explique pourquoi il refuse (jamais la clé n'est affichée)
+            try:
+                raison = json.loads(e.read()).get("description", "")
+            except Exception:
+                raison = ""
+            print(f"  Telegram refuse (essai {essai + 1}) : {e.code} {raison}")
+            if e.code in (400, 401, 403, 404):
+                return False  # inutile de réessayer : c'est un problème de clé ou de conversation
         except Exception as e:
             print(f"  Telegram, essai {essai + 1} raté ({e.__class__.__name__})")
         time.sleep(3)
