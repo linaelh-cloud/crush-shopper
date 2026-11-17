@@ -41,6 +41,8 @@ header .right { margin-left: auto; display: flex; align-items: center; gap: 14px
 .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--dispo); animation: pulse 2s infinite; }
 .live.off i { background: var(--attente); animation: none; }
 @keyframes pulse { 50% { opacity: 0.3; } }
+.icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--ligne); background: var(--blanc); color: var(--noir); display: grid; place-items: center; cursor: pointer; }
+.del { position: absolute; right: 10px; top: 10px; z-index: 2; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.94); color: var(--noir); font-size: 1rem; line-height: 1; cursor: pointer; display: grid; place-items: center; }
 .link-btn { border: 1px solid var(--noir); background: var(--blanc); color: var(--noir); border-radius: 999px; padding: 7px 14px; font-family: var(--font-sign); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.76rem; cursor: pointer; text-decoration: none; }
 
 .title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 28px 14px; }
@@ -109,7 +111,8 @@ footer { padding-bottom: max(18px, env(safe-area-inset-bottom)); }
   header img { width: 38px; height: 38px; border-radius: 10px; }
   header h1 { font-size: 1.05rem; }
   header .sign { font-size: 0.82rem; }
-  header .right { margin-left: 0; width: 100%; justify-content: space-between; }
+  header .wrap { flex-wrap: nowrap; }
+  header .right { margin-left: auto; }
   .title-row { padding-block: 18px 10px; }
   .title-row h2 { font-size: 1.5rem; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
@@ -126,20 +129,21 @@ footer { padding-bottom: max(18px, env(safe-area-inset-bottom)); }
     <img src="logo.jpg" alt="Logo Crush Shopper">
     <div><h1>CRUSH SHOPPER</h1><div class="sign">L'assistant de ta wishlist.</div></div>
     <div class="right">
-      <span class="live off" id="live"><i></i><span id="live-txt">Connexion…</span></span>
-      <button class="link-btn" id="open-cle" type="button">Ma clé</button>
+      <button class="icon-btn" id="open-cle" type="button" aria-label="Mon accès" title="Mon accès">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      </button>
     </div>
   </div>
 </header>
 
 <main class="wrap">
   <section class="panel" id="cle-panel" hidden>
-    <h3>Ma clé GitHub</h3>
-    <p class="safe">Ta wishlist vit sur GitHub. Pour la lire et la modifier, cette page a besoin de ta <b>clé d'accès</b> (elle commence par <b>github_pat_</b>). Tu la tapes <b>une seule fois sur chaque appareil</b> : elle reste rangée dans cet appareil, jamais sur le site.</p>
+    <h3>Mon accès</h3>
+    <p class="safe">Colle ta clé d'accès pour retrouver ta wishlist sur cet appareil. Elle reste rangée ici.</p>
     <form id="cle-form" class="row">
-      <label style="flex:1;min-width:220px">Clé d'accès GitHub<input id="cle" type="password" autocomplete="off" placeholder="github_pat_…"></label>
+      <label style="flex:1;min-width:220px">Clé d'accès<input id="cle" type="password" autocomplete="off" placeholder="github_pat_…"></label>
       <button class="btn" type="submit">Enregistrer</button>
-      <button class="link-btn" type="button" id="cle-off">Oublier la clé</button>
+      <button class="link-btn" type="button" id="cle-off">Se déconnecter</button>
     </form>
     <p class="hint" id="cle-msg" style="margin:0"></p>
   </section>
@@ -147,16 +151,16 @@ footer { padding-bottom: max(18px, env(safe-area-inset-bottom)); }
   <div class="title-row"><h2>Ma wishlist</h2><span class="counts" id="counts"></span></div>
 
   <form class="add" id="add">
-    <input id="f-url" type="url" placeholder="Lien de l'article (https://…)" aria-label="Lien de l'article" required>
-    <input id="f-opt" type="text" placeholder="Taille ou teinte (ex. Taille L)" aria-label="Taille ou teinte">
+    <input id="f-url" type="url" placeholder="Colle le lien de l'article" aria-label="Lien de l'article" required>
+    <input id="f-opt" type="text" placeholder="Ta taille ou ta teinte" aria-label="Taille ou teinte">
     <button class="btn" type="submit" id="f-btn">Ajouter</button>
   </form>
-  <p class="hint" id="hint">Colle le <b>lien</b> de l'article et indique ta <b>taille</b> (ou ta teinte). Le robot GitHub lit la page : le nom, la photo et le stock apparaissent en 1 à 2 minutes.</p>
+  <p class="hint err" id="hint" hidden></p>
 
   <div class="grid" id="grid"></div>
 </main>
 
-<footer><div class="wrap">Ta wishlist et le robot vivent sur GitHub : cette page marche pareil sur le Mac et sur l'iPhone, de partout, même Mac éteint. Quand un article revient, tu reçois « Crush Alert 💌 » sur Telegram et par e-mail, puis Crush Alert s'éteint toute seule. · <a href="https://github.com/linaelh-cloud/crush-shopper/actions" target="_blank" rel="noopener">Voir le robot travailler</a></div></footer>
+
 
 <div class="verdict" id="verdict" hidden role="dialog" aria-live="polite"><img id="v-img" alt=""><div><div class="t" id="v-titre"></div><div class="s" id="v-sous"></div></div><div class="acts" id="v-acts"></div></div>
 <div class="toast" id="toast" hidden><img src="logo.jpg" alt=""><div><b id="t-title"></b><span id="t-body"></span></div></div>
@@ -169,7 +173,7 @@ const DEPOT = "linaelh-cloud/crush-shopper";
 const local = ["127.0.0.1", "localhost"].includes(location.hostname);
 const apiTest = new URLSearchParams(location.search).get("api");
 const API = (local && apiTest && /^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(apiTest)) ? apiTest : "https://api.github.com";
-const STATUTS = { dispo: "Disponible", rupture: "En rupture", attente: "Le robot lit…", bloque: "Site bloqué", inconnu: "Stock illisible" };
+const STATUTS = { dispo: "Disponible", rupture: "En rupture", attente: "Recherche…", bloque: "Indisponible", inconnu: "Indisponible" };
 
 // La clé est rangée dans CET appareil (stockage du navigateur), jamais sur le site.
 function lireCle() { try { return localStorage.getItem("crush_cle") || ""; } catch (e) { return ""; } }
@@ -199,9 +203,9 @@ async function guichet(fichier, options = {}) {
     headers: { "Authorization": `Bearer ${lireCle()}`, "Accept": "application/vnd.github+json", ...(options.body ? { "Content-Type": "application/json" } : {}) },
   });
   if (r.ok) return r.json();
-  const raisons = { 401: "la clé n'est pas valide ou a expiré", 403: "la clé n'a pas le droit d'écrire (« Contents : Read and write »)",
-                    404: "la clé ne voit pas le dépôt crush-shopper", 409: "conflit", 422: "conflit" };
-  const err = new Error(`GitHub refuse : ${raisons[r.status] || "erreur " + r.status}.`); err.code = r.status; throw err;
+  const raisons = { 401: "Ta clé d'accès n'est plus valide.", 403: "Ta clé d'accès ne permet pas de modifier ta wishlist.",
+                    404: "Ta clé d'accès ne trouve pas ta wishlist.", 409: "conflit", 422: "conflit" };
+  const err = new Error(raisons[r.status] || "Petit souci de connexion, réessaie dans un instant."); err.code = r.status; throw err;
 }
 async function lireFichier(fichier, defaut) {
   try { const f = await guichet(fichier); return { data: JSON.parse(deballer(f.content)), sha: f.sha }; }
@@ -221,7 +225,7 @@ async function modifierListe(changement, mot) {
       liste = nouvelle; sha = r.content.sha; dessiner(); return;
     } catch (e) { if (e.code !== 409 && e.code !== 422) throw e; }
   }
-  throw new Error("GitHub était occupé, réessaie dans un instant.");
+  throw new Error("Petit souci de connexion, réessaie dans un instant.");
 }
 
 // ---------------------------------------------------------------- lecture et affichage
@@ -254,7 +258,9 @@ function card(a, index) {
   const ph = el("div", "ph");
   ph.append(el("span", "pill " + m.statut, STATUTS[m.statut] || m.statut));
   if (m.photo) { const img = el("img"); img.src = m.photo; img.alt = a.nom || m.nom || "Article"; img.referrerPolicy = "no-referrer"; ph.append(img); }
-  else ph.append(el("div", "empty", m.attend ? "Le robot lit la page… (1 à 2 min)" : "Pas de photo"));
+  else ph.append(el("div", "empty", m.attend ? "On regarde le stock…" : ""));
+  const x = el("button", "del", "×"); x.type = "button"; x.setAttribute("aria-label", "Retirer cet article"); x.onclick = () => retirer(a.url);
+  ph.append(x);
   c.append(ph);
 
   c.append(el("span", "site", siteDe(a.url)));
@@ -265,31 +271,23 @@ function card(a, index) {
   const b = el("button", "alert" + (a.crush_alert ? " on" : ""), a.crush_alert ? "Crush Alert ✓" : "Crush Alert");
   const lisible = m.statut === "dispo" || m.statut === "rupture";
   b.disabled = occupe || (!lisible && !a.crush_alert);
-  b.title = lisible || a.crush_alert ? "Surveiller cet article" : (m.attend ? "Attends que le robot ait lu la page" : "Le robot n'arrive pas à lire le stock de cet article");
+  b.title = lisible || a.crush_alert ? "Être prévenue quand il revient" : (m.attend ? "Un instant, on regarde le stock" : "Crush Alert n'est pas possible pour cet article");
   b.onclick = () => basculer(a.url);
   c.append(b);
 
-  if (m.precision) c.append(el("span", "when", "🔎 " + m.precision));
-  let when = m.attend ? "Le robot GitHub va lire la page (1 à 2 min)…" : (m.depuis ? `${STATUTS[m.statut] || m.statut} depuis le ${m.depuis.replace(" (heure UTC)", " UTC")}` : "");
-  if (m.eteinte_le && !a.crush_alert) when += ` · alerte envoyée le ${m.eteinte_le.replace(" (heure UTC)", " UTC")} · Crush Alert éteinte toute seule 🔕`;
-  if (when) c.append(el("span", "when", when));
-
-  const tools = el("div", "tools");
-  const v = el("button", null, "Vérifier maintenant"); v.onclick = () => verifier();
-  const d = el("button", null, "Retirer"); d.onclick = () => retirer(a.url);
-  tools.append(v, d); c.append(tools);
+  if (m.eteinte_le && !a.crush_alert) c.append(el("span", "when", "💌 Tu as été prévenue : il était de retour."));
   return c;
 }
 
 function dessiner() {
   const articles = [...(liste.articles || [])].reverse(); // le plus récent d'abord
   grid.replaceChildren(...(articles.length ? articles.map(card)
-    : [el("div", "empty-state", lireCle() ? "Ta wishlist est vide. Colle le lien d'un article pour commencer." : "Entre ta clé (bouton « Ma clé ») pour voir ta wishlist.")]));
+    : [el("div", "empty-state", lireCle() ? "Ta wishlist est vide. Colle le lien d'un article pour commencer." : "Connecte-toi (en haut à droite) pour voir ta wishlist.")]));
   const surveilles = articles.filter(a => a.crush_alert).length;
   document.getElementById("counts").textContent = `${articles.length} article${articles.length > 1 ? "s" : ""} · ${surveilles} Crush Alert`;
 }
 
-function live(ok, texte) { document.getElementById("live").classList.toggle("off", !ok); document.getElementById("live-txt").textContent = texte; }
+function live() {}  // (plus d'indicateur technique à l'écran)
 
 // ---------------------------------------------------------------- actions
 async function action(fn, okTitre, okTexte) {
@@ -306,7 +304,7 @@ document.getElementById("add").addEventListener("submit", (e) => {
   const url = document.getElementById("f-url").value.trim();
   let option = document.getElementById("f-opt").value.trim();
   const hint = document.getElementById("hint");
-  if (!/^https?:\/\//.test(url)) { hint.textContent = "Colle un lien qui commence par https://"; hint.classList.add("err"); return; }
+  if (!/^https?:\/\//.test(url)) { hint.textContent = "Colle le lien complet de l'article (il commence par https://)."; hint.hidden = false; return; }
   if (!cleValide(lireCle())) { montrerCle("Entre d'abord ta clé."); return; }
   const teinte = siteDe(url) === "MAC Cosmetics" ? teinteDuLien(url) : "";
   if (!option && teinte) option = "Teinte " + teinte;
@@ -316,8 +314,8 @@ document.getElementById("add").addEventListener("submit", (e) => {
       w.articles.push({ nom: "", option, teinte, url, crush_alert: false, ajoute_le: new Date().toISOString() });
     }, "Article ajouté depuis la page wishlist");
     ajoutes.add(url);
-    e.target.reset(); hint.classList.remove("err");
-    hint.textContent = "Article ajouté ✅ Le robot GitHub se réveille et lit la page : résultat dans 1 à 2 minutes.";
+    e.target.reset();
+    hint.hidden = true; toast("Ajouté ✨", "On regarde le stock pour toi.");
   });
 });
 
@@ -325,11 +323,11 @@ function basculer(url) {
   let allume = false;
   action(async () => {
     await modifierListe((w) => { const a = w.articles.find(x => x.url === url); if (a) { a.crush_alert = !a.crush_alert; allume = a.crush_alert; } }, "Crush Alert changée depuis la page wishlist");
-  }).then(() => toast(allume ? "Crush Alert activée 💌" : "Crush Alert désactivée", allume ? "Le robot GitHub surveille cet article jour et nuit." : "Je ne surveille plus cet article."));
+  }).then(() => toast(allume ? "Crush Alert activée 💌" : "Crush Alert désactivée", allume ? "Je te préviens dès qu'il revient." : "Tu ne seras plus prévenue pour cet article."));
 }
 function retirer(url) {
   if (!confirm("Retirer cet article de ta wishlist ?")) return;
-  action(() => modifierListe((w) => { w.articles = w.articles.filter(a => a.url !== url); }, "Article retiré depuis la page wishlist"), "Article retiré", "Il n'est plus dans ta wishlist.");
+  action(() => modifierListe((w) => { w.articles = w.articles.filter(a => a.url !== url); }, "Article retiré depuis la page wishlist"), "Retiré", "L'article n'est plus dans ta wishlist.");
 }
 function verifier() {
   // On note l'heure de la demande dans la liste : ce changement réveille le robot GitHub.
@@ -353,18 +351,18 @@ function afficherVerdict(a, m) {
   const fermer = el("button", "link-btn", "Fermer"); fermer.type = "button"; fermer.onclick = () => v.hidden = true;
   if (m.statut === "rupture") {
     document.getElementById("v-titre").textContent = `🔴 ${nom}${opt} est en rupture.`;
-    sous.textContent = "Active Crush Alert : tu seras prévenue dès qu'il revient. " + (m.precision ? `(${m.precision})` : "");
+    sous.textContent = "Active Crush Alert : je te préviens dès qu'il revient.";
     const go = el("button", "btn", "💌 Activer Crush Alert"); go.type = "button";
     go.onclick = () => { v.hidden = true; if (!a.crush_alert) basculer(a.url); };
     acts.append(fermer, go);
   } else if (m.statut === "dispo") {
     document.getElementById("v-titre").textContent = `🟢 ${nom}${opt} est disponible !`;
-    sous.textContent = "Tu peux l'acheter maintenant. " + (m.precision ? `(${m.precision})` : "");
+    sous.textContent = "Fonce, il t'attend.";
     const lien = el("a", "btn", "Voir l'article"); lien.href = a.url; lien.target = "_blank"; lien.rel = "noopener";
     acts.append(fermer, lien);
   } else {
-    document.getElementById("v-titre").textContent = m.statut === "bloque" ? "⛔ Ce site bloque le robot." : "⚪️ Le robot n'arrive pas à lire le stock.";
-    sous.textContent = (m.precision ? m.precision + ". " : "") + "L'article reste dans ta wishlist, mais Crush Alert n'est pas possible sur ce site.";
+    document.getElementById("v-titre").textContent = "Je n'arrive pas à voir le stock de cet article.";
+    sous.textContent = "Il reste dans ta wishlist, mais Crush Alert n'est pas possible sur ce site.";
     acts.append(fermer);
   }
   v.hidden = false;
@@ -373,17 +371,17 @@ function afficherVerdict(a, m) {
 // ---------------------------------------------------------------- Ma clé
 const panneau = document.getElementById("cle-panel");
 function montrerCle(msg) { panneau.hidden = false; document.getElementById("cle-msg").textContent = msg || ""; }
-document.getElementById("open-cle").onclick = () => { panneau.hidden = !panneau.hidden; document.getElementById("cle-msg").textContent = lireCle() ? "✅ Une clé est rangée dans cet appareil." : ""; };
+document.getElementById("open-cle").onclick = () => { panneau.hidden = !panneau.hidden; document.getElementById("cle-msg").textContent = lireCle() ? "✅ Tu es connectée sur cet appareil." : ""; };
 document.getElementById("cle-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const v = document.getElementById("cle").value.trim();
-  if (!cleValide(v)) { document.getElementById("cle-msg").textContent = "Ce n'est pas une clé GitHub : elle doit commencer par github_pat_"; return; }
+  if (!cleValide(v)) { document.getElementById("cle-msg").textContent = "Cette clé ne semble pas bonne : elle commence par github_pat_"; return; }
   rangerCle(v); document.getElementById("cle").value = "";
-  document.getElementById("cle-msg").textContent = "Clé rangée dans cet appareil. Connexion à GitHub…";
+  document.getElementById("cle-msg").textContent = "Connexion…";
   await charger(); planifier(60000);
-  if (sha) { panneau.hidden = true; toast("Connectée ✅", "Ta wishlist arrive de GitHub."); }
+  if (sha) { panneau.hidden = true; toast("Bienvenue ✨", "Voici ta wishlist."); }
 });
-document.getElementById("cle-off").onclick = () => { rangerCle(""); liste = { articles: [] }; memoire = {}; live(false, "Pas connectée"); dessiner(); montrerCle("Clé oubliée sur cet appareil."); };
+document.getElementById("cle-off").onclick = () => { rangerCle(""); liste = { articles: [] }; memoire = {}; live(false, "Pas connectée"); dessiner(); montrerCle("Tu es déconnectée sur cet appareil."); };
 
 // ---------------------------------------------------------------- relecture régulière
 // Toutes les 15 s quand le robot doit lire un article, sinon toutes les minutes.
