@@ -2,8 +2,11 @@
 Les « lecteurs » de sites : pour chaque site appris, une fonction qui lit
 le nom, la photo et le stock d'un article sur sa page.
 
-Pour l'instant, le robot sait lire : MAC Cosmetics.
-Pour apprendre un nouveau site, on ajoute une fonction ici.
+Le robot sait lire :
+  - MAC Cosmetics, couleur par couleur (lecteur « appris ») ;
+  - (presque) tous les autres sites, grâce au LECTEUR UNIVERSEL : il lit la petite
+    « fiche produit standard » (schema.org, au format JSON-LD) que beaucoup de boutiques
+    cachent dans leurs pages pour Google : nom, photo, et « en stock / en rupture ».
 """
 import html
 import re
@@ -18,11 +21,23 @@ NON_APPRIS = "non_appris"  # site que le robot ne sait pas encore lire
 
 
 def site_de(url):
-    """Retourne le nom du site appris pour cette adresse, ou None."""
+    """Le nom du site à afficher : « MAC Cosmetics », sinon le nom de domaine (ex. « rouje.com »)."""
     hote = urlparse(url).netloc.lower()
     if "maccosmetics." in hote:
         return "MAC Cosmetics"
-    return None
+    return hote[4:] if hote.startswith("www.") else (hote or None)
+
+
+def lecteur_de(url):
+    """Quel lecteur utiliser : « mac » (appris) ou « universel » (fiche standard)."""
+    return "mac" if "maccosmetics." in urlparse(url).netloc.lower() else "universel"
+
+
+def page_bloquee(titre, code=200):
+    """Reconnaît une page anti-robot (on ne contourne jamais : on s'arrête)."""
+    t = (titre or "").lower()
+    return code in (403, 429) or any(m in t for m in
+        ("access denied", "un instant", "just a moment", "attention required", "captcha", "are you a robot"))
 
 
 def teinte_dans_url(url):
@@ -71,3 +86,139 @@ def lire_mac(page_html, teinte=""):
         if og:
             infos["photo"] = og.group(1)
     return infos
+
+
+# ------------------------------------------------------------------ lecteur universel
+EN_STOCK = ("instock", "limitedavailability", "onlineonly", "instoreonly")
+
+
+def _fiches_produit(page_html):
+    """Trouve les « fiches produit standard » (JSON-LD de type Product) cachées dans la page."""
+    import json
+    fiches = []
+    for m in re.finditer(r'<script[^>]+application/ld\+json[^>]*>(.*?)</script>', page_html, re.S | re.I):
+        try:
+            donnees = json.loads(html.unescape(m.group(1).strip()))
+        except Exception:
+            continue
+        pile = [donnees]
+        while pile:
+            x = pile.pop()
+            if isinstance(x, list):
+                pile += x
+                continue
+            if not isinstance(x, dict):
+                continue
+            if "@graph" in x:
+                pile += x["@graph"] if isinstance(x["@graph"], list) else [x["@graph"]]
+            types = x.get("@type") if isinstance(x.get("@type"), list) else [x.get("@type")]
+            if "Product" in types or "ProductGroup" in types:
+                fiches.append(x)
+    return fiches
+
+
+def _offres(fiche):
+    """Toutes les offres (une par taille/couleur, souvent) avec leur étiquette et leur stock."""
+    offres = fiche.get("offers") or []
+    offres = offres if isinstance(offres, list) else [offres]
+    resultat = []
+    for o in offres:
+        if isinstance(o, dict) and o.get("@type") == "AggregateOffer" and o.get("offers"):
+            offres += o["offers"] if isinstance(o["offers"], list) else [o["offers"]]
+            continue
+        if isinstance(o, dict):
+            etiquette = " ".join(str(o.get(k, "")) for k in ("name", "sku", "url", "size", "color"))
+            resultat.append((etiquette, str(o.get("availability", "")).lower()))
+    for v in fiche.get("hasVariant") or []:  # variantes (ProductGroup)
+        if isinstance(v, dict):
+            sous = v.get("offers") or []
+            sous = sous if isinstance(sous, list) else [sous]
+            for o in sous:
+                etiquette = " ".join(str(v.get(k, "")) for k in ("name", "sku", "size", "color"))
+                resultat.append((etiquette, str(o.get("availability", "")).lower()))
+    return resultat
+
+
+def _mots_option(option):
+    """« Taille 38 » -> ["38"] ; « Teinte Modesty » -> ["modesty"]."""
+    mots = re.sub(r"(?i)\b(taille|teinte|couleur|pointure|size|color)\b", " ", option or "")
+    return [m.lower() for m in re.split(r"[\s/,;–-]+", mots) if m.strip()]
+
+
+def _correspond(etiquette, mots):
+    morceaux = set(re.split(r"[\s/,;:._|()–-]+", etiquette.lower()))
+    return all(m in morceaux for m in mots)
+
+
+def _variante_du_lien(url):
+    """Le numéro de variante dans le lien (ex. « ?variant=50661911396711 ») = couleur + taille exactes."""
+    m = re.search(r"[?&](?:variant|variantId|sku|skuId)=([A-Za-z0-9_-]+)", url or "")
+    return m.group(1) if m else ""
+
+
+def _couleur_du_nom(nom):
+    """« Veste Performance - Olive Tree » -> « olive tree » (la couleur après le tiret)."""
+    morceaux = re.split(r"\s[-–|]\s", nom or "")
+    return morceaux[-1].strip().lower() if len(morceaux) > 1 else ""
+
+
+def lire_universel(page_html, option="", url=""):
+    """Lit nom, photo et stock grâce à la fiche standard.
+    Priorité : 1) la variante exacte du lien (couleur + taille), 2) ma taille/teinte
+    (en gardant la couleur de l'article), 3) l'article entier."""
+    infos = {"nom": "", "teinte": option, "photo": "", "statut": INCONNU, "precision": ""}
+    fiches = _fiches_produit(page_html)
+    og_titre = re.search(r'<meta[^>]+property="og:title"[^>]+content="([^"]+)"', page_html)
+    og_image = re.search(r'<meta[^>]+property="og:image"[^>]+content="([^"]+)"', page_html)
+    if og_titre:
+        infos["nom"] = html.unescape(og_titre.group(1)).strip()
+    if og_image:
+        infos["photo"] = og_image.group(1)
+    if not fiches:
+        infos["precision"] = "pas de fiche standard sur cette page"
+        return infos
+
+    fiche = fiches[0]
+    infos["nom"] = html.unescape(str(fiche.get("name") or infos["nom"])).strip()
+    image = fiche.get("image")
+    if isinstance(image, list) and image:
+        image = image[0]
+    if isinstance(image, dict):
+        image = image.get("url") or image.get("contentUrl")
+    if isinstance(image, str) and image:
+        infos["photo"] = "https:" + image if image.startswith("//") else image
+
+    offres = [o for f in fiches for o in _offres(f)]
+    if not offres:
+        infos["precision"] = "la fiche ne dit pas si c'est en stock"
+        return infos
+    mots = _mots_option(option)
+    variante = _variante_du_lien(url)
+    couleur = _couleur_du_nom(infos["nom"])
+    choisies = [o for o in offres if variante and variante in o[0]]
+    if choisies:
+        infos["precision"] = "variante exacte du lien (couleur + taille)"
+    else:
+        choisies = [o for o in offres if mots and _correspond(o[0], mots)]
+        # Plusieurs couleurs dans la fiche ? On garde celle de l'article.
+        meme_couleur = [o for o in choisies if couleur and couleur in o[0].lower()]
+        if meme_couleur:
+            choisies = meme_couleur
+    if choisies and not infos["precision"]:
+        infos["precision"] = f"stock lu pour « {option} »" + (f", couleur {couleur.title()}" if couleur and any(couleur in o[0].lower() for o in choisies) else "")
+    if not choisies:
+        choisies = offres
+        infos["precision"] = ("taille/teinte introuvable sur la fiche : stock de l'article entier"
+                              if mots else "stock de l'article entier")
+    disponible = any(any(m in disp for m in EN_STOCK) for _, disp in choisies)
+    infos["statut"] = DISPO if disponible else RUPTURE
+    return infos
+
+
+def lire(url, page_html, option="", teinte=""):
+    """Choisit le bon lecteur selon le site."""
+    if lecteur_de(url) == "mac":
+        infos = lire_mac(page_html, teinte)
+        infos.setdefault("precision", f"teinte « {teinte} »" if teinte else "")
+        return infos
+    return lire_universel(page_html, option, url)

@@ -132,13 +132,14 @@ def main():
                 page.screenshot(path=str(CAPTURES / f"article-{i + 1}.png"), timeout=10_000)
             except Exception:
                 print("  (capture d'écran ratée, on continue)")
-            if code == 403 or "access denied" in page.title().lower():
-                print(f"  ⛔ MAC a refusé l'accès au robot (code {code})")
+            if sites.page_bloquee(page.title(), code):
+                print(f"  ⛔ Le site a refusé l’accès au robot (code {code})")
                 etat[a["url"]] = dict(avant, statut="bloque", depuis=avant.get("depuis") if avant.get("statut") == "bloque" else maintenant())
                 bloque = True
                 continue
 
-            infos = sites.lire_mac(page.content(), a.get("teinte", ""))
+            # Le bon lecteur selon le site : MAC (appris) ou universel (fiche standard)
+            infos = sites.lire(a["url"], page.content(), a.get("option", ""), a.get("teinte", ""))
             statut = infos["statut"]
             print(f"  statut : {statut}")
             # La mémoire ne change que si l'état change : pas de sauvegarde inutile toutes les 15 min.
@@ -163,9 +164,10 @@ def main():
 
     ETAT.write_text(json.dumps(etat, ensure_ascii=False, indent=2), encoding="utf-8")
     if bloque:
-        print("Résultat : MAC bloque les ordinateurs de GitHub.")
-        sys.exit(2)
-    print("Résultat : le robot a pu lire MAC depuis GitHub ✅")
+        # On le signale, sans faire échouer tout le lancement : les autres sites ont bien été lus.
+        print("⚠️ Au moins un site bloque les ordinateurs de GitHub (voir « Le site a refusé » plus haut).")
+        return
+    print("Résultat : le robot a pu lire les sites depuis GitHub ✅")
 
 
 def maintenant():
