@@ -1,0 +1,52 @@
+# La « recette » que GitHub suit pour faire tourner le robot Crush Shopper.
+name: Surveillance Crush Shopper
+
+on:
+  # Le bouton « Run workflow » dans l'onglet Actions, pour lancer un test à la main.
+  workflow_dispatch:
+  # Le réveil automatique : activé seulement APRÈS un test réussi.
+  # Pour l'activer, enlever le # devant les deux lignes suivantes (toutes les 15 minutes) :
+  # schedule:
+  #   - cron: "*/15 * * * *"
+
+permissions:
+  contents: write   # pour enregistrer la mémoire du robot (etat.json)
+
+jobs:
+  surveiller:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Récupérer le code du robot
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer Playwright et Chrome
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Lancer le robot (dans un écran imaginaire)
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: xvfb-run --auto-servernum python surveille.py
+
+      - name: Garder les captures d'écran du robot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: captures-du-robot
+          path: captures/
+
+      - name: Enregistrer la mémoire du robot
+        if: always()
+        run: |
+          git config user.name "Crush Shopper"
+          git config user.email "actions@users.noreply.github.com"
+          git add etat.json
+          git diff --cached --quiet || (git commit -m "Mémoire du robot mise à jour" && git push)

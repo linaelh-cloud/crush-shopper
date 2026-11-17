@@ -1,0 +1,18 @@
+{
+  "articles": [
+    {
+      "nom": "Rouge à lèvres MAC M·A·Cximal",
+      "option": "Teinte Modesty",
+      "teinte": "Modesty",
+      "url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
+      "crush_alert": true
+    },
+    {
+      "nom": "Rouge à lèvres MAC M·A·Cximal",
+      "option": "Teinte Fleshpot",
+      "teinte": "Fleshpot",
+      "url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
+      "crush_alert": false
+    }
+  ]
+}
