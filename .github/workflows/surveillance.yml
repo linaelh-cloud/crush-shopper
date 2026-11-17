@@ -32,11 +32,27 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"   # garder les outils Python de côté d'une fois sur l'autre
+
+      # Le « cache » : GitHub garde Chrome dans un placard entre deux lancements,
+      # au lieu de le retélécharger à chaque fois (le plus long de la recette).
+      - name: Ressortir Chrome du placard (cache)
+        id: placard
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: chrome-playwright-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
 
       - name: Installer Playwright et Chrome
         run: |
           pip install -r requirements.txt
-          python -m playwright install --with-deps chromium
+          if [ "${{ steps.placard.outputs.cache-hit }}" = "true" ]; then
+            echo "Chrome trouvé dans le placard : on installe seulement ce qui l'entoure."
+            python -m playwright install-deps chromium
+          else
+            echo "Placard vide : on télécharge Chrome (une seule fois)."
+            python -m playwright install --with-deps chromium
+          fi
 
       - name: Lancer le robot (dans un écran imaginaire)
         env:
