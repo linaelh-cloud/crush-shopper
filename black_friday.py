@@ -29,12 +29,13 @@ FICHIER = Path(__file__).parent / "docs" / "black-friday.json"
 JUSQUA = re.compile(r"jusqu['’]?\s*(?:à|a)\s*-?\s?(\d{1,2})\s?%", re.I)
 POURCENT = re.compile(r"(?<![\d,.])-\s?(\d{1,2})\s?%")
 # « code BLACK20 », « avec le code : NOTINO »
-CODE = re.compile(r"\bcode(?:\s+promo)?\s*[:«\"“]?\s*([A-Za-z][A-Za-z0-9]{3,14})\b", re.I)
+CODE = re.compile(r"\bcode(?:\s+promo(?:tionnel)?)?\s*[:«\"“]?\s*([A-Za-z][A-Za-z0-9]{3,14})\b", re.I)
 MOTS_BF = re.compile(r"black\s*(?:friday|week|month|november)|cyber\s*(?:monday|week)", re.I)
 # Mots qui ne sont pas des codes (en majuscules dans la page)
 PAS_DES_CODES = {"promo", "postal", "code", "black", "friday", "offre", "valable", "client", "acces", "accès",
                  "pour", "dans", "avec", "votre", "vous", "sera", "sans", "dans", "suivant", "unique", "cadeau",
-                 "parrainage", "secret", "panier", "commande", "réduction", "reduction", "applique", "appliqué"}
+                 "parrainage", "secret", "panier", "commande", "réduction", "reduction", "applique", "appliqué",
+                 "tionnel", "tion", "bague", "bracelet", "stores", "store", "produit", "article", "livraison"}
 
 
 def lire_promos(texte):
@@ -134,6 +135,14 @@ def main(seulement=()):
         navigateur = pw.chromium.launch(headless=False)
         page = navigateur.new_page(locale="fr-FR", viewport={"width": 1280, "height": 900})
         for m in marques:
+            # Si la fenêtre du robot a été fermée (ou Chrome s'est arrêté), on en rouvre une.
+            if not navigateur.is_connected() or page.is_closed():
+                try:
+                    navigateur = pw.chromium.launch(headless=False)
+                except Exception:
+                    pass
+                page = navigateur.new_page(locale="fr-FR", viewport={"width": 1280, "height": 900})
+                print("   (fenêtre du robot rouverte)")
             vu = {"le": maintenant()}
             try:
                 reponse = page.goto(m["lien"], wait_until="domcontentloaded", timeout=35_000)

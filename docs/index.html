@@ -31,8 +31,8 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 /* Toute la page un peu plus petite (demandé le 18/11 : « c'est un peu grand ») */
-html { zoom: 0.6; }   /* mon modèle était une capture Retina (2× plus de pixels) : on revient à la taille réelle */
-@media (max-width: 760px) { html { zoom: 0.86; } }
+html { zoom: 0.6; --trait: 2.5px; }  /* 2,5 × 0,6 = 1,5 px réel : contour net */   /* mon modèle était une capture Retina (2× plus de pixels) : on revient à la taille réelle */
+@media (max-width: 760px) { html { zoom: 0.86; --trait: 1.744px; } }  /* 1,744 × 0,86 = 1,5 px réel */
 body { background: var(--creme); color: var(--texte); font-family: var(--font-caps); font-size: 15px; line-height: 1.4; -webkit-font-smoothing: antialiased; }
 [hidden] { display: none !important; }
 button { font: inherit; color: inherit; }
@@ -80,7 +80,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
 .puces { display: flex; align-items: center; gap: 18px; margin: 28px 0 0; }
 .puces .liste { display: flex; gap: 18px; overflow-x: auto; scrollbar-width: none; }
 .puces .liste::-webkit-scrollbar { display: none; }
-.puce { flex: none; min-width: 190px; height: 54px; padding: 0 26px; border-radius: 999px; border: 1.5px solid #0e0e0e; background: #fff; color: #0e0e0e; font-family: var(--font-caps); font-weight: 500; font-size: 1.15rem; letter-spacing: 0.24em; text-transform: uppercase; cursor: pointer; }  /* même style que CRUSH ALERTE */
+.puce { flex: none; min-width: 190px; height: 62px; padding: 0 30px; border-radius: 999px; border: var(--trait) solid #0e0e0e; background: #fff; color: #0e0e0e; font-family: var(--font-caps); font-weight: 500; font-size: 1.35rem; letter-spacing: 0.24em; text-transform: uppercase; cursor: pointer; }  /* identique à CRUSH ALERTE */
 .puce.on { background: #0e0e0e; color: #fff; }
 .compte { margin-left: auto; flex: none; font-family: var(--font-serif); font-style: italic; font-size: 1.55rem; color: var(--bordeaux); padding-right: 16px; border-right: 2px solid var(--bordeaux); }
 
@@ -107,12 +107,46 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
 .marque { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.3rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.95; }
 .nom { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.85rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .taille { margin: 4px 0 0; font-family: var(--font-caps); font-weight: 300; font-size: 1.4rem; opacity: 0.95; }
-.alerter { margin-top: 16px; width: 100%; height: 62px; border: 1.5px solid #0e0e0e; border-radius: 999px; background: #fff; color: #0e0e0e; font-family: var(--font-caps); font-weight: 500; font-size: 1.35rem; letter-spacing: 0.24em; text-transform: uppercase; cursor: pointer; transition: transform .15s ease; }
+.alerter { margin-top: 16px; width: 100%; height: 62px; border: var(--trait) solid #0e0e0e; border-radius: 999px; background: #fff; color: #0e0e0e; font-family: var(--font-caps); font-weight: 500; font-size: 1.35rem; letter-spacing: 0.24em; text-transform: uppercase; cursor: pointer; transition: transform .15s ease; }
 .alerter:active { transform: scale(0.98); }
 .alerter.on { background: #0e0e0e; color: #fff; }
 .alerter:disabled { opacity: 0.55; cursor: default; }
 .lancee { margin: 10px 0 0; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; color: var(--bordeaux); }
 .vide-total { grid-column: 1 / -1; text-align: center; padding: 50px 20px; font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; color: var(--bordeaux); background: var(--carte); border: 1.5px solid var(--bord); border-radius: 26px; }
+
+/* --- Onglets « Ma wishlist » / « Black Friday » --- */
+.onglets { display: flex; gap: 18px; margin-top: 28px; }
+/* --- Onglet Black Friday --- */
+.bf-tete { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
+.bf-titre { margin: 0; font-family: var(--font-logo); font-weight: 400; font-size: 2.4rem; letter-spacing: 0.02em; -webkit-text-stroke: 1px #0e0e0e; }
+.bf-sous { margin: 8px 0 0; font-family: var(--font-caps); font-size: 1.15rem; letter-spacing: 0.24em; text-transform: uppercase; }
+.bf-maj { margin: 0; font-family: var(--font-serif); font-style: italic; font-size: 1.3rem; color: var(--gris); }
+.bf-dates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+.bf-date { border: var(--trait) solid #0e0e0e; border-radius: 22px; padding: 18px 24px; background: #fff; }
+.bf-date.ajd { background: #0e0e0e; color: #fff; }
+.bf-date b { display: block; font-family: var(--font-caps); font-weight: 500; font-size: 1.05rem; letter-spacing: 0.22em; text-transform: uppercase; }
+.bf-date span { font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; }
+.bf-etats { margin-top: 14px; }
+.bf-grille { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
+@media (min-width: 1200px) { .bf-grille { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.bf-carte { position: relative; background: #fff; border: 1.5px solid var(--bord); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.bf-carte.wl { border-color: #0e0e0e; border-width: var(--trait); }
+.bf-haut { display: flex; align-items: center; gap: 14px; }
+.bf-logo { flex: none; width: 64px; height: 64px; border-radius: 50%; border: 1.5px solid var(--bord); background: #fff; display: grid; place-items: center; overflow: hidden; text-decoration: none; color: #0e0e0e; font-family: var(--font-logo); font-size: 1.2rem; }
+.bf-logo img { width: 40px; height: 40px; object-fit: contain; }
+.bf-nom { margin: 0; font-family: var(--font-caps); font-weight: 600; font-size: 1.2rem; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.2; }
+.bf-cat { margin: 2px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 1.2rem; color: var(--gris); }
+.bf-etat { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 4px 14px; background: var(--rose-clair); font-family: var(--font-caps); font-size: 0.95rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.bf-etat::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #c9902d; }
+.bf-etat.en-cours::before { background: var(--vert); } .bf-etat.termine::before { background: #9a948e; }
+.bf-offre { margin: 0; font-family: var(--font-serif); font-size: 1.45rem; line-height: 1.25; }
+.bf-vu { margin: 0; font-size: 1.05rem; color: var(--gris); }
+.bf-vu b { color: #0e0e0e; }
+.bf-codes { display: flex; flex-wrap: wrap; gap: 6px; }
+.bf-code { border: 1.5px dashed #0e0e0e; border-radius: 10px; padding: 3px 10px; background: transparent; font-family: var(--font-caps); font-weight: 600; font-size: 1rem; letter-spacing: 0.08em; cursor: pointer; }
+.bf-wl { position: absolute; top: 16px; right: 16px; font-family: var(--font-caps); font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; background: #0e0e0e; color: #fff; border-radius: 999px; padding: 3px 10px; }
+.bf-carte .alerter { margin-top: auto; height: 50px; font-size: 1rem; display: grid; place-items: center; text-decoration: none; }
+.bf-note { margin: 26px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 1.25rem; color: var(--gris); }
 
 /* Vue « liste » (bouton aux 3 traits) */
 .grille.en-liste { grid-template-columns: 1fr; gap: 18px; }
@@ -132,7 +166,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
 .fenetre label { display: grid; gap: 6px; font-size: 0.82rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bordeaux); }
 .fenetre input, .fenetre select { width: 100%; height: 52px; border: 1.5px solid #ebe5de; background: #fff; border-radius: 999px; padding: 0 20px; font-family: var(--font-serif); font-style: italic; font-size: 1.25rem; color: var(--texte); }
 .fenetre .actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 6px; }
-.btn { height: 50px; padding: 0 26px; border: 1.5px solid #0e0e0e; border-radius: 999px; background: #0e0e0e; color: #fff; font-family: var(--font-caps); font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; font-size: 0.9rem; cursor: pointer; text-decoration: none; display: inline-grid; place-items: center; }
+.btn { height: 50px; padding: 0 26px; border: var(--trait) solid #0e0e0e; border-radius: 999px; background: #0e0e0e; color: #fff; font-family: var(--font-caps); font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; font-size: 0.9rem; cursor: pointer; text-decoration: none; display: inline-grid; place-items: center; }
 .btn.doux { background: #fff; color: #0e0e0e; }
 .erreur { color: var(--rouge) !important; font-style: italic; }
 .menu { position: fixed; left: calc(var(--barre) + 12px); top: 30px; z-index: 21; background: var(--creme); border-radius: 20px; padding: 10px; box-shadow: 0 24px 60px -18px rgba(20,20,20,0.5); display: grid; min-width: 250px; animation: monte .2s ease both; }
@@ -154,7 +188,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   .icones svg { width: 32px; height: 32px; } .icones button { padding: 6px 20px; }
   .recherche, .categories select, .vues button { height: 56px; } .vues button { width: 56px; }
   .recherche input, .categories select { font-size: 1.25rem; }
-  .puce { min-width: 0; font-size: 1rem; height: 48px; } .compte { font-size: 1.3rem; }
+  .puce { min-width: 0; } .compte { font-size: 1.3rem; }
 }
 @media (max-width: 760px) {
   :root { --barre: 0px; }
@@ -182,7 +216,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   .vues { gap: 8px; } .vues button { width: 46px; height: 46px; border-radius: 12px; } .vues button svg { width: 22px; height: 22px; }
   .puces { margin-top: 14px; gap: 6px; flex-wrap: wrap; } .puces .liste { gap: 8px; order: 2; flex: 1 1 100%; }
   .compte { order: 1; border-right: 0; }
-  .puce { height: 40px; padding: 0 16px; font-size: 0.78rem; letter-spacing: 0.16em; }
+  .puce { height: 42px; padding: 0 18px; font-size: 0.8rem; letter-spacing: 0.14em; }  /* identique à CRUSH ALERTE sur iPhone */
   .compte { font-size: 1.1rem; padding-right: 8px; }
   .grille { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
   .affiche { border-radius: 14px; }
@@ -201,6 +235,20 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   .en-liste .alerter { flex: 1 1 100%; height: 40px; }
   .menu { position: absolute; left: 12px; }
   .ajouter { right: 16px; width: 60px; height: 60px; font-size: 2rem; }
+  .onglets { gap: 8px; margin-top: 14px; } .onglets .puce { flex: 1; }
+  .bf-titre { font-size: 1.25rem; -webkit-text-stroke: 0.5px #0e0e0e; } .bf-sous { font-size: 0.75rem; letter-spacing: 0.16em; }
+  .bf-maj { font-size: 0.95rem; }
+  .bf-dates { grid-template-columns: 1fr; gap: 8px; margin-top: 14px; }
+  .bf-date { padding: 10px 16px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .bf-date b { font-size: 0.72rem; } .bf-date span { font-size: 1.05rem; }
+  .bf-grille { grid-template-columns: 1fr; gap: 12px; margin-top: 16px; }
+  .bf-carte { padding: 16px; border-radius: 18px; }
+  .bf-logo { width: 48px; height: 48px; } .bf-logo img { width: 30px; height: 30px; }
+  .bf-nom { font-size: 0.85rem; } .bf-cat { font-size: 0.95rem; }
+  .bf-etat { font-size: 0.68rem; } .bf-offre { font-size: 1.1rem; } .bf-vu { font-size: 0.82rem; }
+  .bf-code { font-size: 0.78rem; } .bf-wl { font-size: 0.6rem; }
+  .bf-carte .alerter { height: 42px; font-size: 0.8rem; }
+  .bf-note { font-size: 0.95rem; }
 }
 </style>
 </head>
@@ -237,8 +285,14 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
     <div class="cs reflet" style="left:386px;top:44px" aria-hidden="true">CS<sup>✦</sup></div>
   </div>
 
-  <img class="banniere" src="banniere.jpg" alt="Ma Wishlist — la wishlist plus intelligente">
+  <img class="banniere" src="banniere.jpg?v=4" alt="Ma Wishlist — la wishlist plus intelligente">
 
+  <div class="onglets">
+    <button class="puce on" type="button" data-vue="wishlist">Ma wishlist</button>
+    <button class="puce" type="button" data-vue="bf">Black Friday</button>
+  </div>
+
+  <div id="vue-wishlist">
   <div class="outils">
     <label class="recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
       <input id="q" type="search" placeholder="Rechercher un article, une marque..." aria-label="Rechercher un article, une marque"></label>
@@ -253,6 +307,24 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   <div class="puces"><div class="liste" id="puces"></div><span class="compte" id="compte"></span></div>
 
   <div class="grille" id="grid"></div>
+  </div>
+
+  <!-- ================= Onglet BLACK FRIDAY ================= -->
+  <section id="vue-bf" hidden>
+    <div class="bf-tete">
+      <div><h2 class="bf-titre">Black Friday 2026</h2><p class="bf-sous" id="bf-compte-rebours"></p></div>
+      <p class="bf-maj" id="bf-maj"></p>
+    </div>
+    <div class="bf-dates" id="bf-dates"></div>
+    <div class="outils">
+      <label class="recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <input id="bf-q" type="search" placeholder="Rechercher une marque (Sephora, Zara, Etam…)" aria-label="Rechercher une marque"></label>
+    </div>
+    <div class="puces"><div class="liste" id="bf-cats"></div></div>
+    <div class="puces bf-etats"><div class="liste" id="bf-etats"></div><span class="compte" id="bf-nb"></span></div>
+    <div class="bf-grille" id="bf-grille"></div>
+    <p class="bf-note">Les promos sont relevées par le robot sur les sites des marques et des sites d'annonces. Vérifie toujours sur le site avant de payer.</p>
+  </section>
 </div></div>
 
 <button class="ajouter" id="b-ajouter" type="button" aria-label="Ajouter un article">+</button>
@@ -261,6 +333,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   <button type="button" data-m="ajouter">Ajouter un article</button>
   <button type="button" data-m="alertes">Mes alertes</button>
   <button type="button" data-m="tous">Toute ma wishlist</button>
+  <button type="button" data-m="bf">Black Friday</button>
   <button type="button" data-m="acces">Mon accès</button>
 </div>
 
@@ -492,8 +565,9 @@ menu.onclick = (e) => {
   const m = e.target.dataset.m; if (!m) return; menu.hidden = true;
   if (m === "ajouter") ouvrirAjout();
   if (m === "alertes") { seulementAlertes = true; dessiner(); }
-  if (m === "tous") { seulementAlertes = false; filtreCat = "Tous"; selCat.value = "Tous"; dessiner(); }
+  if (m === "tous") { montrerVue("wishlist"); seulementAlertes = false; filtreCat = "Tous"; selCat.value = "Tous"; dessiner(); }
   if (m === "acces") ouvrirCle();
+  if (m === "bf") montrerVue("bf");
 };
 document.getElementById("b-cloche").onclick = () => {
   seulementAlertes = !seulementAlertes; dessiner();
@@ -593,6 +667,103 @@ async function boucle() {
 let reveilJusqua = 0;
 function guetterLeRobot() { reveilJusqua = Date.now() + 4 * 60000; planifier(15000); }
 document.addEventListener("visibilitychange", () => { if (!document.hidden && !occupe) charger(); });
+// ================================================================ Onglet BLACK FRIDAY
+// Les promos viennent du fichier black-friday.json, rempli par le robot (black_friday.py).
+let BF = null, bfCat = "Toutes", bfEtat = "Tous", bfRecherche = "";
+const JOUR = () => new Date().toISOString().slice(0, 10);
+const joliJour = (iso) => iso ? new Date(iso + "T12:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" }) : "";
+function etatBF(m) {
+  // Même règle que le robot : terminé si la date de fin est passée ; en cours si le site affiche ses promos ;
+  // en cours si c'est officiel et qu'on est dans les dates ; sinon à venir.
+  const j = JOUR(), vu = m.vu_sur_le_site || {}, da = m.dates_annonce || {};
+  const debut = m.debut || da.debut || "", fin = m.fin || da.fin || "";
+  if (fin && j > fin) return "terminé";
+  if (vu.parle_du_black_friday && (vu.jusqua || (vu.reductions || []).length)) return "en cours";
+  if (debut && j >= debut && (!fin || j <= fin) && m.statut === "officiel") return "en cours";
+  return "à venir";
+}
+async function chargerBF() {
+  try { BF = await (await fetch("black-friday.json?t=" + Date.now(), { cache: "no-store" })).json(); }
+  catch (e) { BF = null; }
+  dessinerBF();
+}
+function dessinerBF() {
+  if (!BF) { document.getElementById("bf-grille").replaceChildren(el("div", "vide-total", "Les promos arrivent…")); return; }
+  // Compte à rebours jusqu'au vendredi 27 novembre
+  const bfJour = (BF.dates || []).find(d => d.nom === "Black Friday");
+  if (bfJour) {
+    const n = Math.round((new Date(bfJour.debut + "T00:00:00") - new Date(JOUR() + "T00:00:00")) / 864e5);
+    document.getElementById("bf-compte-rebours").textContent = n > 1 ? `J-${n} avant le Black Friday` : n === 1 ? "C'est demain !" : n === 0 ? "C'est aujourd'hui !" : "Le Black Friday est passé";
+  }
+  document.getElementById("bf-maj").textContent = BF.robot_passe_le ? `Promos relevées par le robot le ${BF.robot_passe_le.replace(" UTC", "")}` : "";
+  document.getElementById("bf-dates").replaceChildren(...(BF.dates || []).map(d => {
+    const c = el("div", "bf-date" + (JOUR() >= d.debut && JOUR() <= d.fin ? " ajd" : ""));
+    c.append(el("b", null, d.nom.replace(" (beaucoup d'enseignes)", "")), el("span", null, d.debut === d.fin ? joliJour(d.debut) : `${joliJour(d.debut)} → ${joliJour(d.fin)}`));
+    return c;
+  }));
+  const cats = ["Toutes", ...(BF.categories || [])];
+  document.getElementById("bf-cats").replaceChildren(...cats.map(c => { const b = el("button", "puce" + (bfCat === c ? " on" : ""), c); b.type = "button"; b.onclick = () => { bfCat = c; dessinerBF(); }; return b; }));
+  const etats = ["Tous", "en cours", "à venir", "terminé"];
+  document.getElementById("bf-etats").replaceChildren(...etats.map(c => { const b = el("button", "puce" + (bfEtat === c ? " on" : ""), c); b.type = "button"; b.onclick = () => { bfEtat = c; dessinerBF(); }; return b; }));
+  const mesSites = new Set((liste.articles || []).map(a => siteDe(a.url)).concat((liste.articles || []).map(a => (memoire[a.url] || {}).marque || "")).map(x => (x || "").toLowerCase()));
+  const dansMaWL = (m) => m.dans_ma_wishlist || mesSites.has((m.marque || "").toLowerCase()) || mesSites.has((m.site || "").toLowerCase());
+  const ordre = { "en cours": 0, "à venir": 1, "terminé": 2 };
+  let ms = (BF.marques || []).map(m => ({ ...m, _etat: etatBF(m), _wl: dansMaWL(m) }))
+    .filter(m => bfCat === "Toutes" || m.categorie === bfCat)
+    .filter(m => bfEtat === "Tous" || m._etat === bfEtat)
+    .filter(m => !bfRecherche || [m.marque, m.categorie, m.site, m.offre].join(" ").toLowerCase().includes(bfRecherche));
+  ms.sort((a, b) => (b._wl - a._wl) || (ordre[a._etat] - ordre[b._etat]) || a.marque.localeCompare(b.marque, "fr"));
+  document.getElementById("bf-nb").textContent = `${ms.length} marque${ms.length > 1 ? "s" : ""}`;
+  document.getElementById("bf-grille").replaceChildren(...(ms.length ? ms.map(carteBF) : [el("div", "vide-total", "Aucune marque ne correspond.")]));
+}
+function carteBF(m) {
+  const c = el("article", "bf-carte" + (m._wl ? " wl" : ""));
+  if (m._wl) c.append(el("span", "bf-wl", "Ma wishlist"));
+  const haut = el("div", "bf-haut");
+  // Le logo ouvre directement le site de la marque
+  const logo = el("a", "bf-logo"); logo.href = m.lien; logo.target = "_blank"; logo.rel = "noopener"; logo.title = "Ouvrir le site " + m.marque;
+  const img = el("img"); img.alt = m.marque; img.loading = "lazy"; img.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(m.site)}&sz=128`;
+  img.onerror = () => { logo.textContent = m.marque.slice(0, 2).toUpperCase(); };
+  logo.append(img);
+  const t = el("div"); t.append(el("p", "bf-nom", m.marque), el("p", "bf-cat", m.categorie));
+  haut.append(logo, t); c.append(haut);
+  c.append(el("span", "bf-etat " + m._etat.replace("é", "e").replace(" ", "-"), m._etat));
+  const vu0 = m.vu_sur_le_site || {};
+  const robotAVu = vu0.parle_du_black_friday && (vu0.jusqua || (vu0.reductions || []).length);
+  // Rien d'annoncé dans la presse, mais le robot a vu des promos sur le site : on le dit.
+  c.append(el("p", "bf-offre", m.statut === "non annoncé" && robotAVu ? "Promos Black Friday affichées sur le site" : m.offre));
+  const da = m.dates_annonce || {};
+  const debut = m.debut || da.debut, fin = m.fin || da.fin;
+  if (debut || fin) c.append(el("p", "bf-vu", debut && fin ? `Du ${joliJour(debut)} au ${joliJour(fin)}` : debut ? `À partir du ${joliJour(debut)}` : `Jusqu'au ${joliJour(fin)}`));
+  const vu = m.vu_sur_le_site || {};
+  if (vu.bloque) c.append(el("p", "bf-vu", "Le site ne laisse pas entrer le robot : vérifie directement."));
+  else if (vu.jusqua || (vu.reductions || []).length) {
+    const p = el("p", "bf-vu"); p.append("Vu sur le site : ", el("b", null, vu.jusqua ? "jusqu'à " + vu.jusqua : vu.reductions.slice(0, 3).join(", ")));
+    c.append(p);
+  }
+  const codes = [...new Set([...(vu.codes || [])])].filter(x => x.length >= 4);
+  if (codes.length) {
+    const z = el("div", "bf-codes");
+    codes.forEach(code => { const b = el("button", "bf-code", code); b.type = "button"; b.title = "Copier le code";
+      b.onclick = async () => { try { await navigator.clipboard.writeText(code); toast("Code copié ✨", code); } catch (e) { toast("Code", code); } }; z.append(b); });
+    c.append(z);
+  }
+  const voir = el("a", "alerter", "Voir le site"); voir.href = m.lien; voir.target = "_blank"; voir.rel = "noopener";
+  c.append(voir);
+  return c;
+}
+document.getElementById("bf-q").addEventListener("input", (e) => { bfRecherche = e.target.value.trim().toLowerCase(); dessinerBF(); });
+// Passer d'un onglet à l'autre
+function montrerVue(v) {
+  document.getElementById("vue-wishlist").hidden = v !== "wishlist";
+  document.getElementById("vue-bf").hidden = v !== "bf";
+  document.querySelectorAll(".onglets .puce").forEach(b => b.classList.toggle("on", b.dataset.vue === v));
+  if (v === "bf" && !BF) chargerBF();
+  try { localStorage.setItem("crush_onglet", v); } catch (e) {}
+}
+document.querySelectorAll(".onglets .puce").forEach(b => b.onclick = () => montrerVue(b.dataset.vue));
+try { if (localStorage.getItem("crush_onglet") === "bf" || location.hash === "#black-friday") montrerVue("bf"); } catch (e) {}
+
 dessiner();
 boucle();
 </script>

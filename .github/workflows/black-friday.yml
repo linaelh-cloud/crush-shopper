@@ -1,0 +1,65 @@
+# La « recette » du robot Black Friday : chaque jour, il fait le tour des sites des marques
+# et met à jour docs/black-friday.json (promos vues, codes, dates, « en cours / à venir / terminé »).
+name: Robot Black Friday
+
+on:
+  workflow_dispatch:          # le bouton « Run workflow », pour le lancer à la main
+  schedule:
+    - cron: "0 6 * * *"       # tous les jours vers 7 h (heure de Paris)
+
+permissions:
+  contents: write             # pour enregistrer le fichier des promos
+
+# Un seul robot à la fois (le même « groupe » que le robot de la wishlist : ils ne s'écrivent pas dessus).
+concurrency:
+  group: surveillance
+  cancel-in-progress: false
+
+jobs:
+  promos:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - name: Récupérer le code du robot
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Ressortir Chrome du placard (cache)
+        id: placard
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: chrome-playwright-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+
+      - name: Installer Playwright et Chrome
+        run: |
+          pip install -r requirements.txt
+          if [ "${{ steps.placard.outputs.cache-hit }}" = "true" ]; then
+            python -c "from playwright.sync_api import sync_playwright as s; p = s().start(); p.chromium.launch().close(); p.stop()" \
+              || python -m playwright install-deps chromium
+          else
+            python -m playwright install --with-deps chromium
+          fi
+
+      - name: Lancer le robot Black Friday (dans un écran imaginaire)
+        run: xvfb-run --auto-servernum python black_friday.py
+
+      - name: Enregistrer les promos
+        if: always()
+        run: |
+          git config user.name "Crush Shopper"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/black-friday.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Promos Black Friday mises à jour"
+          for essai in 1 2 3; do
+            if git pull --rebase && git push; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
