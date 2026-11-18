@@ -1,14 +1,15 @@
 # La « recette » du robot « Pour toi » : quand j'ajoute ou retire un article de ma wishlist
-# (et une fois par jour), il cherche des articles SIMILAIRES chez plein de marques
-# et écrit docs/suggestions.json, que l'appli affiche dans l'onglet « POUR TOI ».
-# Si la clé ANTHROPIC_API_KEY est rangée dans le coffre-fort (Secrets), l'IA Claude choisit
-# les articles et écrit les phrases ; sinon, c'est le cerveau à règles (gratuit).
+# (ou quand Crush Styliste dépose ses idées), il prépare docs/suggestions.json,
+# que l'appli affiche dans l'onglet « POUR TOI ».
+# Les idées viennent de Crush Styliste (routine Claude, qui dépose styliste.json chaque matin)
+# ou, si elle est rangée dans le coffre-fort, de la clé payante ANTHROPIC_API_KEY.
+# Le robot vérifie chaque lien (photo, prix, stock) avant de l'afficher dans l'appli.
 name: Robot Pour toi
 
 on:
   workflow_dispatch:          # le bouton « Run workflow », pour le lancer à la main
   push:
-    paths: ["wishlist.json"]  # la « sonnette » : ma wishlist a changé
+    paths: ["wishlist.json", "styliste.json"]  # sonnettes : ma wishlist a changé, ou Crush Styliste a déposé ses idées
   schedule:
     - cron: "0 7 * * *"       # et tous les jours vers 8 h (heure de Paris), pour les nouveautés
 

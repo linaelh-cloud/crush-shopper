@@ -1,12 +1,16 @@
 """
-Crush Shopper – l'IA (Claude) pour les suggestions « Pour toi ».
+Crush Shopper – la styliste IA (Claude) pour l'onglet « Pour toi ».
 
 Elle ne s'allume QUE si la clé ANTHROPIC_API_KEY est rangée dans le coffre-fort de GitHub.
 Sans clé, le robot utilise son cerveau à règles (suggestions.py) : rien ne casse.
 
-Deux missions :
-  1. comprendre mon style et inventer de bonnes recherches pour chaque article ;
-  2. choisir, parmi les produits trouvés, ceux qui me ressemblent, avec une phrase perso.
+Ce qu'elle fait :
+  1. elle lit ma wishlist (et mes marques préférées) ;
+  2. elle cherche sur TOUT le web, avec l'outil officiel de recherche de Claude :
+     les dupes dont on parle (TikTok, blogs, Reddit, magazines), les marques et teintes tendance,
+     ce qu'aiment les filles qui achètent le même article ;
+  3. elle rend une liste d'articles précis (marque, nom, teinte, lien de la fiche produit, pourquoi).
+Le robot ouvre ensuite chaque lien pour vérifier photo, prix et stock.
 """
 import os
 from typing import List
@@ -14,30 +18,32 @@ from typing import List
 from pydantic import BaseModel
 
 MODELE = "claude-opus-5-5"
+RECHERCHES_MAX = 15        # recherches web au maximum par passage (chacune coûte un peu)
+
+OUTILS_WEB = [
+    {"type": "web_search_20260209", "name": "web_search", "max_uses": RECHERCHES_MAX},
+    {"type": "web_fetch_20260209", "name": "web_fetch"},
+]
 
 
 def active():
     return bool(os.environ.get("ANTHROPIC_API_KEY", "").strip())
 
 
-class Recherche(BaseModel):
-    pour_url: str          # le lien de l'article de ma wishlist
-    requete: str           # ce qu'on tape dans la recherche de Zalando (en français)
-    type_produit: str      # mot qui doit apparaître dans le nom (ex. « veste », « rouge à lèvres »)
-
-
-class Profil(BaseModel):
-    style: str             # mon style en une phrase
-    recherches: List[Recherche]
-
-
-class Choix(BaseModel):
-    numero: int            # le numéro du produit dans la liste envoyée
-    raison: str            # phrase perso courte, en tutoiement
+class Idee(BaseModel):
+    pour_url: str          # le lien de l'article de ma wishlist qui a inspiré l'idée
+    marque: str
+    nom: str               # nom du produit
+    teinte_ou_couleur: str # ex. « 32 Brownie », « kaki »
+    lien: str              # lien DIRECT de la fiche produit (pas une page de recherche)
+    prix: str              # ex. « 34 € » (vide si inconnu)
+    genre: str             # « dupe », « tendance », « même style », « coup de cœur des filles »
+    pourquoi: str          # phrase perso courte, en tutoiement
 
 
 class Selection(BaseModel):
-    choix: List[Choix]
+    style: str             # mon style en une phrase, en tutoiement
+    idees: List[Idee]
 
 
 def _client():
@@ -45,45 +51,66 @@ def _client():
     return anthropic.Anthropic()
 
 
-def profil_et_recherches(articles):
-    """articles : liste de dicts {url, nom, option, marque, prix, categorie}."""
-    lignes = "\n".join(f"- {a['url']} | {a['nom']} | {a.get('option','')} | {a.get('marque','')} | {a.get('prix','')} | {a.get('categorie','')}"
-                       for a in articles)
-    r = _client().messages.parse(
-        model=MODELE,
-        max_tokens=16000,
-        output_config={"effort": "low"},
-        system=("Tu es la styliste personnelle de l'appli Crush Shopper. Tu analyses une wishlist "
-                "et tu prépares des recherches de produits SIMILAIRES chez d'autres marques, comme Google Shopping."),
-        messages=[{"role": "user", "content": (
-            "Voici ma wishlist (lien | nom | taille ou teinte | marque | prix | catégorie) :\n" + lignes +
-            "\n\n1) Décris mon style en une phrase courte, en tutoiement (couleurs, esprit, budget)."
-            "\n2) Pour CHAQUE article, propose 2 ou 3 recherches courtes en français (2 à 4 mots) à taper sur Zalando "
-            "pour trouver des articles similaires d'AUTRES marques : même type de produit, couleur ou esprit proche. "
-            "Donne aussi le mot du type de produit qui doit apparaître dans le nom des résultats (ex. « veste », « rouge à lèvres »).")}],
-        output_format=Profil,
+def _consigne(articles, marques_aimees):
+    lignes = "\n".join(
+        f"- {a['url']} | {a['nom']} | {a.get('option', '')} | marque : {a.get('marque', '')} | prix : {a.get('prix', '')} "
+        f"| catégorie : {a.get('categorie', '')}" for a in articles)
+    aimees = ", ".join(marques_aimees) if marques_aimees else "(pas encore de liste : déduis-les de ma wishlist)"
+    return (
+        "Voici ma wishlist (lien | nom | taille ou teinte | marque | prix | catégorie) :\n" + lignes +
+        f"\n\nMes marques préférées : {aimees}\n\n"
+        "Fais une vraie recherche sur le web, comme une amie styliste qui suit TikTok, les blogs beauté et mode, "
+        "Reddit et les magazines. Pour CHAQUE article de ma wishlist, trouve 5 à 8 produits précis qui me plairaient :\n"
+        "- les DUPES et alternatives dont on parle (cherche par exemple « dupe » + nom + teinte, « TikTok », « Reddit ») ;\n"
+        "- les marques et teintes TENDANCE en ce moment dans le même esprit ;\n"
+        "- ce qu'aiment aussi les filles qui achètent cet article (avis, comparatifs, « si tu aimes X tu vas adorer ») ;\n"
+        "- en priorité mes marques préférées, puis des marques du même niveau ou plus désirables, pas des marques bas de gamme.\n"
+        "Pour un maquillage, la TEINTE doit être vraiment proche de la mienne (même famille de couleur et même sous-ton). "
+        "Pour un vêtement, même type de pièce et couleur ou style proche.\n"
+        "Varie les marques (pas plus de 2 idées par marque). Produits vendus en France (sites .fr ou livrant en France).\n"
+        "IMPORTANT : donne seulement des liens de FICHES PRODUIT que tu as vraiment vus pendant ta recherche "
+        "(jamais un lien inventé, jamais une page de recherche ou de catégorie).\n"
+        "Termine par un résumé clair : mon style en une phrase, puis la liste des produits avec, pour chacun : "
+        "le lien de l'article de ma wishlist concerné, la marque, le nom, la teinte ou couleur, le lien de la fiche, le prix, "
+        "le genre (dupe / tendance / même style / coup de cœur des filles) et pourquoi il me plairait "
+        "(15 mots maximum, en tutoiement, précis, ex. « Le dupe TikTok de ta Modesty, même nude rosé, en plus crémeux »)."
     )
-    if r.stop_reason == "refusal" or r.parsed_output is None:
+
+
+def styliste_web(articles, marques_aimees=(), continuations_max=4):
+    """Recherche sur le web puis mise en forme. Rend une Selection, ou None."""
+    client = _client()
+    messages = [{"role": "user", "content": _consigne(articles, marques_aimees)}]
+    systeme = ("Tu es la styliste personnelle de l'appli Crush Shopper. Tu connais les tendances beauté et mode, "
+               "les dupes TikTok et les avis des clientes. Tu es précise et tu ne recommandes que des produits réels.")
+    # 1) La recherche sur le web (Claude cherche et lit les pages lui-même, sur les serveurs d'Anthropic)
+    for _ in range(continuations_max + 1):
+        with client.messages.stream(model=MODELE, max_tokens=32000, system=systeme,
+                                    tools=OUTILS_WEB, messages=messages) as flux:
+            reponse = flux.get_final_message()
+        if reponse.stop_reason == "pause_turn":
+            # La recherche est longue : on la laisse reprendre là où elle s'était arrêtée
+            messages = [messages[0], {"role": "assistant", "content": reponse.content}]
+            continue
+        break
+    if reponse.stop_reason == "refusal":
         return None
-    return r.parsed_output
-
-
-def choisir(style, candidats, combien=24):
-    """candidats : liste de dicts {nom, marque, prix, pour_nom}. Rend {numero: raison}."""
-    lignes = "\n".join(f"{i}. {c['nom']} | {c.get('marque','')} | {c.get('prix','')} | proche de : {c['pour_nom']}"
-                       for i, c in enumerate(candidats))
-    r = _client().messages.parse(
+    compte_rendu = "\n".join(b.text for b in reponse.content if b.type == "text").strip()
+    if not compte_rendu:
+        return None
+    # 2) La mise en forme : on transforme son compte rendu en liste bien rangée (formulaire)
+    r = client.messages.parse(
         model=MODELE,
         max_tokens=16000,
         output_config={"effort": "low"},
-        system="Tu es la styliste personnelle de l'appli Crush Shopper. Tu parles en tutoiement, avec des phrases courtes et chics.",
+        system="Tu recopies fidèlement un compte rendu de recherche dans le formulaire demandé, sans rien inventer.",
         messages=[{"role": "user", "content": (
-            f"Mon style : {style}\n\nProduits trouvés (numéro. nom | marque | prix | article de ma wishlist dont il est proche) :\n{lignes}"
-            f"\n\nChoisis jusqu'à {combien} produits qui me plairaient vraiment : varie les marques, garde le bon type de produit, "
-            "évite les doublons. Pour chacun, écris une raison perso de 15 mots maximum "
-            "(ex. « Le même vert olive que ta veste Alo, en version légère et à 69 € »).")}],
+            "Compte rendu de la styliste :\n\n" + compte_rendu +
+            "\n\nRecopie mon style et chaque produit proposé. Garde seulement les produits qui ont un lien de fiche produit "
+            "(http…). « pour_url » doit être exactement l'un de ces liens de ma wishlist :\n" +
+            "\n".join(a["url"] for a in articles))}],
         output_format=Selection,
     )
     if r.stop_reason == "refusal" or r.parsed_output is None:
         return None
-    return {c.numero: c.raison for c in r.parsed_output.choix}
+    return r.parsed_output

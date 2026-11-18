@@ -321,13 +321,13 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   <!-- ================= Onglet POUR TOI ================= -->
   <section id="vue-pt" hidden>
     <div class="bf-tete">
-      <div><h2 class="bf-titre">Pour toi</h2><p class="bf-sous">Des crushs qui te ressemblent, de plein de marques</p></div>
+      <div><h2 class="bf-titre">Pour toi</h2><p class="bf-sous">Les idées de ta styliste, trouvées sur tout le web</p></div>
       <p class="bf-maj" id="pt-maj"></p>
     </div>
     <p class="pt-style" id="pt-style"></p>
     <div class="puces"><div class="liste" id="pt-filtres"></div><span class="compte" id="pt-nb"></span></div>
     <div class="grille" id="pt-grille"></div>
-    <p class="bf-note">Ces idées sont trouvées par le robot d'après ta wishlist. Les prix peuvent changer : vérifie sur le site avant de payer.</p>
+    <p class="bf-note">Ces idées sont trouvées par ta styliste IA d'après ta wishlist. Les prix peuvent changer : vérifie sur le site avant de payer.</p>
   </section>
 
   <!-- ================= Onglet BLACK FRIDAY ================= -->
@@ -786,8 +786,16 @@ async function chargerPT() {
 }
 function dessinerPT() {
   const grille = document.getElementById("pt-grille");
-  if (!PT || !(PT.suggestions || []).length) { grille.replaceChildren(el("div", "vide-total", "Ajoute des articles à ta wishlist : je te trouve des idées ✨")); return; }
-  document.getElementById("pt-style").textContent = PT.mon_style || "";
+  const vide = !PT || !(PT.suggestions || []).length;
+  document.getElementById("pt-filtres").parentElement.hidden = vide;
+  if (vide) {
+    document.getElementById("pt-style").textContent = ""; document.getElementById("pt-maj").textContent = "";
+    grille.replaceChildren(el("div", "vide-total", PT && PT.par_ia
+      ? "Ajoute des articles à ta wishlist : ta styliste te trouve des idées ✨"
+      : "Ta styliste arrive bientôt ✨ Elle cherchera pour toi, sur tout le web, les dupes, les teintes et les marques tendance."));
+    return;
+  }
+  document.getElementById("pt-style").textContent = (PT.par_ia ? "✦ Ta styliste : " : "") + (PT.mon_style || "");
   document.getElementById("pt-maj").textContent = PT.mise_a_jour ? `Idées trouvées le ${PT.mise_a_jour.replace(" UTC", "")}` : "";
   // Les mêmes catégories que ma wishlist
   document.getElementById("pt-filtres").replaceChildren(...["Tous", ...CATEGORIES].map(g => {
@@ -803,7 +811,8 @@ function carteIdee(s, index) {
   dejaVues.add(s.lien);
   const affiche = el("a", "affiche"); affiche.href = s.lien; affiche.target = "_blank"; affiche.rel = "noopener";
   const img = el("img"); img.src = s.photo; img.alt = s.nom; img.referrerPolicy = "no-referrer"; img.loading = "lazy"; affiche.append(img);
-  if (s.promo) affiche.append(el("span", "etat promo", s.promo));
+  // Étiquette en haut : « DUPE », « TENDANCE »… (idées de la styliste IA), sinon la promo
+  if (s.genre || s.promo) affiche.append(el("span", "etat promo", s.genre ? s.genre.toUpperCase() : s.promo));
   const infos = el("div", "infos");
   // « LIP COLOR - Rouge à lèvres - notably nude » → nom « Lip Color », puis « notably nude · 23,95 € »
   const morceaux = s.nom.split(" - "), joli = (t) => t === t.toUpperCase() ? t.toLowerCase().replace(/(^|\s)\S/g, x => x.toUpperCase()) : t;
