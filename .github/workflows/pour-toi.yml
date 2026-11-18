@@ -1,0 +1,71 @@
+# La « recette » du robot « Pour toi » : quand j'ajoute ou retire un article de ma wishlist
+# (et une fois par jour), il cherche des articles SIMILAIRES chez plein de marques
+# et écrit docs/suggestions.json, que l'appli affiche dans l'onglet « POUR TOI ».
+# Si la clé ANTHROPIC_API_KEY est rangée dans le coffre-fort (Secrets), l'IA Claude choisit
+# les articles et écrit les phrases ; sinon, c'est le cerveau à règles (gratuit).
+name: Robot Pour toi
+
+on:
+  workflow_dispatch:          # le bouton « Run workflow », pour le lancer à la main
+  push:
+    paths: ["wishlist.json"]  # la « sonnette » : ma wishlist a changé
+  schedule:
+    - cron: "0 7 * * *"       # et tous les jours vers 8 h (heure de Paris), pour les nouveautés
+
+permissions:
+  contents: write             # pour enregistrer le fichier des suggestions
+
+# Si j'ajoute 3 articles d'un coup, on garde seulement le dernier lancement (il voit toute la liste).
+concurrency:
+  group: suggestions
+  cancel-in-progress: true
+
+jobs:
+  pour-toi:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Récupérer le code du robot
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Ressortir Chrome du placard (cache)
+        id: placard
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: chrome-playwright-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+
+      - name: Installer Playwright et Chrome
+        run: |
+          pip install -r requirements.txt
+          if [ "${{ steps.placard.outputs.cache-hit }}" = "true" ]; then
+            python -c "from playwright.sync_api import sync_playwright as s; p = s().start(); p.chromium.launch().close(); p.stop()" \
+              || python -m playwright install-deps chromium
+          else
+            python -m playwright install --with-deps chromium
+          fi
+
+      - name: Lancer le robot Pour toi (dans un écran imaginaire)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # vide tant que je ne l'ai pas rangée : pas grave
+        run: xvfb-run --auto-servernum python suggestions.py
+
+      - name: Enregistrer les suggestions
+        run: |
+          git config user.name "Crush Shopper"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/suggestions.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Suggestions Pour toi mises à jour"
+          for essai in 1 2 3; do
+            if git pull --rebase && git push; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
