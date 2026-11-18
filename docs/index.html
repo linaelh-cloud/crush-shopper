@@ -778,26 +778,24 @@ function carteBF(m) {
 document.getElementById("bf-q").addEventListener("input", (e) => { bfRecherche = e.target.value.trim().toLowerCase(); dessinerBF(); });
 // ================================================================ Onglet POUR TOI
 // Les idées viennent du fichier suggestions.json, rempli par le robot (suggestions.py).
-let PT = null, ptFiltre = "Tout";
+let PT = null, ptFiltre = "Tous";
 async function chargerPT() {
   try { PT = await (await fetch("suggestions.json?t=" + Date.now(), { cache: "no-store" })).json(); }
   catch (e) { PT = null; }
   dessinerPT();
 }
-const commeDe = (s) => s.comme || (s.raison || "").split(" · ")[0];
 function dessinerPT() {
   const grille = document.getElementById("pt-grille");
   if (!PT || !(PT.suggestions || []).length) { grille.replaceChildren(el("div", "vide-total", "Ajoute des articles à ta wishlist : je te trouve des idées ✨")); return; }
   document.getElementById("pt-style").textContent = PT.mon_style || "";
   document.getElementById("pt-maj").textContent = PT.mise_a_jour ? `Idées trouvées le ${PT.mise_a_jour.replace(" UTC", "")}` : "";
-  const groupes = ["Tout", ...new Set(PT.suggestions.map(commeDe))];
-  if (!groupes.includes(ptFiltre)) ptFiltre = "Tout";
-  document.getElementById("pt-filtres").replaceChildren(...groupes.map(g => {
+  // Les mêmes catégories que ma wishlist
+  document.getElementById("pt-filtres").replaceChildren(...["Tous", ...CATEGORIES].map(g => {
     const b = el("button", "puce" + (ptFiltre === g ? " on" : ""), g); b.type = "button"; b.onclick = () => { ptFiltre = g; dessinerPT(); }; return b;
   }));
-  const ss = PT.suggestions.filter(s => ptFiltre === "Tout" || commeDe(s) === ptFiltre);
+  const ss = PT.suggestions.filter(s => ptFiltre === "Tous" || (s.categorie || "Mode") === ptFiltre);
   document.getElementById("pt-nb").textContent = `${ss.length} idée${ss.length > 1 ? "s" : ""}`;
-  grille.replaceChildren(...ss.map(carteIdee));
+  grille.replaceChildren(...(ss.length ? ss.map(carteIdee) : [el("div", "vide-total", "Pas encore d'idées dans cette catégorie : ajoute un article de ce genre à ta wishlist ✨")]));
 }
 function carteIdee(s, index) {
   const c = el("article", "carte" + (dejaVues.has(s.lien) ? " vue" : ""));   // l'animation, seulement la 1re fois
