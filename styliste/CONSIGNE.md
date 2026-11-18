@@ -20,9 +20,14 @@ Règles :
 - Maquillage : la **teinte** doit être vraiment proche de la mienne (même famille de couleur et même sous-ton).
 - Vêtement : même type de pièce, couleur ou style proche.
 - Pas plus de 2 idées par marque. Produits vendus en France (site .fr ou livraison en France).
-- **Seulement des liens de fiches produit que tu as vraiment ouvertes** (jamais un lien inventé,
-  jamais une page de recherche ou de catégorie). Ouvre chaque fiche pour vérifier qu'elle existe.
-- Ne contourne jamais une protection anti-robot ni un CAPTCHA : si un site bloque, choisis un autre site.
+- **Seulement des liens de fiches produit vus dans tes résultats de recherche** (jamais un lien inventé,
+  jamais une page de recherche ou de catégorie). Tu n'as PAS besoin d'ouvrir les fiches : ton ordinateur
+  dans le cloud n'a pas accès aux sites des boutiques, et c'est mon robot GitHub « Pour toi » qui ouvre
+  et vérifie chaque lien (photo, prix, stock). Tu peux lire les articles, blogs et avis si tu y as accès.
+- **Seulement des sites officiels de marques ou de grands magasins connus** (sephora.fr, nocibe.fr, douglas.fr,
+  notino.fr, zalando.fr, galerieslafayette.com, printemps.com, lookfantastic.fr, le site officiel de la marque…).
+  Jamais de sites douteux ou de copies (ex. « alooyogashop.it.com » n'est PAS le vrai site d'Alo Yoga).
+- Ne contourne jamais une protection anti-robot ni un CAPTCHA.
 
 ## 3. Ranger tes idées
 Écris le fichier `styliste.json` (à la racine du dépôt), exactement dans ce format :
