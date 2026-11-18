@@ -30,6 +30,9 @@
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
+/* Toute la page un peu plus petite (demandé le 18/11 : « c'est un peu grand ») */
+html { zoom: 0.6; }   /* mon modèle était une capture Retina (2× plus de pixels) : on revient à la taille réelle */
+@media (max-width: 760px) { html { zoom: 0.86; } }
 body { background: var(--creme); color: var(--texte); font-family: var(--font-caps); font-size: 15px; line-height: 1.4; -webkit-font-smoothing: antialiased; }
 [hidden] { display: none !important; }
 button { font: inherit; color: inherit; }
@@ -46,7 +49,9 @@ button { font: inherit; color: inherit; }
 .cs.reflet { color: #fff; opacity: 0.16; font-size: 1.95rem; }
 
 /* --- Contenu --- */
-.page { margin-left: var(--barre); padding: 0 22px 90px 26px; max-width: calc(1680px + var(--barre)); }
+.page { margin-left: var(--barre); padding: 0 22px 90px 26px; }
+/* Le contenu est centré dans l'espace à droite de la barre bordeaux */
+.contenu { max-width: none; }  /* toute la largeur : nom à gauche, bannière d'un bord à l'autre */
 header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
 .titre h1 { white-space: nowrap; margin: 0; font-family: var(--font-logo); font-weight: 400; font-size: 2.6rem; line-height: 1; color: var(--bordeaux); letter-spacing: 0.01em; -webkit-text-stroke: 1.4px var(--bordeaux); }
 .titre p { margin: 8px 0 0 50px; font-family: var(--font-caps); font-weight: 500; font-size: 0.98rem; letter-spacing: 0.36em; color: var(--bordeaux); }
@@ -82,6 +87,8 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
 /* --- Les cartes --- */
 .grille { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 32px; }
 @media (max-width: 1100px) and (min-width: 761px) { .grille { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .grille { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; } }
+@media (min-width: 1200px) { .grille { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; } }
 .carte { position: relative; display: flex; flex-direction: column; animation: monte .4s ease both; }
 .carte.vue { animation: none; }
 /* L'affiche : grande photo verticale, texte blanc posé en bas sur un léger dégradé */
@@ -90,21 +97,21 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
 .affiche::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0) 32%, rgba(0,0,0,0) 48%, rgba(0,0,0,0.55) 100%); }
 .affiche .vide { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.3rem; color: var(--gris); padding: 20px; }
 .affiche.sans-photo::after { background: none; }
-.etat { position: absolute; left: 22px; top: 22px; z-index: 2; display: inline-flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.95); color: #0e0e0e; border-radius: 999px; padding: 6px 16px 6px 14px; font-family: var(--font-caps); font-size: 1.05rem; font-weight: 500; }
+.etat { position: absolute; left: 22px; top: 22px; z-index: 2; display: inline-flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.95); color: #0e0e0e; border-radius: 999px; padding: 6px 16px 6px 14px; font-family: var(--font-caps); font-size: 1.3rem; font-weight: 500; }
 .etat::before { content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--gris); }
 .etat.dispo::before { background: var(--vert); } .etat.rupture::before { background: #a23a2c; }
 .etat.attente::before { background: #c9902d; }
 .croix { position: absolute; right: 22px; top: 22px; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); color: #0e0e0e; font-size: 1.5rem; line-height: 1; cursor: pointer; display: grid; place-items: center; }
 .infos { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 0 26px 28px; color: #fff; display: grid; gap: 4px; text-shadow: 0 1px 12px rgba(0,0,0,0.25); }
 .affiche.sans-photo .infos { color: #0e0e0e; text-shadow: none; }
-.marque { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.05rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.95; }
-.nom { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.65rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.taille { margin: 4px 0 0; font-family: var(--font-caps); font-weight: 300; font-size: 1.2rem; opacity: 0.95; }
+.marque { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.3rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.95; }
+.nom { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.85rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.taille { margin: 4px 0 0; font-family: var(--font-caps); font-weight: 300; font-size: 1.4rem; opacity: 0.95; }
 .alerter { margin-top: 16px; width: 100%; height: 62px; border: 1.5px solid #0e0e0e; border-radius: 999px; background: #fff; color: #0e0e0e; font-family: var(--font-caps); font-weight: 500; font-size: 1.35rem; letter-spacing: 0.24em; text-transform: uppercase; cursor: pointer; transition: transform .15s ease; }
 .alerter:active { transform: scale(0.98); }
 .alerter.on { background: #0e0e0e; color: #fff; }
 .alerter:disabled { opacity: 0.55; cursor: default; }
-.lancee { margin: 10px 0 0; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.15rem; color: var(--bordeaux); }
+.lancee { margin: 10px 0 0; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; color: var(--bordeaux); }
 .vide-total { grid-column: 1 / -1; text-align: center; padding: 50px 20px; font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; color: var(--bordeaux); background: var(--carte); border: 1.5px solid var(--bord); border-radius: 26px; }
 
 /* Vue « liste » (bouton aux 3 traits) */
@@ -209,7 +216,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   <div class="cs reflet" style="left:68px;top:1230px" aria-hidden="true">CS<sup>✦</sup></div>
 </aside>
 
-<div class="page">
+<div class="page"><div class="contenu">
   <header>
     <div class="titre"><h1>CRUSH SHOPPER</h1><p>L'ASSISTANT DE TA WISHLIST.</p></div>
     <div class="icones">
@@ -246,7 +253,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   <div class="puces"><div class="liste" id="puces"></div><span class="compte" id="compte"></span></div>
 
   <div class="grille" id="grid"></div>
-</div>
+</div></div>
 
 <button class="ajouter" id="b-ajouter" type="button" aria-label="Ajouter un article">+</button>
 
