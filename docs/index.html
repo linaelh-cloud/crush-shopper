@@ -148,7 +148,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
 .bf-carte .alerter { margin-top: auto; height: 50px; font-size: 1rem; display: grid; place-items: center; text-decoration: none; }
 .bf-note { margin: 26px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 1.25rem; color: var(--gris); }
 
-/* --- Onglet « Pour toi » (suggestions) --- */
+/* --- Onglet « Crush Styliste » (suggestions de la styliste IA) --- */
 .pt-style { margin: 14px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 1.6rem; line-height: 1.3; max-width: 900px; }
 .pt-raison { margin: 12px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 1.4rem; line-height: 1.25; text-align: center; }
 .etat.promo::before { display: none; }
@@ -297,7 +297,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
 
   <div class="onglets">
     <button class="puce on" type="button" data-vue="wishlist">Ma wishlist</button>
-    <button class="puce" type="button" data-vue="pt">Pour toi</button>
+    <button class="puce" type="button" data-vue="pt">Crush Styliste</button>
     <button class="puce" type="button" data-vue="bf">Black Friday</button>
   </div>
 
@@ -321,7 +321,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   <!-- ================= Onglet POUR TOI ================= -->
   <section id="vue-pt" hidden>
     <div class="bf-tete">
-      <div><h2 class="bf-titre">Pour toi</h2><p class="bf-sous">Les idées de ta styliste, trouvées sur tout le web</p></div>
+      <div><h2 class="bf-titre">Crush Styliste</h2><p class="bf-sous">Les idées de ta styliste, trouvées sur tout le web</p></div>
       <p class="bf-maj" id="pt-maj"></p>
     </div>
     <p class="pt-style" id="pt-style"></p>
@@ -354,7 +354,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   <button type="button" data-m="ajouter">Ajouter un article</button>
   <button type="button" data-m="alertes">Mes alertes</button>
   <button type="button" data-m="tous">Toute ma wishlist</button>
-  <button type="button" data-m="pt">Pour toi</button>
+  <button type="button" data-m="pt">Crush Styliste</button>
   <button type="button" data-m="bf">Black Friday</button>
   <button type="button" data-m="acces">Mon accès</button>
 </div>
@@ -828,7 +828,7 @@ function carteIdee(s, index) {
       await modifierListe((w) => {
         if (w.articles.some(a => a.url === s.lien)) return;
         w.articles.push({ nom: s.nom, option: "", teinte: "", url: s.lien, categorie: s.categorie || "Mode", crush_alert: false, ajoute_le: new Date().toISOString() });
-      }, "Article ajouté depuis Pour toi");
+      }, "Article ajouté depuis Crush Styliste");
       dessinerPT();
     }, "Ajouté ✨", "Il est dans ta wishlist.");
   };
@@ -851,7 +851,7 @@ document.querySelectorAll(".onglets .puce").forEach(b => b.onclick = () => montr
 try {
   const o = localStorage.getItem("crush_onglet");
   if (o === "bf" || location.hash === "#black-friday") montrerVue("bf");
-  else if (o === "pt" || location.hash === "#pour-toi") montrerVue("pt");
+  else if (o === "pt" || location.hash === "#pour-toi" || location.hash === "#crush-styliste") montrerVue("pt");
 } catch (e) {}
 
 dessiner();
