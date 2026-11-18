@@ -16,7 +16,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Jost:wght@300;400;500&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Jost:ital,wght@0,300;0,400;0,500;1,300&family=Inter:wght@400;500;600&display=swap">
 <style>
 :root {
   --blanc: #ffffff; --noir: #0e0e0e; --beige: #d9c1ac; --sable: #f3ece4; --taupe: #7d6b5d; --ligne: #e8e0d7;
@@ -74,12 +74,6 @@ input[type=text], input[type=url], input[type=password] { min-width: 0; width: 1
 .ph::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: linear-gradient(to bottom, rgba(14,14,14,0.10) 0%, rgba(14,14,14,0) 30%, rgba(14,14,14,0) 50%, rgba(14,14,14,0.62) 100%); }
 .ph .empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-family: var(--font-sign); letter-spacing: 0.08em; font-size: 0.8rem; color: var(--taupe); padding: 20px; }
-.ph::after { content: ""; position: absolute; inset: 14px; z-index: 1; pointer-events: none; color: #fff; opacity: 0.8;
-  background: linear-gradient(currentColor,currentColor) left top/16px 1.2px no-repeat, linear-gradient(currentColor,currentColor) left top/1.2px 16px no-repeat,
-  linear-gradient(currentColor,currentColor) right top/16px 1.2px no-repeat, linear-gradient(currentColor,currentColor) right top/1.2px 16px no-repeat,
-  linear-gradient(currentColor,currentColor) left bottom/16px 1.2px no-repeat, linear-gradient(currentColor,currentColor) left bottom/1.2px 16px no-repeat,
-  linear-gradient(currentColor,currentColor) right bottom/16px 1.2px no-repeat, linear-gradient(currentColor,currentColor) right bottom/1.2px 16px no-repeat; }
-.ph.vide::after { color: var(--noir); opacity: 0.4; }
 .pill { position: absolute; left: 22px; top: 22px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.92); border-radius: 999px; padding: 3px 10px; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.02em; }
 .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--taupe); }
 .pill.dispo::before { background: var(--dispo); } .pill.rupture::before { background: var(--rupture); }
@@ -90,6 +84,7 @@ input[type=text], input[type=url], input[type=password] { min-width: 0; width: 1
 .name { font-family: var(--font-sign); font-weight: 400; font-size: 1.12rem; line-height: 1.25; overflow-wrap: anywhere; color: inherit; text-decoration: none; }
 .opt { font-family: var(--font-sign); font-weight: 300; font-size: 0.86rem; letter-spacing: 0.04em; opacity: 0.9; }
 .when { font-size: 0.76rem; color: var(--taupe); }
+.lancee { margin: -2px 0 0; text-align: center; font-family: var(--font-sign); font-style: italic; font-weight: 300; font-size: 0.86rem; letter-spacing: 0.02em; color: var(--taupe); }
 .fleche { position: absolute; right: -6px; top: calc(24px + 45%); z-index: 3; width: 42px; height: 42px; border-radius: 6px; border: 0; background: rgba(255,255,255,0.95); box-shadow: 0 6px 18px -8px rgba(0,0,0,0.4); font-size: 1.3rem; cursor: pointer; display: grid; place-items: center; }
 .alert { border: 1px solid var(--noir); background: var(--blanc); color: var(--noir); border-radius: 999px; padding: 11px 14px; font-family: var(--font-sign); letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; cursor: pointer; }
 .alert.on { background: var(--noir); color: var(--blanc); }
@@ -288,6 +283,7 @@ function card(a, index) {
   b.title = lisible || a.crush_alert ? "Être prévenue quand il revient" : (m.attend ? "Un instant, on regarde le stock" : "Crush Alert n'est pas possible pour cet article");
   b.onclick = () => basculer(a.url);
   c.append(b);
+  if (a.crush_alert) c.append(el("p", "lancee", "Ton alerte est lancée, garde un œil sur ton téléphone."));
 
   if (m.eteinte_le && !a.crush_alert) c.append(el("span", "when", "💌 Tu as été prévenue : il était de retour."));
   return c;
