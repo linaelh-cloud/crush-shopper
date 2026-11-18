@@ -325,6 +325,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
       <p class="bf-maj" id="pt-maj"></p>
     </div>
     <p class="pt-style" id="pt-style"></p>
+    <div class="puces"><button class="puce" type="button" id="b-marques">Mes marques</button><span class="compte" id="mes-marques"></span></div>
     <div class="puces"><div class="liste" id="pt-filtres"></div><span class="compte" id="pt-nb"></span></div>
     <div class="grille" id="pt-grille"></div>
     <p class="bf-note">Ces idées sont trouvées par ta styliste IA d'après ta wishlist. Les prix peuvent changer : vérifie sur le site avant de payer.</p>
@@ -357,6 +358,15 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   <button type="button" data-m="pt">Crush Styliste</button>
   <button type="button" data-m="bf">Black Friday</button>
   <button type="button" data-m="acces">Mon accès</button>
+</div>
+
+<div class="voile" id="f-marques" hidden>
+  <form class="fenetre" id="marques-form">
+    <h3>Mes marques préférées</h3>
+    <p>Ta styliste les met en priorité dans ses idées, dès sa prochaine recherche (chaque matin à 8 h). Sépare-les par des virgules.</p>
+    <label>Mes marques<input id="f-marques-txt" type="text" placeholder="ex. MAC, Charlotte Tilbury, Rare Beauty, Alo Yoga"></label>
+    <div class="actions"><button class="btn doux" type="button" data-fermer>Annuler</button><button class="btn" type="submit">Enregistrer</button></div>
+  </form>
 </div>
 
 <div class="voile" id="f-ajout" hidden>
@@ -463,7 +473,7 @@ async function charger() {
     const [w, e] = await Promise.all([lireFichier("wishlist.json"), lireFichier("etat.json", {})]);
     liste = w.data; liste.articles = liste.articles || []; sha = w.sha; memoire = e.data || {};
     live(true, "GitHub veille");
-    dessiner(); verdicts();
+    dessiner(); verdicts(); afficherMarques();
   } catch (err) {
     live(false, "Pas connectée");
     if (err.code === 401 || err.code === 403 || err.code === 404) montrerCle(err.message);
@@ -566,8 +576,9 @@ function teinteDuLien(url) { const m = url.match(/[?&]shade=([^&#]+)/); return m
 
 // Fenêtres
 const fAjout = document.getElementById("f-ajout"), panneau = document.getElementById("cle-panel"), menu = document.getElementById("menu");
-document.querySelectorAll("[data-fermer]").forEach(b => b.onclick = () => { fAjout.hidden = true; panneau.hidden = true; });
-[fAjout, panneau].forEach(v => v.addEventListener("click", (e) => { if (e.target === v) v.hidden = true; }));
+const fMarques = document.getElementById("f-marques");
+document.querySelectorAll("[data-fermer]").forEach(b => b.onclick = () => { fAjout.hidden = true; panneau.hidden = true; fMarques.hidden = true; });
+[fAjout, panneau, fMarques].forEach(v => v.addEventListener("click", (e) => { if (e.target === v) v.hidden = true; }));
 function ouvrirAjout() {
   menu.hidden = true;
   if (!cleValide(lireCle())) { montrerCle("Entre d'abord ta clé."); return; }
@@ -786,10 +797,11 @@ async function chargerPT() {
 }
 function dessinerPT() {
   const grille = document.getElementById("pt-grille");
+  afficherMarques();
   const vide = !PT || !(PT.suggestions || []).length;
   document.getElementById("pt-filtres").parentElement.hidden = vide;
   if (vide) {
-    document.getElementById("pt-style").textContent = ""; document.getElementById("pt-maj").textContent = "";
+    document.getElementById("pt-style").textContent = ""; document.getElementById("pt-maj").textContent = ""; afficherMarques();
     grille.replaceChildren(el("div", "vide-total", PT && PT.par_ia
       ? "Ajoute des articles à ta wishlist : ta styliste te trouve des idées ✨"
       : "Ta styliste arrive bientôt ✨ Elle cherchera pour toi, sur tout le web, les dupes, les teintes et les marques tendance."));
@@ -836,6 +848,25 @@ function carteIdee(s, index) {
   if (s.raison) c.append(el("p", "pt-raison", s.raison));
   return c;
 }
+
+// « Mes marques » : la liste de mes marques préférées (rangée dans wishlist.json, lue par Crush Styliste)
+function afficherMarques() {
+  const m = liste.marques_aimees || [];
+  document.getElementById("mes-marques").textContent = m.length ? m.join(" · ") : "";
+}
+document.getElementById("b-marques").onclick = () => {
+  if (!cleValide(lireCle())) { montrerCle("Entre d'abord ta clé."); return; }
+  document.getElementById("f-marques-txt").value = (liste.marques_aimees || []).join(", ");
+  fMarques.hidden = false;
+};
+document.getElementById("marques-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const marques = [...new Set(document.getElementById("f-marques-txt").value.split(",").map(x => x.trim()).filter(Boolean))].slice(0, 30);
+  action(async () => {
+    await modifierListe((w) => { w.marques_aimees = marques; }, "Mes marques préférées");
+    fMarques.hidden = true; afficherMarques();
+  }, "Enregistré ✨", "Ta styliste les mettra en priorité dès demain matin.");
+});
 
 // Passer d'un onglet à l'autre
 function montrerVue(v) {
