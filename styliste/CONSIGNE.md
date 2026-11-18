@@ -17,6 +17,7 @@ Pour CHAQUE article de ma wishlist, trouve **5 à 8 produits précis** qui me pl
 - mes marques préférées d'abord, puis des marques du même niveau ou plus désirables (pas de marques bas de gamme).
 
 Règles :
+- Une idée = un produit précis dans une teinte précise (pas « famille nude »), et jamais deux fois le même produit.
 - Maquillage : la **teinte** doit être vraiment proche de la mienne (même famille de couleur et même sous-ton).
 - Vêtement : même type de pièce, couleur ou style proche.
 - Pas plus de 2 idées par marque. Produits vendus en France (site .fr ou livraison en France).
@@ -24,8 +25,10 @@ Règles :
   jamais une page de recherche ou de catégorie). Tu n'as PAS besoin d'ouvrir les fiches : ton ordinateur
   dans le cloud n'a pas accès aux sites des boutiques, et c'est mon robot GitHub « Pour toi » qui ouvre
   et vérifie chaque lien (photo, prix, stock). Tu peux lire les articles, blogs et avis si tu y as accès.
-- **Seulement des sites officiels de marques ou de grands magasins connus** (sephora.fr, nocibe.fr, douglas.fr,
-  notino.fr, zalando.fr, galerieslafayette.com, printemps.com, lookfantastic.fr, le site officiel de la marque…).
+- **Seulement des boutiques qui vendent en EUROS en France** : sites officiels des marques en version française
+  (.fr ou /fr-fr/) ou grands magasins connus (nocibe.fr, notino.fr, zalando.fr, galerieslafayette.com, printemps.com,
+  lookfantastic.fr, marionnaud.fr…). Pas de boutiques américaines en dollars.
+- **N'utilise PAS sephora.fr ni douglas.fr** : ces sites bloquent les robots, mon robot ne peut pas vérifier leurs liens.
   Jamais de sites douteux ou de copies (ex. « alooyogashop.it.com » n'est PAS le vrai site d'Alo Yoga).
 - Ne contourne jamais une protection anti-robot ni un CAPTCHA.
 

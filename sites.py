@@ -258,6 +258,31 @@ def marque_et_prix(page_html):
     return marque, prix
 
 
+# Les prix en euros : l'ordinateur de GitHub est aux États-Unis, alors certains sites (ex. Alo Yoga)
+# lui montrent des dollars. On convertit au taux du jour de la Banque centrale européenne,
+# avec « ≈ » devant, pour dire que c'est une conversion (le vrai prix en France peut être différent).
+_taux = {}
+
+
+def en_euros(prix):
+    m = re.match(r"^\s*([\d\u202f.,]+)\s*([$£])\s*$", prix or "")
+    if not m:
+        return prix
+    devise = {"$": "USD", "£": "GBP"}[m.group(2)]
+    if devise not in _taux:
+        try:
+            import json
+            import urllib.request
+            r = urllib.request.urlopen(f"https://api.frankfurter.dev/v1/latest?base={devise}&symbols=EUR", timeout=15)
+            _taux[devise] = json.loads(r.read())["rates"]["EUR"]
+        except Exception:
+            _taux[devise] = None
+    if not _taux[devise]:
+        return prix
+    montant = float(m.group(1).replace("\u202f", "").replace(",", "."))
+    return "≈ " + _joli_prix(round(montant * _taux[devise]))
+
+
 def lire(url, page_html, option="", teinte=""):
     """Choisit le bon lecteur selon le site."""
     if lecteur_de(url) == "mac":
@@ -271,5 +296,5 @@ def lire(url, page_html, option="", teinte=""):
         if not prix:  # MAC range son prix dans ses données cachées
             m = re.search(r'"price"\s*:\s*"?([0-9]+(?:[.,][0-9]+)?)', html.unescape(page_html))
             prix = _joli_prix(m.group(1)) if m else ""
-    infos["marque"], infos["prix"] = marque, prix
+    infos["marque"], infos["prix"] = marque, en_euros(prix)
     return infos

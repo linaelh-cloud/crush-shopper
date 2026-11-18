@@ -67,6 +67,8 @@ def verifier(page, idee, sources):
         return None
     if not infos.get("photo"):
         return None
+    if not (infos.get("prix") or "").endswith("€") or infos["prix"].startswith("≈"):
+        return None   # seulement des boutiques qui vendent en euros (pas de dollars ni de prix convertis)
     src = sources.get(idee.pour_url) or next(iter(sources.values()))
     v = {"nom": idee.nom + (f" - {idee.teinte_ou_couleur}" if idee.teinte_ou_couleur else ""),
          "lien": page.url.split("#")[0], "photo": infos["photo"], "prix": infos.get("prix") or idee.prix,
