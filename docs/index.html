@@ -5,172 +5,281 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Crush Shopper</title>
 <!-- Crush Shopper en ligne : la page vit sur GitHub Pages, la liste dans wishlist.json du dépôt,
-     et le robot GitHub lit le stock. Plus besoin du Mac. -->
+     et le robot GitHub lit le stock. Design « bordeaux » créé par Lina (18/11/2026). -->
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Crush Shopper">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#fcf6f1">
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Jost:ital,wght@0,300;0,400;0,500;1,300&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Jost:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap">
 <style>
+/* ================= Design de Lina : bordeaux, crème, rose poudré ================= */
 :root {
-  --blanc: #ffffff; --noir: #0e0e0e; --beige: #d9c1ac; --sable: #f3ece4; --taupe: #7d6b5d; --ligne: #e8e0d7;
-  --dispo: #2f6b4a; --rupture: #a23a2c; --attente: #b07a2a;
+  --bordeaux: #51090f; --bordeaux-2: #6b1520; --creme: #fcf6f1; --carte: #fffaf6; --bord: #efe2dc;
+  --rose: #eccaca; --rose-clair: #f8e4e2; --texte: #1f1a19; --gris: #6f6765;
+  --vert: #1a8a12; --rouge: #b10605;
   --font-logo: "Michroma", "Eurostile", "Arial Black", sans-serif;
-  --font-sign: "Jost", "Futura", "Century Gothic", sans-serif;
-  --font-body: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-caps: "Jost", "Futura", "Century Gothic", sans-serif;
+  --font-serif: "Cormorant Garamond", "Didot", Georgia, serif;
+  --barre: 156px;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--blanc); color: var(--noir); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
-.wrap { max-width: 1100px; margin: 0 auto; padding-inline: 20px; }
-:focus-visible { outline: 2px solid var(--noir); outline-offset: 2px; }
+html, body { margin: 0; }
+body { background: var(--creme); color: var(--texte); font-family: var(--font-caps); font-size: 15px; line-height: 1.4; -webkit-font-smoothing: antialiased; }
 [hidden] { display: none !important; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--bordeaux); outline-offset: 2px; }
+@keyframes monte { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-header { border-bottom: 1px solid var(--ligne); }
-header .wrap { display: flex; align-items: center; gap: 14px; padding-block: 18px; flex-wrap: wrap; }
-header img { width: 46px; height: 46px; border-radius: 12px; }
-header h1 { margin: 0; font-family: var(--font-logo); font-weight: 400; font-size: 1.35rem; letter-spacing: 0.02em; }
-header .sign { font-family: var(--font-sign); font-weight: 300; letter-spacing: 0.08em; color: var(--taupe); }
-header .right { margin-left: auto; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.live { font-family: var(--font-sign); font-size: 0.82rem; letter-spacing: 0.06em; color: var(--taupe); display: flex; align-items: center; gap: 8px; }
-.live i { width: 8px; height: 8px; border-radius: 50%; background: var(--dispo); animation: pulse 2s infinite; }
-.live.off i { background: var(--attente); animation: none; }
-@keyframes pulse { 50% { opacity: 0.3; } }
-.icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--ligne); background: var(--blanc); color: var(--noir); display: grid; place-items: center; cursor: pointer; }
-.del { position: absolute; right: 22px; top: 22px; z-index: 2; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.94); color: var(--noir); font-size: 1rem; line-height: 1; cursor: pointer; display: grid; place-items: center; }
-.link-btn { border: 1px solid var(--noir); background: var(--blanc); color: var(--noir); border-radius: 999px; padding: 7px 14px; font-family: var(--font-sign); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.76rem; cursor: pointer; text-decoration: none; }
+/* --- Barre bordeaux à gauche, avec le logo CS✦ et ses reflets --- */
+.barre { position: fixed; inset: 0 auto 0 0; width: var(--barre); background: var(--bordeaux); color: #fff; z-index: 6; overflow: hidden; }
+.burger { position: absolute; left: 44px; top: 42px; width: 56px; height: 40px; border: 0; background: none; cursor: pointer; display: grid; gap: 9px; align-content: center; padding: 0; }
+.burger i { display: block; height: 2px; background: #fff; border-radius: 2px; }
+.cs { font-family: var(--font-logo); letter-spacing: -0.04em; line-height: 1; position: absolute; white-space: nowrap; }
+.cs sup { font-family: var(--font-caps); font-size: 0.55em; vertical-align: 0.9em; margin-left: 0.04em; }
+.cs.grand { left: 22px; top: 186px; font-size: 3.4rem; color: #fff; }
+.cs.reflet { color: #fff; opacity: 0.16; font-size: 1.95rem; }
 
-.title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 28px 14px; }
-.title-row h2 { margin: 0; font-family: var(--font-sign); font-weight: 300; font-size: 1.7rem; letter-spacing: 0.08em; text-transform: uppercase; }
-.counts { font-family: var(--font-sign); letter-spacing: 0.06em; color: var(--taupe); font-size: 0.9rem; }
+/* --- Contenu --- */
+.page { margin-left: var(--barre); padding: 0 22px 90px 26px; max-width: calc(1680px + var(--barre)); }
+header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
+.titre h1 { white-space: nowrap; margin: 0; font-family: var(--font-logo); font-weight: 400; font-size: 2.6rem; line-height: 1; color: var(--bordeaux); letter-spacing: 0.01em; -webkit-text-stroke: 1.4px var(--bordeaux); }
+.titre p { margin: 8px 0 0 50px; font-family: var(--font-caps); font-weight: 500; font-size: 0.98rem; letter-spacing: 0.36em; color: var(--bordeaux); }
+.icones { margin-left: auto; display: flex; align-items: center; }
+.icones button { position: relative; border: 0; background: none; cursor: pointer; color: var(--texte); padding: 6px 30px; display: grid; place-items: center; }
+.icones button + button { border-left: 2px solid var(--texte); }
+.icones svg { width: 40px; height: 40px; }
+.badge { position: absolute; top: 0; right: 20px; min-width: 20px; height: 20px; border-radius: 999px; background: var(--bordeaux); color: #fff; font-size: 0.72rem; font-weight: 600; display: grid; place-items: center; padding: 0 5px; }
 
-form.add { display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; background: var(--sable); padding: 14px; border-radius: 6px; align-items: center; }
-input[type=text], input[type=url], input[type=password] { min-width: 0; width: 100%; border: 1px solid var(--ligne); background: var(--blanc); border-radius: 6px; padding: 10px 12px; font: inherit; }
-.btn { border: 0; background: var(--noir); color: var(--blanc); border-radius: 6px; padding: 10px 18px; font-family: var(--font-sign); letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.82rem; cursor: pointer; text-decoration: none; display: inline-block; }
-.btn:disabled { opacity: 0.5; cursor: default; }
-.hint { font-size: 0.82rem; color: var(--taupe); margin: 8px 2px 0; }
-.err { color: var(--rupture); }
-@media (max-width: 860px) { form.add { grid-template-columns: 1fr; } }
+.bande { display: none; }
+.banniere { display: block; width: 100%; height: auto; border-radius: 22px; box-shadow: 0 10px 30px -22px rgba(81,9,15,0.6); }
 
-/* Panneau « Ma clé » */
-.panel { margin-top: 18px; border: 1px solid var(--ligne); border-radius: 8px; padding: 18px; display: grid; gap: 12px; }
-.panel h3 { margin: 0; font-family: var(--font-sign); font-weight: 400; font-size: 1.3rem; }
-.panel .safe { background: var(--sable); border-radius: 6px; padding: 10px 12px; font-size: 0.86rem; margin: 0; }
-.panel .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.panel label { display: grid; gap: 4px; font-size: 0.8rem; color: var(--taupe); }
+.outils { display: flex; gap: 24px; align-items: center; margin-top: 30px; }
+.recherche { flex: 1.4; display: flex; align-items: center; gap: 14px; background: #fdf8f4; border: 1.5px solid #ece2de; border-radius: 999px; padding: 0 22px; height: 66px; }
+.recherche svg { flex: none; width: 30px; height: 30px; color: var(--texte); }
+.recherche input { flex: 1; min-width: 0; border: 0; background: none; outline: none; font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; color: var(--texte); }
+.recherche input::placeholder { color: #57504e; }
+.categories { flex: 1; position: relative; }
+.categories select { width: 100%; height: 66px; appearance: none; -webkit-appearance: none; background: #fdf8f4; border: 1.5px solid #ece2de; border-radius: 999px; padding: 0 56px 0 38px; font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; color: var(--texte); cursor: pointer; }
+.categories svg { position: absolute; right: 26px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; pointer-events: none; }
+.vues { display: flex; gap: 22px; }
+.vues button { width: 66px; height: 66px; border-radius: 14px; border: 1.5px solid #e2d6d2; background: #fdf8f4; color: var(--texte); cursor: pointer; display: grid; place-items: center; }
+.vues button svg { width: 32px; height: 32px; }
+.vues button.on { background: var(--bordeaux); border-color: var(--bordeaux); color: #fff; }
 
-/* « Scroll & shop » : une rangée de grandes cartes qui défile sur le côté */
-.rail { position: relative; }
-.grid { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(260px, 300px); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-block: 24px 40px; scrollbar-width: none; }
-.grid::-webkit-scrollbar { display: none; }
-.card { display: grid; gap: 12px; align-content: start; scroll-snap-align: start; }
-.ph { position: relative; aspect-ratio: 3 / 4.4; background: var(--sable); border-radius: 10px; overflow: hidden; box-shadow: 0 10px 28px -16px rgba(30,20,10,0.45); }
-.ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.ph::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(to bottom, rgba(14,14,14,0.10) 0%, rgba(14,14,14,0) 30%, rgba(14,14,14,0) 50%, rgba(14,14,14,0.62) 100%); }
-.ph .empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-family: var(--font-sign); letter-spacing: 0.08em; font-size: 0.8rem; color: var(--taupe); padding: 20px; }
-.pill { position: absolute; left: 22px; top: 22px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.92); border-radius: 999px; padding: 3px 10px; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.02em; }
-.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--taupe); }
-.pill.dispo::before { background: var(--dispo); } .pill.rupture::before { background: var(--rupture); }
-.pill.attente::before { background: var(--attente); animation: pulse 1.4s infinite; } .pill.bloque::before, .pill.inconnu::before { background: var(--attente); }
-.infos { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 0 24px 26px; color: #fff; display: grid; gap: 4px; text-shadow: 0 1px 10px rgba(0,0,0,0.25); }
-.ph.vide .infos { color: var(--noir); text-shadow: none; }
-.site { font-family: var(--font-sign); font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.9; }
-.name { font-family: var(--font-sign); font-weight: 400; font-size: 1.12rem; line-height: 1.25; overflow-wrap: anywhere; color: inherit; text-decoration: none; }
-.opt { font-family: var(--font-sign); font-weight: 300; font-size: 0.86rem; letter-spacing: 0.04em; opacity: 0.9; }
-.when { font-size: 0.76rem; color: var(--taupe); }
-.lancee { margin: -2px 0 0; text-align: center; font-family: var(--font-sign); font-style: italic; font-weight: 300; font-size: 0.86rem; letter-spacing: 0.02em; color: var(--taupe); }
-.fleche { position: absolute; right: -6px; top: calc(24px + 45%); z-index: 3; width: 42px; height: 42px; border-radius: 6px; border: 0; background: rgba(255,255,255,0.95); box-shadow: 0 6px 18px -8px rgba(0,0,0,0.4); font-size: 1.3rem; cursor: pointer; display: grid; place-items: center; }
-.alert { border: 1px solid var(--noir); background: var(--blanc); color: var(--noir); border-radius: 999px; padding: 11px 14px; font-family: var(--font-sign); letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; cursor: pointer; }
-.alert.on { background: var(--noir); color: var(--blanc); }
-.alert:disabled { border-color: var(--ligne); color: var(--taupe); cursor: default; }
-.tools { display: flex; flex-wrap: wrap; gap: 4px 12px; }
-.tools button { background: none; border: 0; padding: 0; font: inherit; font-size: 0.78rem; color: var(--taupe); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-.empty-state { width: min(560px, 86vw); border: 1px dashed var(--ligne); border-radius: 8px; padding: 40px 20px; text-align: center; color: var(--taupe); font-family: var(--font-sign); letter-spacing: 0.04em; }
+.puces { display: flex; align-items: center; gap: 18px; margin: 28px 0 0; }
+.puces .liste { display: flex; gap: 18px; overflow-x: auto; scrollbar-width: none; }
+.puces .liste::-webkit-scrollbar { display: none; }
+.puce { flex: none; min-width: 190px; height: 54px; padding: 0 26px; border-radius: 999px; border: 1.5px solid var(--bordeaux-2); background: transparent; color: var(--bordeaux); font-family: var(--font-serif); font-style: italic; font-size: 1.55rem; cursor: pointer; }
+.puce.on { background: var(--bordeaux); color: #fff; }
+.compte { margin-left: auto; flex: none; font-family: var(--font-serif); font-style: italic; font-size: 1.55rem; color: var(--bordeaux); padding-right: 16px; border-right: 2px solid var(--bordeaux); }
 
-.toast { position: fixed; right: 20px; bottom: 20px; max-width: 360px; background: var(--blanc); border: 1px solid var(--ligne); border-radius: 16px; box-shadow: 0 14px 36px -12px rgba(40,30,20,0.35); padding: 12px 14px; display: grid; grid-template-columns: 38px 1fr; gap: 10px; align-items: center; z-index: 9; }
-.toast img { width: 38px; height: 38px; border-radius: 9px; }
-.toast b { display: block; font-size: 0.88rem; }
-.toast span { font-size: 0.82rem; }
-.verdict { position: fixed; left: 50%; top: 90px; transform: translateX(-50%); width: min(440px, calc(100vw - 28px)); background: var(--blanc); border: 1px solid var(--ligne); border-radius: 18px; box-shadow: 0 24px 60px -18px rgba(40,30,20,0.45); padding: 16px; display: grid; grid-template-columns: 64px 1fr; gap: 14px; z-index: 10; }
-.verdict img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; background: var(--sable); }
-.verdict .t { font-weight: 600; line-height: 1.35; }
-.verdict .s { font-size: 0.85rem; color: var(--taupe); margin-top: 3px; }
-.verdict .acts { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-footer { border-top: 1px solid var(--ligne); padding-block: 18px; font-size: 0.8rem; color: var(--taupe); }
-footer a { color: inherit; }
+/* --- Les cartes --- */
+.grille { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 32px; }
+@media (max-width: 1100px) and (min-width: 761px) { .grille { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.carte { position: relative; display: flex; flex-direction: column; animation: monte .4s ease both; }
+.carte.vue { animation: none; }
+/* L'affiche : grande photo verticale, texte blanc posé en bas sur un léger dégradé */
+.affiche { position: relative; display: block; aspect-ratio: 3 / 4.4; border-radius: 16px; overflow: hidden; background: #e9e4df; box-shadow: 0 14px 30px -20px rgba(30,20,10,0.55); text-decoration: none; }
+.affiche img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.affiche::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0) 32%, rgba(0,0,0,0) 48%, rgba(0,0,0,0.55) 100%); }
+.affiche .vide { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.3rem; color: var(--gris); padding: 20px; }
+.affiche.sans-photo::after { background: none; }
+.etat { position: absolute; left: 22px; top: 22px; z-index: 2; display: inline-flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.95); color: #0e0e0e; border-radius: 999px; padding: 6px 16px 6px 14px; font-family: var(--font-caps); font-size: 1.05rem; font-weight: 500; }
+.etat::before { content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--gris); }
+.etat.dispo::before { background: var(--vert); } .etat.rupture::before { background: #a23a2c; }
+.etat.attente::before { background: #c9902d; }
+.croix { position: absolute; right: 22px; top: 22px; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); color: #0e0e0e; font-size: 1.5rem; line-height: 1; cursor: pointer; display: grid; place-items: center; }
+.infos { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 0 26px 28px; color: #fff; display: grid; gap: 4px; text-shadow: 0 1px 12px rgba(0,0,0,0.25); }
+.affiche.sans-photo .infos { color: #0e0e0e; text-shadow: none; }
+.marque { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.05rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.95; }
+.nom { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.65rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.taille { margin: 4px 0 0; font-family: var(--font-caps); font-weight: 300; font-size: 1.2rem; opacity: 0.95; }
+.alerter { margin-top: 16px; width: 100%; height: 62px; border: 1.5px solid #0e0e0e; border-radius: 999px; background: #fff; color: #0e0e0e; font-family: var(--font-caps); font-weight: 500; font-size: 1.35rem; letter-spacing: 0.24em; text-transform: uppercase; cursor: pointer; transition: transform .15s ease; }
+.alerter:active { transform: scale(0.98); }
+.alerter.on { background: #0e0e0e; color: #fff; }
+.alerter:disabled { opacity: 0.55; cursor: default; }
+.lancee { margin: 10px 0 0; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.15rem; color: var(--bordeaux); }
+.vide-total { grid-column: 1 / -1; text-align: center; padding: 50px 20px; font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; color: var(--bordeaux); background: var(--carte); border: 1.5px solid var(--bord); border-radius: 26px; }
 
-/* ---------- Sur téléphone ---------- */
-.wrap { padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); }
-header { padding-top: env(safe-area-inset-top); }
-footer { padding-bottom: max(18px, env(safe-area-inset-bottom)); }
-@media (max-width: 600px) {
-  .wrap { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
-  header .wrap { gap: 10px; padding-block: 12px; }
-  header img { width: 38px; height: 38px; border-radius: 10px; }
-  header h1 { font-size: 1.05rem; }
-  header .sign { font-size: 0.82rem; }
-  header .wrap { flex-wrap: nowrap; }
-  header .right { margin-left: auto; }
-  .title-row { padding-block: 18px 10px; }
-  .title-row h2 { font-size: 1.3rem; }
-  .counts { font-size: 0.78rem; }
-  .grid { grid-auto-columns: 74vw; gap: 14px; padding-block: 16px 32px; }
-  .fleche { display: none; }
-  .tools button { font-size: 0.74rem; }
-  .toast { left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); max-width: none; }
+/* Vue « liste » (bouton aux 3 traits) */
+.grille.en-liste { grid-template-columns: 1fr; gap: 18px; }
+.en-liste .carte { flex-direction: row; align-items: center; gap: 22px; }
+.en-liste .affiche { flex: 0 0 360px; aspect-ratio: 16 / 9; }
+.en-liste .alerter { flex: 0 0 240px; margin: 0; height: 54px; font-size: 1.05rem; }
+.en-liste .lancee { flex: 1; text-align: left; margin: 0; }
+
+/* --- Bouton rond « + » pour ajouter --- */
+.ajouter { position: fixed; right: 30px; bottom: max(30px, env(safe-area-inset-bottom)); z-index: 7; width: 70px; height: 70px; border-radius: 50%; border: 0; background: var(--bordeaux); color: #fff; font-size: 2.4rem; line-height: 1; cursor: pointer; box-shadow: 0 14px 30px -12px rgba(81,9,15,0.7); display: grid; place-items: center; }
+
+/* --- Menu, fenêtres --- */
+.voile { position: fixed; inset: 0; z-index: 20; background: rgba(40,10,12,0.35); display: grid; place-items: center; padding: 16px; }
+.fenetre { width: min(520px, 100%); background: var(--creme); border-radius: 26px; padding: 26px; box-shadow: 0 30px 70px -20px rgba(40,10,12,0.5); display: grid; gap: 14px; animation: monte .25s ease both; }
+.fenetre h3 { margin: 0; font-family: var(--font-serif); font-style: italic; font-weight: 600; font-size: 2rem; color: var(--bordeaux); }
+.fenetre p { margin: 0; color: var(--gris); }
+.fenetre label { display: grid; gap: 6px; font-size: 0.82rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bordeaux); }
+.fenetre input, .fenetre select { width: 100%; height: 52px; border: 1.5px solid #ece2de; background: #fff; border-radius: 999px; padding: 0 20px; font-family: var(--font-serif); font-style: italic; font-size: 1.25rem; color: var(--texte); }
+.fenetre .actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 6px; }
+.btn { height: 50px; padding: 0 26px; border: 0; border-radius: 999px; background: var(--bordeaux); color: #fff; font-family: var(--font-caps); font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.9rem; cursor: pointer; text-decoration: none; display: inline-grid; place-items: center; }
+.btn.doux { background: var(--rose); color: var(--bordeaux); }
+.erreur { color: var(--rouge) !important; font-style: italic; }
+.menu { position: fixed; left: calc(var(--barre) + 12px); top: 30px; z-index: 21; background: var(--creme); border-radius: 20px; padding: 10px; box-shadow: 0 24px 60px -18px rgba(40,10,12,0.5); display: grid; min-width: 250px; animation: monte .2s ease both; }
+.menu button { border: 0; background: none; text-align: left; padding: 12px 16px; border-radius: 12px; font-family: var(--font-serif); font-style: italic; font-size: 1.35rem; color: var(--bordeaux); cursor: pointer; }
+.menu button:hover { background: var(--rose-clair); }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 30; width: min(400px, calc(100vw - 24px)); background: var(--bordeaux); color: #fff; border-radius: 20px; padding: 14px 18px; display: grid; gap: 2px; box-shadow: 0 16px 40px -16px rgba(40,10,12,0.6); animation: monte .25s ease both; }
+.toast b { font-family: var(--font-serif); font-style: italic; font-weight: 600; font-size: 1.3rem; }
+.toast span { font-size: 0.92rem; opacity: 0.85; }
+.verdict { position: fixed; left: 50%; top: 90px; transform: translateX(-50%); z-index: 25; width: min(460px, calc(100vw - 24px)); background: var(--creme); border-radius: 26px; padding: 18px; display: grid; grid-template-columns: 84px 1fr; gap: 16px; box-shadow: 0 30px 70px -20px rgba(40,10,12,0.5); animation: monte .3s ease both; }
+.verdict img { width: 84px; height: 100px; object-fit: contain; border-radius: 16px; background: #fff; }
+.verdict .t { font-family: var(--font-serif); font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--bordeaux); line-height: 1.2; }
+.verdict .s { color: var(--gris); margin-top: 4px; }
+.verdict .acts { grid-column: 1 / -1; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+
+/* ================= Écrans plus petits ================= */
+@media (max-width: 1350px) {
+  .titre h1 { font-size: 2.1rem; } .titre p { margin-left: 40px; font-size: 0.85rem; }
+  .icones svg { width: 32px; height: 32px; } .icones button { padding: 6px 20px; }
+  .recherche, .categories select, .vues button { height: 56px; } .vues button { width: 56px; }
+  .recherche input, .categories select { font-size: 1.25rem; }
+  .puce { min-width: 0; font-size: 1.3rem; height: 48px; } .compte { font-size: 1.3rem; }
+}
+@media (max-width: 760px) {
+  :root { --barre: 0px; }
+  /* Sur iPhone : la barre de gauche disparaît, et une bande bordeaux horizontale (avec le motif
+     monogramme) se place entre le titre et la bannière */
+  .barre { display: none; }
+  .bande { display: block; position: relative; height: 78px; margin: 0 -12px 14px; background: var(--bordeaux); color: #fff; overflow: hidden; }
+  .bande .burger { left: 16px; top: 19px; width: 40px; height: 40px; gap: 7px; }
+  .bande .cs.grand { left: 74px; top: 17px; font-size: 2.3rem; }
+  .bande .cs.reflet { font-size: 1.25rem; opacity: 0.18; }
+  .page { padding: calc(6px + env(safe-area-inset-top)) 12px 100px; }
+  header { padding: 8px 0 12px; gap: 8px; }
+  .titre h1 { font-size: 1.02rem; -webkit-text-stroke: 0.5px var(--bordeaux); }
+  .titre p { margin: 5px 0 0 12px; font-size: 0.56rem; letter-spacing: 0.26em; }
+  .icones button { padding: 4px 9px; } .icones button + button { border-left-width: 1.5px; }
+  .icones svg { width: 22px; height: 22px; }
+  .badge { top: -4px; right: 0; min-width: 16px; height: 16px; font-size: 0.6rem; }
+  .icones .chercher { display: none; }
+  .banniere { height: auto; border-radius: 14px; }  /* bannière entière, sans recadrage */
+  .outils { flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .recherche { flex: 1 1 100%; height: 50px; padding: 0 16px; }
+  .recherche svg { width: 22px; height: 22px; }
+  .recherche input, .categories select { font-size: 1.15rem; }
+  .categories { flex: 1; } .categories select { height: 46px; padding-left: 20px; }
+  .vues { gap: 8px; } .vues button { width: 46px; height: 46px; border-radius: 12px; } .vues button svg { width: 22px; height: 22px; }
+  .puces { margin-top: 14px; gap: 6px; flex-wrap: wrap; } .puces .liste { gap: 8px; order: 2; flex: 1 1 100%; }
+  .compte { order: 1; border-right: 0; }
+  .puce { height: 40px; padding: 0 18px; font-size: 1.15rem; }
+  .compte { font-size: 1.1rem; padding-right: 8px; }
+  .grille { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+  .affiche { border-radius: 14px; }
+  .etat { left: 10px; top: 10px; font-size: 0.72rem; padding: 3px 9px 3px 8px; gap: 5px; }
+  .etat::before { width: 7px; height: 7px; }
+  .croix { right: 10px; top: 10px; width: 28px; height: 28px; font-size: 1.05rem; }
+  .infos { padding: 0 12px 14px; gap: 2px; }
+  .marque { font-size: 0.62rem; letter-spacing: 0.14em; }
+  .nom { font-size: 0.98rem; }
+  .taille { font-size: 0.8rem; margin-top: 2px; }
+  .alerter { height: 42px; font-size: 0.8rem; letter-spacing: 0.14em; margin-top: 10px; white-space: nowrap; }
+
+  .lancee { font-size: 0.95rem; }
+  .en-liste .carte { gap: 10px; flex-wrap: wrap; }
+  .en-liste .affiche { flex: 1 1 100%; aspect-ratio: 16 / 10; }
+  .en-liste .alerter { flex: 1 1 100%; height: 40px; }
+  .menu { position: absolute; left: 12px; }
+  .ajouter { right: 16px; width: 60px; height: 60px; font-size: 2rem; }
 }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <img src="logo.jpg" alt="Logo Crush Shopper">
-    <div><h1>CRUSH SHOPPER</h1><div class="sign">L'assistant de ta wishlist.</div></div>
-    <div class="right">
-      <button class="icon-btn" id="open-cle" type="button" aria-label="Mon accès" title="Mon accès">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
-      </button>
+<aside class="barre">
+  <button class="burger" id="burger" type="button" aria-label="Menu"><i></i><i></i><i></i></button>
+  <div class="cs grand" aria-hidden="true">CS<sup>✦</sup></div>
+  <div class="cs reflet" style="left:16px;top:376px" aria-hidden="true">CS<sup>✦</sup></div>
+  <div class="cs reflet" style="left:68px;top:540px" aria-hidden="true">CS<sup>✦</sup></div>
+  <div class="cs reflet" style="left:22px;top:708px" aria-hidden="true">CS<sup>✦</sup></div>
+  <div class="cs reflet" style="left:68px;top:886px" aria-hidden="true">CS<sup>✦</sup></div>
+  <div class="cs reflet" style="left:26px;top:1072px" aria-hidden="true">CS<sup>✦</sup></div>
+  <div class="cs reflet" style="left:68px;top:1230px" aria-hidden="true">CS<sup>✦</sup></div>
+</aside>
+
+<div class="page">
+  <header>
+    <div class="titre"><h1>CRUSH SHOPPER</h1><p>L'ASSISTANT DE TA WISHLIST.</p></div>
+    <div class="icones">
+      <button class="chercher" id="b-chercher" type="button" aria-label="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button>
+      <button id="b-cloche" type="button" aria-label="Mes alertes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/><path d="M12 3v2"/></svg><span class="badge" id="badge" hidden>0</span></button>
+      <button id="open-cle" type="button" aria-label="Mon accès"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="8" r="4.2"/><path d="M4 21c1.2-4.2 4.3-6.3 8-6.3s6.8 2.1 8 6.3z"/></svg></button>
+    </div>
+  </header>
+
+  <div class="bande" aria-label="Menu">
+    <button class="burger" id="burger2" type="button" aria-label="Menu"><i></i><i></i><i></i></button>
+    <div class="cs grand" aria-hidden="true">CS<sup>✦</sup></div>
+    <div class="cs reflet" style="left:178px;top:8px" aria-hidden="true">CS<sup>✦</sup></div>
+    <div class="cs reflet" style="left:214px;top:44px" aria-hidden="true">CS<sup>✦</sup></div>
+    <div class="cs reflet" style="left:262px;top:10px" aria-hidden="true">CS<sup>✦</sup></div>
+    <div class="cs reflet" style="left:300px;top:46px" aria-hidden="true">CS<sup>✦</sup></div>
+    <div class="cs reflet" style="left:346px;top:8px" aria-hidden="true">CS<sup>✦</sup></div>
+    <div class="cs reflet" style="left:386px;top:44px" aria-hidden="true">CS<sup>✦</sup></div>
+  </div>
+
+  <img class="banniere" src="banniere.jpg" alt="Ma Wishlist — la wishlist plus intelligente">
+
+  <div class="outils">
+    <label class="recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input id="q" type="search" placeholder="Rechercher un article, une marque..." aria-label="Rechercher un article, une marque"></label>
+    <div class="categories"><select id="cat" aria-label="Catégorie"></select>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="vues">
+      <button id="v-grille" class="on" type="button" aria-label="Vue en grille"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.8"/></svg></button>
+      <button id="v-liste" type="button" aria-label="Vue en liste"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg></button>
     </div>
   </div>
-</header>
 
-<main class="wrap">
-  <section class="panel" id="cle-panel" hidden>
-    <h3>Mon accès</h3>
-    <p class="safe">Colle ta clé d'accès pour retrouver ta wishlist sur cet appareil. Elle reste rangée ici.</p>
-    <form id="cle-form" class="row">
-      <label style="flex:1;min-width:220px">Clé d'accès<input id="cle" type="password" autocomplete="off" placeholder="github_pat_…"></label>
-      <button class="btn" type="submit">Enregistrer</button>
-      <button class="link-btn" type="button" id="cle-off">Se déconnecter</button>
-    </form>
-    <p class="hint" id="cle-msg" style="margin:0"></p>
-  </section>
+  <div class="puces"><div class="liste" id="puces"></div><span class="compte" id="compte"></span></div>
 
-  <div class="title-row"><h2>Ma wishlist</h2><span class="counts" id="counts"></span></div>
+  <div class="grille" id="grid"></div>
+</div>
 
-  <form class="add" id="add">
-    <input id="f-url" type="url" placeholder="Colle le lien de l'article" aria-label="Lien de l'article" required>
-    <input id="f-opt" type="text" placeholder="Ta taille ou ta teinte" aria-label="Taille ou teinte">
-    <button class="btn" type="submit" id="f-btn">Ajouter</button>
+<button class="ajouter" id="b-ajouter" type="button" aria-label="Ajouter un article">+</button>
+
+<div class="menu" id="menu" hidden>
+  <button type="button" data-m="ajouter">Ajouter un article</button>
+  <button type="button" data-m="alertes">Mes alertes</button>
+  <button type="button" data-m="tous">Toute ma wishlist</button>
+  <button type="button" data-m="acces">Mon accès</button>
+</div>
+
+<div class="voile" id="f-ajout" hidden>
+  <form class="fenetre" id="add">
+    <h3>Ajouter un crush</h3>
+    <label>Lien de l'article<input id="f-url" type="url" placeholder="https://…" required></label>
+    <label>Taille ou teinte<input id="f-opt" type="text" placeholder="ex. Taille L"></label>
+    <label>Catégorie<select id="f-cat"></select></label>
+    <p class="erreur" id="hint" hidden></p>
+    <div class="actions"><button class="btn doux" type="button" data-fermer>Annuler</button><button class="btn" type="submit">Ajouter</button></div>
   </form>
-  <p class="hint err" id="hint" hidden></p>
+</div>
 
-  <div class="rail">
-    <div class="grid" id="grid"></div>
-    <button class="fleche" id="fleche" type="button" aria-label="Voir la suite" hidden>›</button>
-  </div>
-</main>
-
-
+<div class="voile" id="cle-panel" hidden>
+  <form class="fenetre" id="cle-form">
+    <h3>Mon accès</h3>
+    <p>Colle ta clé d'accès pour retrouver ta wishlist sur cet appareil. Elle reste rangée ici.</p>
+    <label>Clé d'accès<input id="cle" type="password" autocomplete="off" placeholder="github_pat_…"></label>
+    <p id="cle-msg"></p>
+    <div class="actions"><button class="btn doux" type="button" id="cle-off">Se déconnecter</button><button class="btn doux" type="button" data-fermer>Fermer</button><button class="btn" type="submit">Enregistrer</button></div>
+  </form>
+</div>
 
 <div class="verdict" id="verdict" hidden role="dialog" aria-live="polite"><img id="v-img" alt=""><div><div class="t" id="v-titre"></div><div class="s" id="v-sous"></div></div><div class="acts" id="v-acts"></div></div>
-<div class="toast" id="toast" hidden><img src="logo.jpg" alt=""><div><b id="t-title"></b><span id="t-body"></span></div></div>
+<div class="toast" id="toast" hidden><b id="t-title"></b><span id="t-body"></span></div>
 
 <script>
 // ---------------------------------------------------------------- réglages
@@ -181,6 +290,7 @@ const local = ["127.0.0.1", "localhost"].includes(location.hostname);
 const apiTest = new URLSearchParams(location.search).get("api");
 const API = (local && apiTest && /^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(apiTest)) ? apiTest : "https://api.github.com";
 const STATUTS = { dispo: "Disponible", rupture: "En rupture", attente: "Recherche…", bloque: "Indisponible", inconnu: "Indisponible" };
+const CATEGORIES = ["Parfums", "Mode", "Beauté", "Accessoires", "Maison", "Luxe"];
 
 // La clé est rangée dans CET appareil (stockage du navigateur), jamais sur le site.
 function lireCle() { try { return localStorage.getItem("crush_cle") || ""; } catch (e) { return ""; } }
@@ -259,50 +369,89 @@ async function charger() {
   }
 }
 
+
+// ---------------------------------------------------------------- les cartes
+function categorieDe(a) { return a.categorie || (siteDe(a.url) === "MAC Cosmetics" ? "Beauté" : "Mode"); }
+const COEUR_INUTILISE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.6-9-9.6C2 7.4 4.3 4.5 7.4 4.5c2 0 3.6 1.1 4.6 2.8 1-1.7 2.6-2.8 4.6-2.8 3.1 0 5.4 2.9 4.4 6.4-1.5 5-9 9.6-9 9.6z"/></svg>';
+
 function card(a, index) {
   const m = etatDe(a);
-  const c = el("article", "card");
-  const ph = el("div", "ph" + (m.photo ? "" : " vide"));
-  ph.append(el("span", "pill " + m.statut, STATUTS[m.statut] || m.statut));
-  if (m.photo) { const img = el("img"); img.src = m.photo; img.alt = a.nom || m.nom || "Article"; img.referrerPolicy = "no-referrer"; img.loading = "lazy"; ph.append(img); }
-  else if (m.attend) ph.append(el("div", "empty", "On regarde le stock…"));
-  const x = el("button", "del", "×"); x.type = "button"; x.setAttribute("aria-label", "Retirer cet article"); x.onclick = () => retirer(a.url);
-  ph.append(x);
-  // Le nom, la marque et la taille sont posés sur la photo
-  const infos = el("div", "infos");
-  infos.append(el("span", "site", siteDe(a.url)));
-  const n = el("a", "name", a.nom || m.nom || "Nouvel article"); n.href = a.url; n.target = "_blank"; n.rel = "noopener";
-  infos.append(n);
-  if (a.option) infos.append(el("span", "opt", a.option));
-  ph.append(infos);
-  c.append(ph);
+  const c = el("article", "carte" + (dejaVues.has(a.url) ? " vue" : ""));
+  c.style.animationDelay = Math.min(index, 8) * 50 + "ms";
+  dejaVues.add(a.url);
 
-  const b = el("button", "alert" + (a.crush_alert ? " on" : ""), "Crush Alert 💌");
+  // L'affiche : la photo en grand, et le texte posé dessus
+  const affiche = el("a", "affiche" + (m.photo ? "" : " sans-photo")); affiche.href = a.url; affiche.target = "_blank"; affiche.rel = "noopener";
+  if (m.photo) { const img = el("img"); img.src = m.photo; img.alt = a.nom || m.nom || "Article"; img.referrerPolicy = "no-referrer"; img.loading = "lazy"; affiche.append(img); }
+  else affiche.append(el("span", "vide", m.attend ? "On regarde le stock…" : ""));
+  affiche.append(el("span", "etat " + m.statut, STATUTS[m.statut] || m.statut));
+  const x = el("button", "croix", "×"); x.type = "button"; x.setAttribute("aria-label", "Retirer de ma wishlist"); x.title = "Retirer de ma wishlist";
+  x.onclick = (e) => { e.preventDefault(); e.stopPropagation(); retirer(a.url); };
+  affiche.append(x);
+  const infos = el("div", "infos");
+  infos.append(el("p", "marque", m.marque || siteDe(a.url)));
+  infos.append(el("p", "nom", a.nom || m.nom || "Nouvel article"));
+  const detail = [a.option, m.prix].filter(Boolean).join(" · ");
+  if (detail) infos.append(el("p", "taille", detail));
+  affiche.append(infos);
+  c.append(affiche);
+
+  const b = el("button", "alerter" + (a.crush_alert ? " on" : ""), "Crush Alerte");
   const lisible = m.statut === "dispo" || m.statut === "rupture";
   b.disabled = occupe || (!lisible && !a.crush_alert);
-  b.title = lisible || a.crush_alert ? "Être prévenue quand il revient" : (m.attend ? "Un instant, on regarde le stock" : "Crush Alert n'est pas possible pour cet article");
+  b.title = a.crush_alert ? "Arrêter l'alerte" : (lisible ? "Être prévenue quand il revient" : (m.attend ? "Un instant, on regarde le stock" : "L'alerte n'est pas possible pour cet article"));
   b.onclick = () => basculer(a.url);
   c.append(b);
   if (a.crush_alert) c.append(el("p", "lancee", "Ton alerte est lancée, garde un œil sur ton téléphone."));
-
-  if (m.eteinte_le && !a.crush_alert) c.append(el("span", "when", "💌 Tu as été prévenue : il était de retour."));
+  else if (m.eteinte_le) c.append(el("p", "lancee", "💌 Tu as été prévenue : il était de retour."));
   return c;
 }
 
-const fleche = document.getElementById("fleche");
-fleche.onclick = () => grid.scrollBy({ left: grid.clientWidth * 0.8, behavior: "smooth" });
-function majFleche() { fleche.hidden = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 8; }
-grid.addEventListener("scroll", majFleche); window.addEventListener("resize", majFleche);
+// ---------------------------------------------------------------- filtres et affichage
+const dejaVues = new Set();
+let filtreCat = "Tous", seulementAlertes = false, recherche = "";
+const selCat = document.getElementById("cat"), selAjout = document.getElementById("f-cat");
+selCat.append(...[["Tous", "Toutes les catégories"], ...CATEGORIES.map(c => [c, c])].map(([v, t]) => { const o = el("option", null, t); o.value = v; return o; }));
+selAjout.append(...CATEGORIES.map(c => { const o = el("option", null, c); o.value = c; return o; }));
+selAjout.value = "Mode";
+selCat.onchange = () => { filtreCat = selCat.value; seulementAlertes = false; dessiner(); };
+document.getElementById("q").addEventListener("input", (e) => { recherche = e.target.value.trim().toLowerCase(); dessiner(); });
+
+function garde(a) {
+  const m = memoire[a.url] || {};
+  if (seulementAlertes && !a.crush_alert) return false;
+  if (filtreCat !== "Tous" && categorieDe(a) !== filtreCat) return false;
+  if (recherche) {
+    const t = [a.nom, m.nom, m.marque, a.option, siteDe(a.url)].join(" ").toLowerCase();
+    if (!t.includes(recherche)) return false;
+  }
+  return true;
+}
 function dessiner() {
-  const articles = [...(liste.articles || [])].reverse(); // le plus récent d'abord
+  const tous = [...(liste.articles || [])].reverse(); // le plus récent d'abord
+  document.getElementById("puces").replaceChildren(...["Tous", ...CATEGORIES].map(cat => {
+    const p = el("button", "puce" + (filtreCat === cat && !seulementAlertes ? " on" : ""), cat); p.type = "button";
+    p.onclick = () => { filtreCat = cat; seulementAlertes = false; selCat.value = cat; dessiner(); };
+    return p;
+  }));
+  const articles = tous.filter(garde);
   grid.replaceChildren(...(articles.length ? articles.map(card)
-    : [el("div", "empty-state", lireCle() ? "Ta wishlist est vide. Colle le lien d'un article pour commencer." : "Connecte-toi (en haut à droite) pour voir ta wishlist.")]));
-  const surveilles = articles.filter(a => a.crush_alert).length;
-  document.getElementById("counts").textContent = `${articles.length} article${articles.length > 1 ? "s" : ""} · ${surveilles} Crush Alert`;
-  majFleche();
+    : [el("div", "vide-total", !lireCle() ? "Connecte-toi (en haut à droite) pour voir ta wishlist." : tous.length ? "Aucun article ici pour l'instant." : "Touche le + pour ajouter ton premier crush ✨")]));
+  document.getElementById("compte").textContent = `${articles.length} article${articles.length > 1 ? "s" : ""}`;
+  const n = tous.filter(a => a.crush_alert).length, badge = document.getElementById("badge");
+  badge.textContent = n; badge.hidden = !n;
 }
 
 function live() {}  // (plus d'indicateur technique à l'écran)
+
+// Vue grille / liste (retenue sur cet appareil)
+const vG = document.getElementById("v-grille"), vL = document.getElementById("v-liste");
+function vue(liste_) {
+  grid.classList.toggle("en-liste", liste_); vG.classList.toggle("on", !liste_); vL.classList.toggle("on", liste_);
+  try { localStorage.setItem("crush_vue", liste_ ? "liste" : "grille"); } catch (e) {}
+}
+vG.onclick = () => vue(false); vL.onclick = () => vue(true);
+try { vue(localStorage.getItem("crush_vue") === "liste"); } catch (e) {}
 
 // ---------------------------------------------------------------- actions
 async function action(fn, okTitre, okTexte) {
@@ -311,26 +460,57 @@ async function action(fn, okTitre, okTexte) {
   catch (e) { toast("Oups", e.message); }
   finally { occupe = false; dessiner(); }
 }
-
 function teinteDuLien(url) { const m = url.match(/[?&]shade=([^&#]+)/); return m ? decodeURIComponent(m[1].replace(/\+/g, " ")) : ""; }
+
+// Fenêtres
+const fAjout = document.getElementById("f-ajout"), panneau = document.getElementById("cle-panel"), menu = document.getElementById("menu");
+document.querySelectorAll("[data-fermer]").forEach(b => b.onclick = () => { fAjout.hidden = true; panneau.hidden = true; });
+[fAjout, panneau].forEach(v => v.addEventListener("click", (e) => { if (e.target === v) v.hidden = true; }));
+function ouvrirAjout() {
+  menu.hidden = true;
+  if (!cleValide(lireCle())) { montrerCle("Entre d'abord ta clé."); return; }
+  fAjout.hidden = false; document.getElementById("hint").hidden = true;
+  setTimeout(() => document.getElementById("f-url").focus(), 50);
+}
+document.getElementById("b-ajouter").onclick = ouvrirAjout;
+function ouvrirMenu(e) {
+  e.stopPropagation(); menu.hidden = !menu.hidden;
+  const bande = document.querySelector(".bande");
+  menu.style.top = getComputedStyle(bande).display !== "none" ? (bande.getBoundingClientRect().bottom + window.scrollY + 6) + "px" : "";
+}
+document.getElementById("burger").onclick = ouvrirMenu;
+document.getElementById("burger2").onclick = ouvrirMenu;
+document.addEventListener("click", (e) => { if (!menu.hidden && !menu.contains(e.target)) menu.hidden = true; });
+menu.onclick = (e) => {
+  const m = e.target.dataset.m; if (!m) return; menu.hidden = true;
+  if (m === "ajouter") ouvrirAjout();
+  if (m === "alertes") { seulementAlertes = true; dessiner(); }
+  if (m === "tous") { seulementAlertes = false; filtreCat = "Tous"; selCat.value = "Tous"; dessiner(); }
+  if (m === "acces") ouvrirCle();
+};
+document.getElementById("b-cloche").onclick = () => {
+  seulementAlertes = !seulementAlertes; dessiner();
+  toast(seulementAlertes ? "Mes alertes 💌" : "Toute ma wishlist", seulementAlertes ? "Voici les articles que je surveille pour toi." : "");
+};
+document.getElementById("b-chercher").onclick = () => document.getElementById("q").focus();
 
 document.getElementById("add").addEventListener("submit", (e) => {
   e.preventDefault();
   const url = document.getElementById("f-url").value.trim();
   let option = document.getElementById("f-opt").value.trim();
+  const categorie = selAjout.value;
   const hint = document.getElementById("hint");
   if (!/^https?:\/\//.test(url)) { hint.textContent = "Colle le lien complet de l'article (il commence par https://)."; hint.hidden = false; return; }
-  if (!cleValide(lireCle())) { montrerCle("Entre d'abord ta clé."); return; }
   const teinte = siteDe(url) === "MAC Cosmetics" ? teinteDuLien(url) : "";
   if (!option && teinte) option = "Teinte " + teinte;
   action(async () => {
     await modifierListe((w) => {
       if (w.articles.some(a => a.url === url && (a.option || "") === option)) throw new Error("Cet article est déjà dans ta wishlist.");
-      w.articles.push({ nom: "", option, teinte, url, crush_alert: false, ajoute_le: new Date().toISOString() });
+      w.articles.push({ nom: "", option, teinte, url, categorie, crush_alert: false, ajoute_le: new Date().toISOString() });
     }, "Article ajouté depuis la page wishlist");
     ajoutes.add(url);
-    e.target.reset();
-    hint.hidden = true; toast("Ajouté ✨", "On regarde le stock pour toi.");
+    e.target.reset(); selAjout.value = "Mode"; fAjout.hidden = true;
+    toast("Ajouté ✨", "Je regarde le stock pour toi.");
   });
 });
 
@@ -338,19 +518,14 @@ function basculer(url) {
   let allume = false;
   action(async () => {
     await modifierListe((w) => { const a = w.articles.find(x => x.url === url); if (a) { a.crush_alert = !a.crush_alert; allume = a.crush_alert; } }, "Crush Alert changée depuis la page wishlist");
-  }).then(() => toast(allume ? "Crush Alert activée 💌" : "Crush Alert désactivée", allume ? "Je te préviens dès qu'il revient." : "Tu ne seras plus prévenue pour cet article."));
+  }).then(() => toast(allume ? "Alerte activée 💌" : "Alerte arrêtée", allume ? "Je te préviens dès qu'il revient." : "Tu ne seras plus prévenue pour cet article."));
 }
 function retirer(url) {
   if (!confirm("Retirer cet article de ta wishlist ?")) return;
   action(() => modifierListe((w) => { w.articles = w.articles.filter(a => a.url !== url); }, "Article retiré depuis la page wishlist"), "Retiré", "L'article n'est plus dans ta wishlist.");
 }
-function verifier() {
-  // On note l'heure de la demande dans la liste : ce changement réveille le robot GitHub.
-  action(() => modifierListe((w) => { w.verification_demandee = new Date().toISOString(); }, "Vérification demandée depuis la page wishlist"),
-         "Vérification lancée", "Le robot GitHub se réveille : résultat dans 1 à 2 minutes.");
-}
 
-// Juste après un ajout : dès que le robot a lu la page, on affiche le verdict 🔴 / 🟢
+// Juste après un ajout : dès que le robot a lu la page, on affiche le verdict
 function verdicts() {
   for (const url of ajoutes) {
     const m = memoire[url]; const a = (liste.articles || []).find(x => x.url === url);
@@ -363,30 +538,30 @@ function afficherVerdict(a, m) {
   const nom = a.nom || m.nom || "Cet article", opt = a.option ? ` (${a.option})` : "";
   document.getElementById("v-img").src = m.photo || "icon-192.png";
   acts.replaceChildren();
-  const fermer = el("button", "link-btn", "Fermer"); fermer.type = "button"; fermer.onclick = () => v.hidden = true;
+  const fermer = el("button", "btn doux", "Fermer"); fermer.type = "button"; fermer.onclick = () => v.hidden = true;
   if (m.statut === "rupture") {
-    document.getElementById("v-titre").textContent = `🔴 ${nom}${opt} est en rupture.`;
-    sous.textContent = "Active Crush Alert : je te préviens dès qu'il revient.";
-    const go = el("button", "btn", "💌 Activer Crush Alert"); go.type = "button";
+    document.getElementById("v-titre").textContent = `${nom}${opt} est en rupture.`;
+    sous.textContent = "Active l'alerte : je te préviens dès qu'il revient.";
+    const go = el("button", "btn", "Alerter 💌"); go.type = "button";
     go.onclick = () => { v.hidden = true; if (!a.crush_alert) basculer(a.url); };
     acts.append(fermer, go);
   } else if (m.statut === "dispo") {
-    document.getElementById("v-titre").textContent = `🟢 ${nom}${opt} est disponible !`;
+    document.getElementById("v-titre").textContent = `${nom}${opt} est disponible !`;
     sous.textContent = "Fonce, il t'attend.";
     const lien = el("a", "btn", "Voir l'article"); lien.href = a.url; lien.target = "_blank"; lien.rel = "noopener";
     acts.append(fermer, lien);
   } else {
     document.getElementById("v-titre").textContent = "Je n'arrive pas à voir le stock de cet article.";
-    sous.textContent = "Il reste dans ta wishlist, mais Crush Alert n'est pas possible sur ce site.";
+    sous.textContent = "Il reste dans ta wishlist, mais l'alerte n'est pas possible sur ce site.";
     acts.append(fermer);
   }
   v.hidden = false;
 }
 
-// ---------------------------------------------------------------- Ma clé
-const panneau = document.getElementById("cle-panel");
+// ---------------------------------------------------------------- Mon accès
 function montrerCle(msg) { panneau.hidden = false; document.getElementById("cle-msg").textContent = msg || ""; }
-document.getElementById("open-cle").onclick = () => { panneau.hidden = !panneau.hidden; document.getElementById("cle-msg").textContent = lireCle() ? "✅ Tu es connectée sur cet appareil." : ""; };
+function ouvrirCle() { panneau.hidden = false; document.getElementById("cle-msg").textContent = lireCle() ? "✅ Tu es connectée sur cet appareil." : ""; }
+document.getElementById("open-cle").onclick = ouvrirCle;
 document.getElementById("cle-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const v = document.getElementById("cle").value.trim();
@@ -396,7 +571,7 @@ document.getElementById("cle-form").addEventListener("submit", async (e) => {
   await charger(); planifier(60000);
   if (sha) { panneau.hidden = true; toast("Bienvenue ✨", "Voici ta wishlist."); }
 });
-document.getElementById("cle-off").onclick = () => { rangerCle(""); liste = { articles: [] }; memoire = {}; live(false, "Pas connectée"); dessiner(); montrerCle("Tu es déconnectée sur cet appareil."); };
+document.getElementById("cle-off").onclick = () => { rangerCle(""); liste = { articles: [] }; memoire = {}; dessiner(); montrerCle("Tu es déconnectée sur cet appareil."); };
 
 // ---------------------------------------------------------------- relecture régulière
 // Toutes les 15 s quand le robot doit lire un article, sinon toutes les minutes.

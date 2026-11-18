@@ -215,10 +215,61 @@ def lire_universel(page_html, option="", url=""):
     return infos
 
 
+def _joli_prix(montant, devise="EUR"):
+    """« 12500.00 » + EUR -> « 12 500 € » ; « 29.9 » -> « 29,90 € »."""
+    try:
+        x = float(str(montant).replace(",", "."))
+    except ValueError:
+        return ""
+    if x <= 0:
+        return ""
+    texte = f"{x:,.2f}".replace(",", "\u202f").replace(".", ",")
+    if texte.endswith(",00"):
+        texte = texte[:-3]
+    symbole = {"EUR": "€", "USD": "$", "GBP": "£"}.get((devise or "EUR").upper(), devise or "€")
+    return f"{texte} {symbole}"
+
+
+def marque_et_prix(page_html):
+    """La marque et le prix, pour l'affichage de la wishlist (fiche standard, sinon balises meta)."""
+    marque, prix = "", ""
+    for fiche in _fiches_produit(page_html):
+        b = fiche.get("brand")
+        if isinstance(b, list) and b:
+            b = b[0]
+        if isinstance(b, dict):
+            b = b.get("name", "")
+        if isinstance(b, str) and b.strip() and not marque:
+            marque = html.unescape(b).strip()
+        offres = fiche.get("offers") or []
+        offres = offres if isinstance(offres, list) else [offres]
+        for o in offres:
+            if isinstance(o, dict) and not prix:
+                prix = _joli_prix(o.get("price") or o.get("lowPrice") or "", o.get("priceCurrency") or "EUR")
+    if not prix:
+        m = re.search(r'<meta[^>]+property="(?:product|og):price:amount"[^>]+content="([^"]+)"', page_html)
+        d = re.search(r'<meta[^>]+property="(?:product|og):price:currency"[^>]+content="([^"]+)"', page_html)
+        if m:
+            prix = _joli_prix(m.group(1), d.group(1) if d else "EUR")
+    if not marque:
+        m = re.search(r'<meta[^>]+property="(?:product:brand|og:brand)"[^>]+content="([^"]+)"', page_html)
+        if m:
+            marque = html.unescape(m.group(1)).strip()
+    return marque, prix
+
+
 def lire(url, page_html, option="", teinte=""):
     """Choisit le bon lecteur selon le site."""
     if lecteur_de(url) == "mac":
         infos = lire_mac(page_html, teinte)
         infos.setdefault("precision", f"teinte « {teinte} »" if teinte else "")
-        return infos
-    return lire_universel(page_html, option, url)
+    else:
+        infos = lire_universel(page_html, option, url)
+    marque, prix = marque_et_prix(page_html)
+    if lecteur_de(url) == "mac":
+        marque = "MAC Cosmetics"
+        if not prix:  # MAC range son prix dans ses données cachées
+            m = re.search(r'"price"\s*:\s*"?([0-9]+(?:[.,][0-9]+)?)', html.unescape(page_html))
+            prix = _joli_prix(m.group(1)) if m else ""
+    infos["marque"], infos["prix"] = marque, prix
+    return infos

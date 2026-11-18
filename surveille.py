@@ -165,8 +165,8 @@ def main():
             if avant.get("statut") != statut:
                 nouveau["depuis"] = maintenant()
             nouveau.pop("verifie_le", None)
-            # Le nom, la photo et la précision servent à la page wishlist en ligne.
-            for cle in ("nom", "photo", "precision"):
+            # Le nom, la photo, la marque et le prix servent à la page wishlist en ligne.
+            for cle in ("nom", "photo", "precision", "marque", "prix"):
                 if infos.get(cle):
                     nouveau[cle] = infos[cle]
 
