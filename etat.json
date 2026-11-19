@@ -37,5 +37,10 @@
     "marque": "Alo Yoga",
     "prix": "≈ 171 €",
     "alerte_envoyee": false
+  },
+  "https://www.nocibe.fr/fr/p/5011977047?variant=1275307": {
+    "statut": "bloque",
+    "precision": "le site bloque les robots",
+    "depuis": "19/11 11:26 (heure UTC)"
   }
 }
