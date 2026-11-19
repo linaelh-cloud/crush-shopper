@@ -5,303 +5,276 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Crush Shopper</title>
 <!-- Crush Shopper en ligne : la page vit sur GitHub Pages, la liste dans wishlist.json du dépôt,
-     et le robot GitHub lit le stock. Design « bordeaux » créé par Lina (18/11/2026). -->
-<link rel="manifest" href="manifest.json?v=3">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=3">
+     et le robot GitHub lit le stock. Design beige / crème / noir créé par Lina (19/11/2026), logo « Crush SHOPPER ». -->
+<link rel="manifest" href="manifest.json?v=5">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=5">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Crush Shopper">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#fdfaf6">
-<link rel="icon" href="icon-192.png?v=3">
+<meta name="theme-color" content="#f4efe9">
+<link rel="icon" href="icon-192.png?v=5">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Jost:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@300;400;500&family=Gilda+Display&family=Jost:wght@300;400;500;600&display=swap">
 <style>
-/* ================= Design de Lina : bordeaux, crème, rose poudré ================= */
+/* ================= Design de Lina (19/11/2026) : beige, crème, noir — logo « Crush SHOPPER » ================= */
 :root {
-  --bordeaux: #0c0c0c; --bordeaux-2: #0c0c0c; --creme: #fdfaf6; --carte: #fefcf9; --bord: #e7e0d8;  /* noir et crème (maquette du 18/11) */
-  --rose: #ece6df; --rose-clair: #f3ede6; --texte: #141414; --gris: #6f6a66;
-  --vert: #1a8a12; --rouge: #b10605;
+  --fond: #f6f1ec; --nav: #f4efe9; --carte: #ece5df; --ligne: #ddd3ca;
+  --noir: #17130f; --texte: #1d1915; --gris: #6d645d; --beige: #d8c6b8;
+  --vert: #2f7a34; --rouge: #a3392c;
+  --bordeaux: #17130f; --creme: #f6f1ec; --rose-clair: #efe7e0;   /* anciens noms, gardés pour le code */
   --font-logo: "Michroma", "Eurostile", "Arial Black", sans-serif;
+  --font-titre: "Gilda Display", "Didot", Georgia, serif;
+  --font-hero: "Outfit", "Futura", "Helvetica Neue", sans-serif;
   --font-caps: "Jost", "Futura", "Century Gothic", sans-serif;
-  --font-serif: "Cormorant Garamond", "Didot", Georgia, serif;
-  --barre: 156px;
+  --font-serif: "Gilda Display", Georgia, serif;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-/* Toute la page un peu plus petite (demandé le 18/11 : « c'est un peu grand ») */
-html { zoom: 0.6; --trait: 2.5px; }  /* 2,5 × 0,6 = 1,5 px réel : contour net */   /* mon modèle était une capture Retina (2× plus de pixels) : on revient à la taille réelle */
-@media (max-width: 760px) { html { zoom: 0.86; --trait: 1.744px; } }  /* 1,744 × 0,86 = 1,5 px réel */
-body { background: var(--creme); color: var(--texte); font-family: var(--font-caps); font-size: 15px; line-height: 1.4; -webkit-font-smoothing: antialiased; }
+body { background: var(--fond); color: var(--texte); font-family: var(--font-caps); font-size: 15px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
 [hidden] { display: none !important; }
 button { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--bordeaux); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--noir); outline-offset: 2px; }
 @keyframes monte { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-/* --- Barre bordeaux à gauche, avec le logo CS✦ et ses reflets --- */
-.barre { position: fixed; inset: 0 auto 0 0; width: var(--barre); background: var(--bordeaux); color: #fff; z-index: 6; overflow: hidden; }
-.burger { position: absolute; left: 44px; top: 42px; width: 56px; height: 40px; border: 0; background: none; cursor: pointer; display: grid; gap: 9px; align-content: center; padding: 0; }
-.burger i { display: block; height: 2px; background: #fff; border-radius: 2px; }
-.cs { font-family: var(--font-logo); letter-spacing: -0.04em; line-height: 1; position: absolute; white-space: nowrap; }
-.cs sup { font-family: var(--font-caps); font-size: 0.55em; vertical-align: 0.9em; margin-left: 0.04em; }
-.cs.grand { left: 22px; top: 186px; font-size: 3.4rem; color: #fff; }
-.cs.reflet { color: #fff; opacity: 0.27; font-size: 1.95rem; }
+/* --- Le menu du haut : C · onglets · icônes --- */
+.nav { position: sticky; top: 0; z-index: 8; display: flex; align-items: center; gap: 24px; height: 76px; padding: 0 48px; background: var(--nav); border-bottom: 1px solid #ebe3db; }
+.logo-c { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 0; color: var(--noir); }
+.cs-carre { width: 44px; height: 44px; border-radius: 11px; background: #0e0e0e; color: #fff; display: grid; place-items: center; font-family: var(--font-logo); font-size: 15px; letter-spacing: 0.02em; }
+.cs-nom { font-family: var(--font-logo); font-size: 21px; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+.onglets { flex: 1; display: flex; justify-content: center; gap: clamp(20px, 5vw, 76px); }
+.onglets .puce { border: 0; background: none; padding: 8px 2px; cursor: pointer; font-family: var(--font-caps); font-size: 14px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: var(--texte); border-bottom: 1.5px solid transparent; white-space: nowrap; }
+.onglets .puce.on { border-bottom-color: var(--noir); background: none; color: var(--texte); }
+.onglets .puce { border-radius: 0; height: auto; border-top: 0; border-left: 0; border-right: 0; }
+.icones { display: flex; align-items: center; gap: 22px; }
+.icones button { position: relative; border: 0; background: none; cursor: pointer; color: var(--texte); padding: 4px; display: grid; place-items: center; }
+.icones svg { width: 24px; height: 24px; }
+.badge { position: absolute; top: -4px; right: -6px; min-width: 17px; height: 17px; border-radius: 999px; background: var(--noir); color: #fff; font-size: 10px; font-weight: 600; display: grid; place-items: center; padding: 0 4px; }
+.burger { display: none; }
 
-/* --- Contenu --- */
-.page { margin-left: var(--barre); padding: 0 22px 90px 26px; }
-/* Le contenu est centré dans l'espace à droite de la barre bordeaux */
-.contenu { max-width: none; }  /* toute la largeur : nom à gauche, bannière d'un bord à l'autre */
-header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
-.titre h1 { white-space: nowrap; margin: 0; font-family: var(--font-logo); font-weight: 400; font-size: 2.6rem; line-height: 1; color: var(--bordeaux); letter-spacing: 0.01em; -webkit-text-stroke: 1.4px var(--bordeaux); }
-.titre p { margin: 8px 0 0 50px; font-family: var(--font-caps); font-weight: 500; font-size: 0.98rem; letter-spacing: 0.36em; color: var(--bordeaux); }
-.icones { margin-left: auto; display: flex; align-items: center; }
-.icones button { position: relative; border: 0; background: none; cursor: pointer; color: var(--texte); padding: 6px 30px; display: grid; place-items: center; }
-.icones button + button { border-left: 2px solid var(--texte); }
-.icones svg { width: 40px; height: 40px; }
-.badge { position: absolute; top: 0; right: 20px; min-width: 20px; height: 20px; border-radius: 999px; background: var(--bordeaux); color: #fff; font-size: 0.72rem; font-weight: 600; display: grid; place-items: center; padding: 0 5px; }
+/* --- Le logo écrit (police Bodoni Moda) --- */
+.logo { display: inline-flex; flex-direction: column; align-items: center; color: var(--noir); }
+.logo .crush { font-family: var(--font-logo); font-weight: 400; font-size: 92px; line-height: 0.9; letter-spacing: -0.02em; }
+.logo .crush b { font-weight: 400; font-size: 1.32em; line-height: 0; }
+.logo .shopper { font-family: var(--font-logo); font-size: 15px; letter-spacing: 0.62em; margin: 6px 0 0 0.62em; }
 
-.bande { display: none; }
-.banniere { display: block; width: 100%; height: auto; border-radius: 22px; box-shadow: 0 10px 30px -22px rgba(20,20,20,0.6); }
+/* --- La page --- */
+.page { padding: 0; }
+.zone { padding: 0 48px; }
 
-.outils { display: flex; gap: 24px; align-items: center; margin-top: 30px; }
-.recherche { flex: 1.4; display: flex; align-items: center; gap: 14px; background: #fefcf9; border: 1.5px solid #ece7e0; border-radius: 999px; padding: 0 22px; height: 66px; }
-.recherche svg { flex: none; width: 30px; height: 30px; color: var(--texte); }
-.recherche input { flex: 1; min-width: 0; border: 0; background: none; outline: none; font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; color: var(--texte); }
-.recherche input::placeholder { color: #57504e; }
+/* --- Accueil : ma bannière (logo, titre, bouton et bande de C déjà dedans), coups de cœur --- */
+.banniere-v3 { position: relative; }
+.banniere-v3 img { display: block; width: 100%; height: auto; }
+.hero-bouton { position: absolute; left: 6.1%; top: 69.3%; width: 21.3%; height: 10.6%; border: 0; background: transparent; cursor: pointer; }
+.hero-bouton:focus-visible { outline: 2px solid #f6f1ec; }
+.pied { margin-top: 70px; }
+@media (max-width: 1100px) and (min-width: 761px) { .cs-nom { display: none; } }
+.hero { position: relative; display: flex; align-items: stretch; height: max(380px, 26.7vw); background: linear-gradient(180deg, #c8beb4 0%, #d5ccc2 28%, #dcd3ca 55%, #ddd4cc 100%); overflow: hidden; }
+.hero-texte { position: relative; z-index: 2; flex: 0 0 auto; max-width: 50vw; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 34px; padding: 48px 0 56px 5vw; }
+.hero h1 { margin: 0; font-family: var(--font-hero); font-weight: 400; letter-spacing: -0.01em; font-size: clamp(36px, 4.2vw, 68px); line-height: 1.05; color: var(--noir); }
+.hero-img { position: absolute; right: 0; top: 0; height: 100%; width: max(50%, 712px); object-fit: cover; object-position: left center; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22%); mask-image: linear-gradient(90deg, transparent 0, #000 22%); }
+.btn-noir { display: inline-flex; align-items: center; gap: 22px; height: 60px; padding: 0 34px; border: 0; border-radius: 16px; background: #0e0e0e; color: #f6f1ec; font-family: var(--font-caps); font-weight: 500; font-size: 16px; letter-spacing: 0.1em; box-shadow: 0 10px 24px -14px rgba(0,0,0,0.6); text-transform: uppercase; cursor: pointer; }
+.fleche { font-size: 20px; line-height: 1; letter-spacing: 0; }
+.bande-c { height: 58px; background: #0e0e0e; color: #f6f1ec; display: flex; align-items: center; justify-content: space-around; gap: 48px; overflow: hidden; font-family: var(--font-logo); font-size: 24px; letter-spacing: 0.02em; white-space: nowrap; }
+.bande-c span { flex: none; }
+.tete-section { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 40px; }
+.tete-section h2 { margin: 0; font-family: var(--font-titre); font-weight: 400; font-size: clamp(30px, 3vw, 44px); color: var(--noir); }
+.lien-fleche { white-space: nowrap; border: 0; background: none; cursor: pointer; display: inline-flex; align-items: center; gap: 16px; font-family: var(--font-caps); font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--noir); padding: 6px 0; }
+.vitrine { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; margin-top: 26px; }
+.vitrine .alerter, .vitrine .lancee { display: none; }
+
+/* --- Barre d'outils (recherche, catégories, vues) --- */
+.titre-vue { margin: 40px 0 0; font-family: var(--font-titre); font-weight: 400; font-size: clamp(30px, 3vw, 44px); color: var(--noir); }
+.outils { display: flex; gap: 16px; align-items: center; margin-top: 24px; }
+.recherche { flex: 1.4; display: flex; align-items: center; gap: 12px; border-radius: 12px; background: #fbf8f5; border: 1px solid var(--ligne); padding: 0 18px; height: 50px; }
+.recherche svg { flex: none; width: 20px; height: 20px; color: var(--texte); }
+.recherche input { flex: 1; min-width: 0; border: 0; background: none; outline: none; font-family: var(--font-caps); font-size: 15px; color: var(--texte); }
+.recherche input::placeholder { color: #8a8079; }
 .categories { flex: 1; position: relative; }
-.categories select { width: 100%; height: 66px; appearance: none; -webkit-appearance: none; background: #fefcf9; border: 1.5px solid #ece7e0; border-radius: 999px; padding: 0 56px 0 38px; font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; color: var(--texte); cursor: pointer; }
-.categories svg { position: absolute; right: 26px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; pointer-events: none; }
-.vues { display: flex; gap: 22px; }
-.vues button { width: 66px; height: 66px; border-radius: 14px; border: 1.5px solid #e4ded7; background: #fefcf9; color: var(--texte); cursor: pointer; display: grid; place-items: center; }
-.vues button svg { width: 32px; height: 32px; }
-.vues button.on { background: var(--bordeaux); border-color: var(--bordeaux); color: #fff; }
+.categories select { width: 100%; height: 50px; appearance: none; -webkit-appearance: none; background: #fbf8f5; border: 1px solid var(--ligne); border-radius: 12px; padding: 0 44px 0 18px; font-family: var(--font-caps); font-size: 15px; color: var(--texte); cursor: pointer; }
+.categories svg { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; pointer-events: none; }
+.vues { display: flex; gap: 10px; }
+.vues button { width: 50px; height: 50px; border-radius: 12px; border: 1px solid var(--ligne); background: #fbf8f5; color: var(--texte); cursor: pointer; display: grid; place-items: center; }
+.vues button svg { width: 20px; height: 20px; }
+.vues button.on { background: var(--noir); border-color: var(--noir); color: #f6f1ec; }
 
-.puces { display: flex; align-items: center; gap: 18px; margin: 28px 0 0; }
-.puces .liste { display: flex; gap: 18px; overflow-x: auto; scrollbar-width: none; }
+/* --- Puces (catégories) : petits rectangles --- */
+.puces { display: flex; align-items: center; gap: 12px; margin: 22px 0 0; }
+.puces .liste { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
 .puces .liste::-webkit-scrollbar { display: none; }
-.puce { flex: none; min-width: 190px; height: 62px; padding: 0 30px; border-radius: 999px; border: var(--trait) solid #0e0e0e; background: #fff; color: #0e0e0e; font-family: var(--font-caps); font-weight: 500; font-size: 1.35rem; letter-spacing: 0.24em; text-transform: uppercase; cursor: pointer; }  /* identique à CRUSH ALERTE */
-.puce.on { background: #0e0e0e; color: #fff; }
-.compte { margin-left: auto; flex: none; font-family: var(--font-serif); font-style: italic; font-size: 1.55rem; color: var(--bordeaux); padding-right: 16px; border-right: 2px solid var(--bordeaux); }
+.puce { flex: none; height: 40px; padding: 0 20px; border-radius: 999px; border: 1px solid var(--noir); background: transparent; color: var(--noir); font-family: var(--font-caps); font-weight: 400; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; }
+.puce.on { background: var(--noir); color: #f6f1ec; }
+.compte { margin-left: auto; flex: none; font-family: var(--font-caps); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gris); }
 
-/* --- Les cartes --- */
-.grille { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 32px; }
-@media (max-width: 1100px) and (min-width: 761px) { .grille { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 1000px) { .grille { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; } }
-@media (min-width: 1200px) { .grille { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; } }
+/* --- Les cartes : photo sur fond beige, cœur, infos dessous --- */
+.grille { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; margin-top: 26px; }
+@media (max-width: 1250px) { .grille { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 1000px) { .grille { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .carte { position: relative; display: flex; flex-direction: column; animation: monte .4s ease both; }
 .carte.vue { animation: none; }
-/* L'affiche : grande photo verticale, texte blanc posé en bas sur un léger dégradé */
-.affiche { position: relative; display: block; aspect-ratio: 3 / 4.4; border-radius: 16px; overflow: hidden; background: #e9e4df; box-shadow: 0 14px 30px -20px rgba(30,20,10,0.55); text-decoration: none; }
-.affiche img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-.affiche::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0) 32%, rgba(0,0,0,0) 48%, rgba(0,0,0,0.55) 100%); }
-.affiche .vide { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.3rem; color: var(--gris); padding: 20px; }
-.affiche.sans-photo::after { background: none; }
-.etat { position: absolute; left: 22px; top: 22px; z-index: 2; display: inline-flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.95); color: #0e0e0e; border-radius: 999px; padding: 6px 16px 6px 14px; font-family: var(--font-caps); font-size: 1.3rem; font-weight: 500; }
-.etat::before { content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--gris); }
-.etat.dispo::before { background: var(--vert); } .etat.rupture::before { background: #a23a2c; }
+.affiche { position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+.affiche img { display: block; width: 100%; aspect-ratio: 1 / 1.08; object-fit: contain; background: var(--carte); padding: 10%; mix-blend-mode: multiply; }
+.affiche .vide { display: grid; place-items: center; aspect-ratio: 1 / 1.08; background: var(--carte); text-align: center; font-family: var(--font-titre); font-size: 17px; color: var(--gris); padding: 20px; }
+.etat { position: absolute; left: 12px; top: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; background: rgba(251,248,245,0.92); color: var(--texte); padding: 4px 10px; font-family: var(--font-caps); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+.etat::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #a39a92; }
+.etat.dispo::before { background: var(--vert); } .etat.rupture::before { background: var(--rouge); }
 .etat.attente::before { background: #c9902d; }
-.croix { position: absolute; right: 22px; top: 22px; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); color: #0e0e0e; font-size: 1.5rem; line-height: 1; cursor: pointer; display: grid; place-items: center; }
-.infos { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 0 26px 28px; color: #fff; display: grid; gap: 4px; text-shadow: 0 1px 12px rgba(0,0,0,0.25); }
-.affiche.sans-photo .infos { color: #0e0e0e; text-shadow: none; }
-.marque { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.3rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.95; }
-.nom { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: 1.85rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.taille { margin: 4px 0 0; font-family: var(--font-caps); font-weight: 300; font-size: 1.4rem; opacity: 0.95; }
-.alerter { margin-top: 16px; width: 100%; height: 62px; border: var(--trait) solid #0e0e0e; border-radius: 999px; background: #fff; color: #0e0e0e; font-family: var(--font-caps); font-weight: 500; font-size: 1.35rem; letter-spacing: 0.24em; text-transform: uppercase; cursor: pointer; transition: transform .15s ease; }
-.alerter:active { transform: scale(0.98); }
-.alerter.on { background: #0e0e0e; color: #fff; }
-.alerter:disabled { opacity: 0.55; cursor: default; }
-.lancee { margin: 10px 0 0; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; color: var(--bordeaux); }
-.vide-total { grid-column: 1 / -1; text-align: center; padding: 50px 20px; font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; color: var(--bordeaux); background: var(--carte); border: 1.5px solid var(--bord); border-radius: 26px; }
-
-/* --- Onglets « Ma wishlist » / « Black Friday » --- */
-.onglets { display: flex; gap: 18px; margin-top: 28px; }
-/* --- Onglet Black Friday --- */
-.bf-tete { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
-.bf-titre { margin: 0; font-family: var(--font-logo); font-weight: 400; font-size: 2.4rem; letter-spacing: 0.02em; -webkit-text-stroke: 1px #0e0e0e; }
-.bf-sous { margin: 8px 0 0; font-family: var(--font-caps); font-size: 1.15rem; letter-spacing: 0.24em; text-transform: uppercase; }
-.bf-maj { margin: 0; font-family: var(--font-serif); font-style: italic; font-size: 1.3rem; color: var(--gris); }
-.bf-dates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
-.bf-date { border: var(--trait) solid #0e0e0e; border-radius: 22px; padding: 18px 24px; background: #fff; }
-.bf-date.ajd { background: #0e0e0e; color: #fff; }
-.bf-date b { display: block; font-family: var(--font-caps); font-weight: 500; font-size: 1.05rem; letter-spacing: 0.22em; text-transform: uppercase; }
-.bf-date span { font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; }
-.bf-etats { margin-top: 14px; }
-.bf-grille { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
-@media (min-width: 1200px) { .bf-grille { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-.bf-carte { position: relative; background: #fff; border: 1.5px solid var(--bord); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 10px; }
-.bf-carte.wl { border-color: #0e0e0e; border-width: var(--trait); }
-.bf-haut { display: flex; align-items: center; gap: 14px; }
-.bf-logo { flex: none; width: 64px; height: 64px; border-radius: 50%; border: 1.5px solid var(--bord); background: #fff; display: grid; place-items: center; overflow: hidden; text-decoration: none; color: #0e0e0e; font-family: var(--font-logo); font-size: 1.2rem; }
-.bf-logo img { width: 40px; height: 40px; object-fit: contain; }
-.bf-nom { margin: 0; font-family: var(--font-caps); font-weight: 600; font-size: 1.2rem; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.2; }
-.bf-cat { margin: 2px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 1.2rem; color: var(--gris); }
-.bf-etat { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 4px 14px; background: var(--rose-clair); font-family: var(--font-caps); font-size: 0.95rem; letter-spacing: 0.12em; text-transform: uppercase; }
-.bf-etat::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #c9902d; }
-.bf-etat.en-cours::before { background: var(--vert); } .bf-etat.termine::before { background: #9a948e; }
-.bf-offre { margin: 0; font-family: var(--font-serif); font-size: 1.45rem; line-height: 1.25; }
-.bf-vu { margin: 0; font-size: 1.05rem; color: var(--gris); }
-.bf-vu b { color: #0e0e0e; }
-.bf-codes { display: flex; flex-wrap: wrap; gap: 6px; }
-.bf-code { border: 1.5px dashed #0e0e0e; border-radius: 10px; padding: 3px 10px; background: transparent; font-family: var(--font-caps); font-weight: 600; font-size: 1rem; letter-spacing: 0.08em; cursor: pointer; }
-.bf-wl { position: absolute; top: 16px; right: 16px; font-family: var(--font-caps); font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; background: #0e0e0e; color: #fff; border-radius: 999px; padding: 3px 10px; }
-.bf-carte .alerter { margin-top: auto; height: 50px; font-size: 1rem; display: grid; place-items: center; text-decoration: none; }
-.bf-note { margin: 26px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 1.25rem; color: var(--gris); }
-
-/* --- Onglet « Crush Styliste » (suggestions de la styliste IA) --- */
-.pt-style { margin: 14px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 1.6rem; line-height: 1.3; max-width: 900px; }
-.pt-raison { margin: 12px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 1.4rem; line-height: 1.25; text-align: center; }
 .etat.promo::before { display: none; }
-.etat.promo { padding: 6px 16px; }
+.croix { position: absolute; right: 10px; top: 10px; z-index: 2; width: 34px; height: 34px; border: 0; background: none; color: var(--noir); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.croix svg { width: 22px; height: 22px; }
+.infos { padding: 14px 2px 0; display: grid; gap: 3px; }
+.marque { margin: 0; font-family: var(--font-caps); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gris); }
+.nom { margin: 0; font-family: var(--font-titre); font-size: 18px; line-height: 1.2; color: var(--noir); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.taille { margin: 2px 0 0; font-size: 13px; color: var(--gris); }
+.alerter { margin-top: 14px; width: 100%; height: 48px; border-radius: 16px; border: 1.5px solid #0e0e0e; background: transparent; color: #0e0e0e; font-family: var(--font-caps); font-weight: 500; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; display: grid; place-items: center; text-decoration: none; }
+.alerter.on { background: #0e0e0e; color: #f6f1ec; box-shadow: 0 10px 24px -14px rgba(0,0,0,0.6); }
+.alerter:disabled { opacity: 0.45; cursor: default; }
+.lancee { margin: 8px 0 0; font-family: var(--font-titre); font-size: 14px; color: var(--gris); text-align: center; }
+.vide-total { grid-column: 1 / -1; text-align: center; padding: 48px 20px; font-family: var(--font-titre); font-size: 20px; color: var(--gris); background: var(--carte); }
 
-/* Vue « liste » (bouton aux 3 traits) */
-.grille.en-liste { grid-template-columns: 1fr; gap: 18px; }
+/* Vue « liste » */
+.grille.en-liste { grid-template-columns: 1fr; gap: 14px; }
 .en-liste .carte { flex-direction: row; align-items: center; gap: 22px; }
-.en-liste .affiche { flex: 0 0 360px; aspect-ratio: 16 / 9; }
-.en-liste .alerter { flex: 0 0 240px; margin: 0; height: 54px; font-size: 1.05rem; }
-.en-liste .lancee { flex: 1; text-align: left; margin: 0; }
+.en-liste .affiche { flex: 1; flex-direction: row; align-items: center; gap: 22px; }
+.en-liste .affiche img, .en-liste .affiche .vide { width: 140px; flex: none; }
+.en-liste .alerter { width: 220px; flex: none; margin: 0; }
+.en-liste .lancee { display: none; }
 
-/* --- Bouton rond « + » pour ajouter --- */
-.ajouter { position: fixed; right: 30px; bottom: max(30px, env(safe-area-inset-bottom)); z-index: 7; width: 70px; height: 70px; border-radius: 50%; border: 0; background: var(--bordeaux); color: #fff; font-size: 2.4rem; line-height: 1; cursor: pointer; box-shadow: 0 14px 30px -12px rgba(20,20,20,0.7); display: grid; place-items: center; }
+/* --- Onglets Crush Styliste et Black Friday --- */
+.bf-tete { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-top: 40px; }
+.bf-titre { margin: 0; font-family: var(--font-titre); font-weight: 400; font-size: clamp(30px, 3vw, 44px); color: var(--noir); }
+.bf-sous { margin: 6px 0 0; font-family: var(--font-caps); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gris); }
+.bf-maj { margin: 0; font-size: 13px; color: var(--gris); }
+.pt-style { margin: 18px 0 0; font-family: var(--font-titre); font-size: 22px; line-height: 1.3; max-width: 900px; }
+.pt-raison { margin: 10px 0 0; font-family: var(--font-titre); font-size: 15px; line-height: 1.3; color: var(--gris); }
+.bf-dates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
+.bf-date { border: 1px solid var(--noir); padding: 16px 20px; }
+.bf-date.ajd { background: var(--noir); color: #f6f1ec; }
+.bf-date b { display: block; font-weight: 400; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
+.bf-date span { font-family: var(--font-titre); font-size: 20px; }
+.bf-etats { margin-top: 10px; }
+.bf-grille { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 24px; }
+@media (min-width: 1300px) { .bf-grille { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.bf-carte { position: relative; background: #fbf8f5; border: 1px solid var(--ligne); padding: 20px; display: flex; flex-direction: column; gap: 9px; }
+.bf-carte.wl { border-color: var(--noir); padding-top: 40px; }
+.bf-haut { display: flex; align-items: center; gap: 12px; }
+.bf-logo { flex: none; width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--ligne); background: #fff; display: grid; place-items: center; overflow: hidden; text-decoration: none; color: var(--noir); font-family: var(--font-logo); }
+.bf-logo img { width: 30px; height: 30px; object-fit: contain; }
+.bf-nom { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; line-height: 1.2; }
+.bf-cat { margin: 2px 0 0; font-family: var(--font-titre); font-size: 14px; color: var(--gris); }
+.bf-etat { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; padding: 3px 10px; background: var(--carte); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+.bf-etat::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #c9902d; }
+.bf-etat.en-cours::before { background: var(--vert); } .bf-etat.termine::before { background: #a39a92; }
+.bf-offre { margin: 0; font-family: var(--font-titre); font-size: 17px; line-height: 1.3; }
+.bf-vu { margin: 0; font-size: 13px; color: var(--gris); }
+.bf-vu b { color: var(--noir); font-weight: 500; }
+.bf-codes { display: flex; flex-wrap: wrap; gap: 6px; }
+.bf-code { border: 1px dashed var(--noir); padding: 3px 9px; background: transparent; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; cursor: pointer; }
+.bf-wl { position: absolute; top: 14px; right: 14px; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; background: var(--noir); color: #f6f1ec; padding: 3px 8px; }
+.bf-carte .alerter { margin-top: auto; }
+.bf-note { margin: 26px 0 0; font-size: 13px; color: var(--gris); }
 
-/* --- Menu, fenêtres --- */
-.voile { position: fixed; inset: 0; z-index: 20; background: rgba(20,20,20,0.35); display: grid; place-items: center; padding: 16px; }
-.fenetre { width: min(520px, 100%); background: var(--creme); border-radius: 26px; padding: 26px; box-shadow: 0 30px 70px -20px rgba(20,20,20,0.5); display: grid; gap: 14px; animation: monte .25s ease both; }
-.fenetre h3 { margin: 0; font-family: var(--font-serif); font-style: italic; font-weight: 600; font-size: 2rem; color: var(--bordeaux); }
+/* --- Bouton + pour ajouter --- */
+.ajouter { position: fixed; right: 28px; bottom: max(28px, env(safe-area-inset-bottom)); z-index: 7; width: 58px; height: 58px; border-radius: 50%; border: 0; background: var(--noir); color: #f6f1ec; font-size: 30px; line-height: 1; cursor: pointer; box-shadow: 0 12px 28px -12px rgba(20,15,10,0.6); display: grid; place-items: center; }
+
+/* --- Fenêtres, menu, messages --- */
+.voile { position: fixed; inset: 0; z-index: 20; background: rgba(23,19,15,0.35); display: grid; place-items: center; padding: 16px; }
+.fenetre { width: min(500px, 100%); background: var(--fond); padding: 28px; border-radius: 18px; box-shadow: 0 30px 70px -20px rgba(20,15,10,0.5); display: grid; gap: 14px; animation: monte .25s ease both; }
+.fenetre h3 { margin: 0; font-family: var(--font-titre); font-weight: 400; font-size: 28px; color: var(--noir); }
 .fenetre p { margin: 0; color: var(--gris); }
-.fenetre label { display: grid; gap: 6px; font-size: 0.82rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bordeaux); }
-.fenetre input, .fenetre select { width: 100%; height: 52px; border: 1.5px solid #ebe5de; background: #fff; border-radius: 999px; padding: 0 20px; font-family: var(--font-serif); font-style: italic; font-size: 1.25rem; color: var(--texte); }
+.fenetre label { display: grid; gap: 6px; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--noir); }
+.fenetre input, .fenetre select { width: 100%; height: 48px; border: 1px solid var(--ligne); background: #fbf8f5; border-radius: 12px; padding: 0 14px; font-family: var(--font-caps); font-size: 15px; color: var(--texte); }
 .fenetre .actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 6px; }
-.btn { height: 50px; padding: 0 26px; border: var(--trait) solid #0e0e0e; border-radius: 999px; background: #0e0e0e; color: #fff; font-family: var(--font-caps); font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; font-size: 0.9rem; cursor: pointer; text-decoration: none; display: inline-grid; place-items: center; }
-.btn.doux { background: #fff; color: #0e0e0e; }
-.erreur { color: var(--rouge) !important; font-style: italic; }
-.menu { position: fixed; left: calc(var(--barre) + 12px); top: 30px; z-index: 21; background: var(--creme); border-radius: 20px; padding: 10px; box-shadow: 0 24px 60px -18px rgba(20,20,20,0.5); display: grid; min-width: 250px; animation: monte .2s ease both; }
-.menu button { border: 0; background: none; text-align: left; padding: 12px 16px; border-radius: 12px; font-family: var(--font-serif); font-style: italic; font-size: 1.35rem; color: var(--bordeaux); cursor: pointer; }
-.menu button:hover { background: var(--rose-clair); }
-
-.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 30; width: min(400px, calc(100vw - 24px)); background: var(--bordeaux); color: #fff; border-radius: 20px; padding: 14px 18px; display: grid; gap: 2px; box-shadow: 0 16px 40px -16px rgba(20,20,20,0.6); animation: monte .25s ease both; }
-.toast b { font-family: var(--font-serif); font-style: italic; font-weight: 600; font-size: 1.3rem; }
-.toast span { font-size: 0.92rem; opacity: 0.85; }
-.verdict { position: fixed; left: 50%; top: 90px; transform: translateX(-50%); z-index: 25; width: min(460px, calc(100vw - 24px)); background: var(--creme); border-radius: 26px; padding: 18px; display: grid; grid-template-columns: 84px 1fr; gap: 16px; box-shadow: 0 30px 70px -20px rgba(20,20,20,0.5); animation: monte .3s ease both; }
-.verdict img { width: 84px; height: 100px; object-fit: contain; border-radius: 16px; background: #fff; }
-.verdict .t { font-family: var(--font-serif); font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--bordeaux); line-height: 1.2; }
+.btn { height: 46px; padding: 0 24px; border-radius: 12px; border: 1px solid var(--noir); background: var(--noir); color: #f6f1ec; font-family: var(--font-caps); letter-spacing: 0.16em; text-transform: uppercase; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-grid; place-items: center; }
+.btn.doux { background: transparent; color: var(--noir); }
+.erreur { color: var(--rouge) !important; }
+.menu { position: fixed; right: 48px; top: 80px; z-index: 21; background: var(--fond); padding: 8px; box-shadow: 0 24px 60px -18px rgba(20,15,10,0.5); display: grid; min-width: 230px; animation: monte .2s ease both; }
+.menu button { border: 0; background: none; text-align: left; padding: 11px 14px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--noir); cursor: pointer; }
+.menu button:hover { background: var(--carte); }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 30; width: min(400px, calc(100vw - 24px)); background: var(--noir); color: #f6f1ec; padding: 14px 18px; display: grid; gap: 2px; box-shadow: 0 16px 40px -16px rgba(20,15,10,0.6); animation: monte .25s ease both; }
+.toast b { font-family: var(--font-titre); font-weight: 400; font-size: 19px; }
+.toast span { font-size: 13px; opacity: 0.85; }
+.verdict { position: fixed; left: 50%; top: 96px; transform: translateX(-50%); z-index: 25; width: min(460px, calc(100vw - 24px)); background: var(--fond); padding: 18px; display: grid; grid-template-columns: 84px 1fr; gap: 16px; box-shadow: 0 30px 70px -20px rgba(20,15,10,0.5); animation: monte .3s ease both; }
+.verdict img { width: 84px; height: 100px; object-fit: contain; background: var(--carte); }
+.verdict .t { font-family: var(--font-titre); font-size: 20px; color: var(--noir); line-height: 1.2; }
 .verdict .s { color: var(--gris); margin-top: 4px; }
 .verdict .acts { grid-column: 1 / -1; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
 
-/* ================= Écrans plus petits ================= */
-@media (max-width: 1350px) {
-  .titre h1 { font-size: 2.1rem; } .titre p { margin-left: 40px; font-size: 0.85rem; }
-  .icones svg { width: 32px; height: 32px; } .icones button { padding: 6px 20px; }
-  .recherche, .categories select, .vues button { height: 56px; } .vues button { width: 56px; }
-  .recherche input, .categories select { font-size: 1.25rem; }
-  .puce { min-width: 0; } .compte { font-size: 1.3rem; }
-}
+/* ================= iPhone ================= */
 @media (max-width: 760px) {
-  :root { --barre: 0px; }
-  /* Sur iPhone : la barre de gauche disparaît, et une bande bordeaux horizontale (avec le motif
-     monogramme) se place entre le titre et la bannière */
-  .barre { display: none; }
-  .bande { display: block; position: relative; height: 78px; margin: 0 -12px 14px; background: var(--bordeaux); color: #fff; overflow: hidden; }
-  .bande .burger { left: 16px; top: 19px; width: 40px; height: 40px; gap: 7px; }
-  .bande .cs.grand { left: 74px; top: 17px; font-size: 2.3rem; }
-  .bande .cs.reflet { font-size: 1.25rem; opacity: 0.28; }
-  .page { padding: calc(6px + env(safe-area-inset-top)) 12px 100px; }
-  header { padding: 8px 0 12px; gap: 8px; }
-  .titre h1 { font-size: 1.02rem; -webkit-text-stroke: 0.5px var(--bordeaux); }
-  .titre p { margin: 5px 0 0 12px; font-size: 0.56rem; letter-spacing: 0.26em; }
-  .icones button { padding: 4px 9px; } .icones button + button { border-left-width: 1.5px; }
-  .icones svg { width: 22px; height: 22px; }
-  .badge { top: -4px; right: 0; min-width: 16px; height: 16px; font-size: 0.6rem; }
-  .icones .chercher { display: none; }
-  .banniere { height: auto; border-radius: 14px; }  /* bannière entière, sans recadrage */
-  .outils { flex-wrap: wrap; gap: 10px; margin-top: 16px; }
-  .recherche { flex: 1 1 100%; height: 50px; padding: 0 16px; }
-  .recherche svg { width: 22px; height: 22px; }
-  .recherche input, .categories select { font-size: 1.15rem; }
-  .categories { flex: 1; } .categories select { height: 46px; padding-left: 20px; }
-  .vues { gap: 8px; } .vues button { width: 46px; height: 46px; border-radius: 12px; } .vues button svg { width: 22px; height: 22px; }
-  .puces { margin-top: 14px; gap: 6px; flex-wrap: wrap; } .puces .liste { gap: 8px; order: 2; flex: 1 1 100%; }
-  .compte { order: 1; border-right: 0; }
-  .puce { height: 42px; padding: 0 18px; font-size: 0.8rem; letter-spacing: 0.14em; }  /* identique à CRUSH ALERTE sur iPhone */
-  .compte { font-size: 1.1rem; padding-right: 8px; }
-  .grille { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
-  .affiche { border-radius: 14px; }
-  .etat { left: 10px; top: 10px; font-size: 0.72rem; padding: 3px 9px 3px 8px; gap: 5px; }
-  .etat::before { width: 7px; height: 7px; }
-  .croix { right: 10px; top: 10px; width: 28px; height: 28px; font-size: 1.05rem; }
-  .infos { padding: 0 12px 14px; gap: 2px; }
-  .marque { font-size: 0.62rem; letter-spacing: 0.14em; }
-  .nom { font-size: 0.98rem; }
-  .taille { font-size: 0.8rem; margin-top: 2px; }
-  .alerter { height: 42px; font-size: 0.8rem; letter-spacing: 0.14em; margin-top: 10px; white-space: nowrap; }
-
-  .lancee { font-size: 0.95rem; }
-  .en-liste .carte { gap: 10px; flex-wrap: wrap; }
-  .en-liste .affiche { flex: 1 1 100%; aspect-ratio: 16 / 10; }
-  .en-liste .alerter { flex: 1 1 100%; height: 40px; }
-  .menu { position: absolute; left: 12px; }
-  .ajouter { right: 16px; width: 60px; height: 60px; font-size: 2rem; }
-  .onglets { gap: 6px; margin-top: 14px; } .onglets .puce { flex: 1; padding: 0 6px; font-size: 0.7rem; letter-spacing: 0.1em; white-space: nowrap; }
-  .bf-titre { font-size: 1.25rem; -webkit-text-stroke: 0.5px #0e0e0e; } .bf-sous { font-size: 0.75rem; letter-spacing: 0.16em; }
-  .bf-maj { font-size: 0.95rem; }
-  .bf-dates { grid-template-columns: 1fr; gap: 8px; margin-top: 14px; }
-  .bf-date { padding: 10px 16px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
-  .bf-date b { font-size: 0.72rem; } .bf-date span { font-size: 1.05rem; }
-  .bf-grille { grid-template-columns: 1fr; gap: 12px; margin-top: 16px; }
-  .bf-carte { padding: 16px; border-radius: 18px; }
-  .bf-logo { width: 48px; height: 48px; } .bf-logo img { width: 30px; height: 30px; }
-  .bf-nom { font-size: 0.85rem; } .bf-cat { font-size: 0.95rem; }
-  .bf-etat { font-size: 0.68rem; } .bf-offre { font-size: 1.1rem; } .bf-vu { font-size: 0.82rem; }
-  .bf-code { font-size: 0.78rem; } .bf-wl { font-size: 0.6rem; }
-  .bf-carte .alerter { height: 42px; font-size: 0.8rem; }
-  .bf-note { font-size: 0.95rem; }
-  .pt-style { font-size: 1.05rem; } .pt-raison { font-size: 0.92rem; margin-top: 8px; }
-  .etat.promo { padding: 3px 9px; }
+  .nav { flex-wrap: wrap; height: auto; padding: calc(8px + env(safe-area-inset-top)) 16px 0; gap: 0; }
+  .cs-carre { width: 38px; height: 38px; border-radius: 10px; font-size: 13px; }
+  .icones { margin-left: auto; gap: 16px; }
+  .onglets { order: 3; flex: 1 1 100%; justify-content: flex-start; gap: 22px; overflow-x: auto; scrollbar-width: none; padding: 6px 0 4px; }
+  .onglets::-webkit-scrollbar { display: none; }
+  .onglets .puce { font-size: 12px; letter-spacing: 0.12em; }
+  .zone { padding: 0 16px; }
+  .hero { flex-direction: column; min-height: 0; height: auto; background: linear-gradient(180deg, #e5d5ca 0%, #d9c7b9 100%); }
+  .hero-texte { padding: 30px 20px 20px; gap: 18px; max-width: none; }
+  .logo .crush { font-size: 58px; } .logo .shopper { font-size: 11px; }
+  .hero h1 { font-size: 34px; }
+  .btn-noir { height: 50px; font-size: 13px; padding: 0 22px; }
+  .hero-img { position: static; width: 100%; max-width: none; height: auto; object-fit: contain; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 20%); mask-image: linear-gradient(180deg, transparent 0, #000 20%); }
+  .bande-c { height: 44px; font-size: 18px; justify-content: flex-start; gap: 30px; padding-left: 14px; }
+  .cs-nom { display: inline; font-size: 12.5px; }
+  .cs-carre { width: 32px; height: 32px; border-radius: 9px; font-size: 11px; }
+  .icones { gap: 12px; } .icones svg { width: 21px; height: 21px; }
+  .tete-section h2 { font-size: 28px; }
+  .vitrine { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .outils { flex-wrap: wrap; gap: 10px; }
+  .recherche { flex: 1 1 100%; height: 46px; }
+  .categories { flex: 1; } .categories select { height: 44px; }
+  .vues button { width: 44px; height: 44px; }
+  .puces { flex-wrap: wrap; } .puces .liste { flex: 1 1 100%; order: 2; }
+  .grille { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .nom { font-size: 16px; }
+  .alerter { height: 42px; border-radius: 14px; font-size: 11.5px; letter-spacing: 0.08em; }
+  .en-liste .carte { flex-wrap: wrap; } .en-liste .alerter { width: 100%; }
+  .bf-dates { grid-template-columns: 1fr; gap: 8px; }
+  .bf-grille { grid-template-columns: 1fr; gap: 12px; }
+  .menu { right: 12px; top: 120px; }
+  .ajouter { right: 16px; width: 54px; height: 54px; }
 }
 </style>
 </head>
 <body>
-<aside class="barre">
-  <button class="burger" id="burger" type="button" aria-label="Menu"><i></i><i></i><i></i></button>
-  <div class="cs grand" aria-hidden="true">CS<sup>✦</sup></div>
-  <div class="cs reflet" style="left:16px;top:376px" aria-hidden="true">CS<sup>✦</sup></div>
-  <div class="cs reflet" style="left:68px;top:540px" aria-hidden="true">CS<sup>✦</sup></div>
-  <div class="cs reflet" style="left:22px;top:708px" aria-hidden="true">CS<sup>✦</sup></div>
-  <div class="cs reflet" style="left:68px;top:886px" aria-hidden="true">CS<sup>✦</sup></div>
-  <div class="cs reflet" style="left:26px;top:1072px" aria-hidden="true">CS<sup>✦</sup></div>
-  <div class="cs reflet" style="left:68px;top:1230px" aria-hidden="true">CS<sup>✦</sup></div>
-</aside>
-
-<div class="page"><div class="contenu">
-  <header>
-    <div class="titre"><h1>CRUSH SHOPPER</h1><p>L'ASSISTANT DE TA WISHLIST.</p></div>
-    <div class="icones">
-      <button class="chercher" id="b-chercher" type="button" aria-label="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button>
-      <button id="b-cloche" type="button" aria-label="Mes alertes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/><path d="M12 3v2"/></svg><span class="badge" id="badge" hidden>0</span></button>
-      <button id="open-cle" type="button" aria-label="Mon accès"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="8" r="4.2"/><path d="M4 21c1.2-4.2 4.3-6.3 8-6.3s6.8 2.1 8 6.3z"/></svg></button>
-    </div>
-  </header>
-
-  <div class="bande" aria-label="Menu">
-    <button class="burger" id="burger2" type="button" aria-label="Menu"><i></i><i></i><i></i></button>
-    <div class="cs grand" aria-hidden="true">CS<sup>✦</sup></div>
-    <div class="cs reflet" style="left:178px;top:8px" aria-hidden="true">CS<sup>✦</sup></div>
-    <div class="cs reflet" style="left:214px;top:44px" aria-hidden="true">CS<sup>✦</sup></div>
-    <div class="cs reflet" style="left:262px;top:10px" aria-hidden="true">CS<sup>✦</sup></div>
-    <div class="cs reflet" style="left:300px;top:46px" aria-hidden="true">CS<sup>✦</sup></div>
-    <div class="cs reflet" style="left:346px;top:8px" aria-hidden="true">CS<sup>✦</sup></div>
-    <div class="cs reflet" style="left:386px;top:44px" aria-hidden="true">CS<sup>✦</sup></div>
-  </div>
-
-  <img class="banniere" src="banniere.jpg?v=4" alt="Ma Wishlist — la wishlist plus intelligente">
-
-  <div class="onglets">
-    <button class="puce on" type="button" data-vue="wishlist">Ma wishlist</button>
+<header class="nav">
+  <button class="burger" id="burger" type="button" aria-label="Menu" hidden></button>
+  <button class="logo-c" id="b-logo" type="button" aria-label="Crush Shopper — accueil"><span class="cs-nom">Crush Shopper</span><span class="cs-carre">CS</span></button>
+  <nav class="onglets" aria-label="Menu principal">
+    <button class="puce on" type="button" data-vue="accueil">Accueil</button>
+    <button class="puce" type="button" data-vue="wishlist">Ma wishlist</button>
     <button class="puce" type="button" data-vue="pt">Crush Styliste</button>
     <button class="puce" type="button" data-vue="bf">Black Friday</button>
+  </nav>
+  <div class="icones">
+    <button class="chercher" id="b-chercher" type="button" aria-label="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button>
+    <button id="b-cloche" type="button" aria-label="Mes alertes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span class="badge" id="badge" hidden>0</span></button>
+    <button id="open-cle" type="button" aria-label="Mon accès"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="8" r="4.2"/><path d="M4 21c1.2-4.2 4.3-6.3 8-6.3s6.8 2.1 8 6.3z"/></svg></button>
   </div>
+  <button class="burger" id="burger2" type="button" aria-label="Menu" hidden></button>
+</header>
 
-  <div id="vue-wishlist">
+<div class="page"><div class="contenu">
+  <!-- ================= ACCUEIL ================= -->
+  <section id="vue-accueil">
+    <div class="hero">
+      <div class="hero-texte">
+        <h1>Ma Wishlist intelligente</h1>
+        <button class="btn-noir" type="button" data-aller="wishlist">Voir ma wishlist <span class="fleche">→</span></button>
+      </div>
+      <img class="hero-img" src="cadeaux-cs.jpg?v=1" alt="Des boîtes cadeaux crème marquées CS, avec un ruban de satin noir">
+    </div>
+    <div class="bande-c" aria-hidden="true"><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span></div>
+    <div class="zone">
+      <div class="tete-section" style="justify-content:flex-end"><h2 hidden>Mes coups de cœur</h2><button class="lien-fleche" type="button" data-aller="wishlist">Voir tout <span class="fleche">→</span></button></div>
+      <div class="vitrine" id="vitrine"></div>
+    </div>
+  </section>
+
+  <div id="vue-wishlist" class="zone" hidden>
+  <h2 class="titre-vue">Ma wishlist</h2>
   <div class="outils">
     <label class="recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
       <input id="q" type="search" placeholder="Rechercher un article, une marque..." aria-label="Rechercher un article, une marque"></label>
@@ -319,7 +292,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   </div>
 
   <!-- ================= Onglet POUR TOI ================= -->
-  <section id="vue-pt" hidden>
+  <section id="vue-pt" class="zone" hidden>
     <div class="bf-tete">
       <div><h2 class="bf-titre">Crush Styliste</h2><p class="bf-sous">Les idées de ta styliste, trouvées sur tout le web</p></div>
       <p class="bf-maj" id="pt-maj"></p>
@@ -332,7 +305,7 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
   </section>
 
   <!-- ================= Onglet BLACK FRIDAY ================= -->
-  <section id="vue-bf" hidden>
+  <section id="vue-bf" class="zone" hidden>
     <div class="bf-tete">
       <div><h2 class="bf-titre">Black Friday 2026</h2><p class="bf-sous" id="bf-compte-rebours"></p></div>
       <p class="bf-maj" id="bf-maj"></p>
@@ -347,7 +320,9 @@ header { display: flex; align-items: center; gap: 20px; padding: 26px 0 22px; }
     <div class="bf-grille" id="bf-grille"></div>
     <p class="bf-note">Les promos sont relevées par le robot sur les sites des marques et des sites d'annonces. Vérifie toujours sur le site avant de payer.</p>
   </section>
-</div></div>
+</div>
+<div class="bande-c pied" aria-hidden="true"><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span><span>CS</span></div>
+</div>
 
 <button class="ajouter" id="b-ajouter" type="button" aria-label="Ajouter un article">+</button>
 
@@ -486,6 +461,7 @@ async function charger() {
 function categorieDe(a) { return a.categorie || (siteDe(a.url) === "MAC Cosmetics" ? "Beauté" : "Mode"); }
 const COEUR_INUTILISE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.6-9-9.6C2 7.4 4.3 4.5 7.4 4.5c2 0 3.6 1.1 4.6 2.8 1-1.7 2.6-2.8 4.6-2.8 3.1 0 5.4 2.9 4.4 6.4-1.5 5-9 9.6-9 9.6z"/></svg>';
 
+const COEUR_PLEIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.6-9-9.6C2 7.4 4.3 4.5 7.4 4.5c2 0 3.6 1.1 4.6 2.8 1-1.7 2.6-2.8 4.6-2.8 3.1 0 5.4 2.9 4.4 6.4-1.5 5-9 9.6-9 9.6z"/></svg>';
 function card(a, index) {
   const m = etatDe(a);
   const c = el("article", "carte" + (dejaVues.has(a.url) ? " vue" : ""));
@@ -497,7 +473,7 @@ function card(a, index) {
   if (m.photo) { const img = el("img"); img.src = m.photo; img.alt = a.nom || m.nom || "Article"; img.referrerPolicy = "no-referrer"; img.loading = "lazy"; affiche.append(img); }
   else affiche.append(el("span", "vide", m.attend ? "On regarde le stock…" : ""));
   affiche.append(el("span", "etat " + m.statut, STATUTS[m.statut] || m.statut));
-  const x = el("button", "croix", "×"); x.type = "button"; x.setAttribute("aria-label", "Retirer de ma wishlist"); x.title = "Retirer de ma wishlist";
+  const x = el("button", "croix"); x.innerHTML = COEUR_PLEIN; x.type = "button"; x.setAttribute("aria-label", "Retirer de ma wishlist"); x.title = "Retirer de ma wishlist";
   x.onclick = (e) => { e.preventDefault(); e.stopPropagation(); retirer(a.url); };
   affiche.append(x);
   const infos = el("div", "infos");
@@ -550,6 +526,9 @@ function dessiner() {
   grid.replaceChildren(...(articles.length ? articles.map(card)
     : [el("div", "vide-total", !lireCle() ? "Connecte-toi (en haut à droite) pour voir ta wishlist." : tous.length ? "Aucun article ici pour l'instant." : "Touche le + pour ajouter ton premier crush ✨")]));
   document.getElementById("compte").textContent = `${articles.length} article${articles.length > 1 ? "s" : ""}`;
+  // Accueil : « Mes coups de cœur » = les 6 derniers articles
+  document.getElementById("vitrine").replaceChildren(...(tous.length ? tous.slice(0, 6).map(card)
+    : [el("div", "vide-total", !lireCle() ? "Connecte-toi (en haut à droite) pour voir ta wishlist." : "Touche le + pour ajouter ton premier crush ✨")]));
   const n = tous.filter(a => a.crush_alert).length, badge = document.getElementById("badge");
   badge.textContent = n; badge.hidden = !n;
 }
@@ -588,8 +567,7 @@ function ouvrirAjout() {
 document.getElementById("b-ajouter").onclick = ouvrirAjout;
 function ouvrirMenu(e) {
   e.stopPropagation(); menu.hidden = !menu.hidden;
-  const bande = document.querySelector(".bande");
-  menu.style.top = getComputedStyle(bande).display !== "none" ? (bande.getBoundingClientRect().bottom + window.scrollY + 6) + "px" : "";
+  menu.style.top = "";
 }
 document.getElementById("burger").onclick = ouvrirMenu;
 document.getElementById("burger2").onclick = ouvrirMenu;
@@ -604,10 +582,11 @@ menu.onclick = (e) => {
   if (m === "pt") montrerVue("pt");
 };
 document.getElementById("b-cloche").onclick = () => {
+  montrerVue("wishlist");
   seulementAlertes = !seulementAlertes; dessiner();
   toast(seulementAlertes ? "Mes alertes 💌" : "Toute ma wishlist", seulementAlertes ? "Voici les articles que je surveille pour toi." : "");
 };
-document.getElementById("b-chercher").onclick = () => document.getElementById("q").focus();
+document.getElementById("b-chercher").onclick = () => { montrerVue("wishlist"); setTimeout(() => document.getElementById("q").focus(), 50); };
 
 document.getElementById("add").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -870,6 +849,7 @@ document.getElementById("marques-form").addEventListener("submit", (e) => {
 
 // Passer d'un onglet à l'autre
 function montrerVue(v) {
+  document.getElementById("vue-accueil").hidden = v !== "accueil";
   document.getElementById("vue-wishlist").hidden = v !== "wishlist";
   document.getElementById("vue-bf").hidden = v !== "bf";
   document.getElementById("vue-pt").hidden = v !== "pt";
@@ -877,11 +857,15 @@ function montrerVue(v) {
   document.querySelectorAll(".onglets .puce").forEach(b => b.classList.toggle("on", b.dataset.vue === v));
   if (v === "bf" && !BF) chargerBF();
   try { localStorage.setItem("crush_onglet", v); } catch (e) {}
+  window.scrollTo(0, 0);
 }
+document.querySelectorAll("[data-aller]").forEach(b => b.onclick = () => montrerVue(b.dataset.aller));
+document.getElementById("b-logo").onclick = () => montrerVue("accueil");
 document.querySelectorAll(".onglets .puce").forEach(b => b.onclick = () => montrerVue(b.dataset.vue));
 try {
   const o = localStorage.getItem("crush_onglet");
   if (o === "bf" || location.hash === "#black-friday") montrerVue("bf");
+  else if (o === "wishlist" || location.hash === "#wishlist") montrerVue("wishlist");
   else if (o === "pt" || location.hash === "#pour-toi" || location.hash === "#crush-styliste") montrerVue("pt");
 } catch (e) {}
 
