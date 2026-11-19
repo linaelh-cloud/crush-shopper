@@ -27,5 +27,15 @@
     "precision": "stock lu pour « Taille L », couleur Olive Tree",
     "marque": "Alo Yoga",
     "prix": "≈ 181 €"
+  },
+  "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app": {
+    "statut": "dispo",
+    "depuis": "19/11 00:34 (heure UTC)",
+    "nom": "Scholar Knit Cropped Full Zip Jacket - Espresso",
+    "photo": "https://www.aloyoga.com/cdn/shop/files/W4601R_04064_b1_s1_a60_dFA26_m271.jpg?v=1792779975&width=600",
+    "precision": "stock lu pour « S », couleur Espresso",
+    "marque": "Alo Yoga",
+    "prix": "≈ 171 €",
+    "alerte_envoyee": false
   }
 }
