@@ -32,6 +32,18 @@ Règles :
   Jamais de sites douteux ou de copies (ex. « alooyogashop.it.com » n'est PAS le vrai site d'Alo Yoga).
 - Ne contourne jamais une protection anti-robot ni un CAPTCHA.
 
+## 2 bis. Les photos de secours (articles que mon robot ne peut pas lire)
+Dans `etat.json`, un article avec `"statut": "bloque"` (ou sans `photo`) vient d'un site qui bloque les robots :
+mon appli n'a ni sa photo ni son nom. Pour CHACUN de ces articles :
+- trouve de quel produit il s'agit grâce à ta recherche web (cherche le lien lui-même, ou les mots qu'il contient) ;
+- trouve la fiche de **ce même produit** (même nom, même teinte ou taille si possible) sur un autre site qui vend
+  en euros en France : le site officiel de la marque (.fr) ou un grand magasin (notino.fr, zalando.fr,
+  lookfantastic.fr, galerieslafayette.com, printemps.com, marionnaud.fr…). Jamais le site qui bloque, jamais sephora.fr
+  ni douglas.fr, jamais un site douteux.
+- si le lien de ma wishlist n'est pas une fiche produit (page de liste, de catégorie), n'invente rien : mets
+  `"note": "ce lien n'est pas la page d'un produit"` sans `lien`.
+Range-les dans `"secours"` (voir le format ci-dessous). Mon robot ouvrira ces liens pour récupérer la photo.
+
 ## 3. Ranger tes idées
 Écris le fichier `styliste.json` (à la racine du dépôt), exactement dans ce format :
 
@@ -49,6 +61,15 @@ Règles :
       "prix": "38 €",
       "genre": "dupe | tendance | même style | coup de cœur des filles",
       "pourquoi": "15 mots maximum, en tutoiement, précis (ex. « Le dupe TikTok de ta Modesty, même brun rosé »)"
+    }
+  ],
+  "secours": [
+    {
+      "pour_url": "le lien EXACT de l'article bloqué de ma wishlist",
+      "nom": "Gloss Absolu Crème de soin",
+      "marque": "Kérastase",
+      "lien": "https://… (fiche du MÊME produit sur un site qui accepte les robots)",
+      "note": ""
     }
   ]
 }

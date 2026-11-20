@@ -61,7 +61,7 @@ jobs:
         run: |
           git config user.name "Crush Shopper"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/suggestions.json
+          git add docs/suggestions.json docs/secours.json 2>/dev/null || git add docs/suggestions.json
           git diff --cached --quiet && exit 0
           git commit -m "Suggestions Pour toi mises à jour"
           for essai in 1 2 3; do

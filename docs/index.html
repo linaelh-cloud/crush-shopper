@@ -379,7 +379,7 @@ const DEPOT = "linaelh-cloud/crush-shopper";
 const local = ["127.0.0.1", "localhost"].includes(location.hostname);
 const apiTest = new URLSearchParams(location.search).get("api");
 const API = (local && apiTest && /^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(apiTest)) ? apiTest : "https://api.github.com";
-const STATUTS = { dispo: "Disponible", rupture: "En rupture", attente: "Recherche…", bloque: "Indisponible", inconnu: "Indisponible" };
+const STATUTS = { dispo: "Disponible", rupture: "En rupture", attente: "Recherche…", bloque: "Stock non suivi", inconnu: "Stock non suivi" };
 const CATEGORIES = ["Parfums", "Mode", "Beauté", "Accessoires", "Maison", "Luxe"];
 
 // La clé est rangée dans CET appareil (stockage du navigateur), jamais sur le site.
@@ -387,6 +387,7 @@ function lireCle() { try { return localStorage.getItem("crush_cle") || ""; } cat
 function rangerCle(v) { try { v ? localStorage.setItem("crush_cle", v) : localStorage.removeItem("crush_cle"); } catch (e) {} }
 const cleValide = (t) => /^(github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,})$/.test(t || "");
 
+let secours = {};  // photos de secours (docs/secours.json) : le même produit trouvé sur un site qui accepte les robots
 let liste = { articles: [] }, sha = "", memoire = {}, ajoutes = new Set(), dejaMontres = new Set(), occupe = false;
 const grid = document.getElementById("grid");
 
@@ -450,6 +451,7 @@ async function charger() {
   try {
     const [w, e] = await Promise.all([lireFichier("wishlist.json"), lireFichier("etat.json", {})]);
     liste = w.data; liste.articles = liste.articles || []; sha = w.sha; memoire = e.data || {};
+    try { secours = await (await fetch("secours.json?t=" + Date.now(), { cache: "no-store" })).json(); } catch (er) { secours = {}; }
     live(true, "GitHub veille");
     dessiner(); verdicts(); afficherMarques();
   } catch (err) {
@@ -472,18 +474,22 @@ function card(a, index) {
   dejaVues.add(a.url);
 
   // L'affiche : la photo en grand, et le texte posé dessus
-  const affiche = el("a", "affiche" + (m.photo ? "" : " sans-photo")); affiche.href = a.url; affiche.target = "_blank"; affiche.rel = "noopener";
-  if (m.photo) { const img = el("img"); img.src = m.photo; img.alt = a.nom || m.nom || "Article"; img.referrerPolicy = "no-referrer"; img.loading = "lazy"; affiche.append(img); }
-  else affiche.append(el("span", "vide", m.attend ? "On regarde le stock…" : ""));
+  // Site qui bloque le robot : on prend la photo de secours (même produit, trouvé ailleurs par ma styliste)
+  const sec = (!m.photo && secours[a.url]) || {};
+  const photo = m.photo || sec.photo;
+  const affiche = el("a", "affiche" + (photo ? "" : " sans-photo")); affiche.href = a.url; affiche.target = "_blank"; affiche.rel = "noopener";
+  if (photo) { const img = el("img"); img.src = photo; img.alt = a.nom || m.nom || "Article"; img.referrerPolicy = "no-referrer"; img.loading = "lazy"; affiche.append(img); }
+  else affiche.append(el("span", "vide", m.attend ? "On regarde le stock…" : (sec.note ? "Ce lien n'est pas la page d'un produit" : "Ta styliste cherche la photo ✨")));
   affiche.append(el("span", "etat " + m.statut, STATUTS[m.statut] || m.statut));
   const x = el("button", "croix"); x.innerHTML = COEUR_PLEIN; x.type = "button"; x.setAttribute("aria-label", "Retirer de ma wishlist"); x.title = "Retirer de ma wishlist";
   x.onclick = (e) => { e.preventDefault(); e.stopPropagation(); retirer(a.url); };
   affiche.append(x);
   const infos = el("div", "infos");
-  infos.append(el("p", "marque", m.marque || siteDe(a.url)));
-  infos.append(el("p", "nom", a.nom || m.nom || "Nouvel article"));
+  infos.append(el("p", "marque", m.marque || sec.marque || siteDe(a.url)));
+  infos.append(el("p", "nom", a.nom || m.nom || sec.nom || "Nouvel article"));
   const detail = [a.option, m.prix].filter(Boolean).join(" · ");
   if (detail) infos.append(el("p", "taille", detail));
+  if (sec.photo) infos.append(el("p", "taille", `Photo trouvée sur ${sec.source}`));
   affiche.append(infos);
   c.append(affiche);
 
