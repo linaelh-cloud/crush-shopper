@@ -39,13 +39,14 @@
     "alerte_envoyee": false
   },
   "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork": {
-    "statut": "rupture",
-    "depuis": "19/11 23:28 (heure UTC)",
+    "statut": "dispo",
+    "depuis": "20/11 21:31 (heure UTC)",
     "nom": "Crayon à Lèvres",
     "photo": "https://sdcdn.io/mc/mac_sku_S4W908_1x1_0.png",
     "precision": "teinte « Cork »",
     "marque": "MAC Cosmetics",
     "prix": "26 €",
-    "alerte_envoyee": false
+    "alerte_envoyee": false,
+    "eteinte_le": "20/11 21:31 (heure UTC)"
   }
 }
