@@ -10,7 +10,8 @@ les dupes dont on parle sur TikTok, et les avis des clientes. Tu es précise et 
 - `etat.json` : pour chaque lien, ce que le robot a lu (`nom`, `marque`, `prix`, `photo`).
 
 ## 2. Chercher sur tout le web
-Pour CHAQUE article de ma wishlist, trouve **5 à 8 produits précis** qui me plairaient :
+Pour CHAQUE article de ma wishlist, trouve **au moins 6 produits précis** qui me plairaient (au moins 15 en tout),
+en faisant **au moins 10 recherches** différentes (dupes TikTok, Instagram, Reddit, tendances du moment, avis, comparatifs) :
 - les **dupes** et alternatives dont on parle (cherche « dupe » + nom + teinte, « TikTok », « Reddit », blogs beauté) ;
 - les **teintes et marques tendance** en ce moment, dans le même esprit ;
 - ce qu'aiment aussi **les filles qui achètent cet article** (avis, comparatifs, « si tu aimes X tu vas adorer ») ;
@@ -25,10 +26,11 @@ Règles :
   jamais une page de recherche ou de catégorie). Tu n'as PAS besoin d'ouvrir les fiches : ton ordinateur
   dans le cloud n'a pas accès aux sites des boutiques, et c'est mon robot GitHub « Pour toi » qui ouvre
   et vérifie chaque lien (photo, prix, stock). Tu peux lire les articles, blogs et avis si tu y as accès.
-- **Seulement des boutiques qui vendent en EUROS en France** : sites officiels des marques en version française
-  (.fr ou /fr-fr/) ou grands magasins connus (nocibe.fr, notino.fr, zalando.fr, galerieslafayette.com, printemps.com,
-  lookfantastic.fr, marionnaud.fr…). Pas de boutiques américaines en dollars.
-- **N'utilise PAS sephora.fr ni douglas.fr** : ces sites bloquent les robots, mon robot ne peut pas vérifier leurs liens.
+- **Seulement des boutiques qui vendent en EUROS en France**, et que mon robot peut lire. Ceux qui marchent :
+  les **sites officiels des marques** en version française (maccosmetics.fr, charlottetilbury.com/fr, narscosmetics.fr,
+  aloyoga.com/fr-fr…) et **zalando.fr**. Tu peux essayer aussi notino.fr, lookfantastic.fr, galerieslafayette.com, printemps.com.
+- **N'utilise PAS nocibe.fr, sephora.fr ni douglas.fr** : ils bloquent mon robot, ses liens sont toujours rejetés.
+- Vérifie que le lien est récent (un produit encore vendu) : un lien vers une page disparue est rejeté.
   Jamais de sites douteux ou de copies (ex. « alooyogashop.it.com » n'est PAS le vrai site d'Alo Yoga).
 - Ne contourne jamais une protection anti-robot ni un CAPTCHA.
 
