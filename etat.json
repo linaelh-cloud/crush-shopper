@@ -43,11 +43,6 @@
     "precision": "le site bloque les robots",
     "depuis": "19/11 11:26 (heure UTC)"
   },
-  "https://www.kerastase.fr/gammes-et-produits/type-de-produits/huiles-et-serums/filtrer-par-type-de-cheveux/cheveux-indisciplines/huile-glaze-drops/KER_00331.html": {
-    "statut": "bloque",
-    "precision": "le site bloque les robots",
-    "depuis": "19/11 12:40 (heure UTC)"
-  },
   "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork": {
     "statut": "rupture",
     "depuis": "19/11 23:28 (heure UTC)",
