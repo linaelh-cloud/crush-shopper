@@ -60,6 +60,10 @@ Fais **au moins 8 recherches** et trouve jusqu'à **25 marques** par passage (en
 faites au passage précédent, dans ton ancien `styliste.json`).
 Règles :
 - **Seulement des infos de 2026** (date de l'article ou de la publication en novembre 2026). Les offres 2025 → ignore.
+- **Seulement des offres valables en FRANCE** (site .fr de la marque, en euros) : des sources françaises (presse et
+  sites de bons plans français, comptes Instagram/TikTok français de la marque). Une offre lue sur un site américain ou
+  anglais (newbeauty.com, fashionbeans.com…) ne compte PAS : les promos ne sont pas les mêmes.
+- Pas d'offre « à vérifier » ni de supposition : si ce n'est pas écrit clairement dans la source, ne la mets pas.
 - **Toujours une source** : le lien exact de l'article / la publication où tu l'as lu. Jamais d'offre inventée ou supposée.
 - `offre` = courte et précise, comme un bandeau : « -30 % sur tout le site », « 3 achetés = le 4e offert », « jusqu'à -50 % sur une sélection ».
 - `en_cours` = true seulement si la source dit que l'offre a déjà commencé ; sinon mets `debut` (AAAA-MM-JJ) si la date est annoncée.
