@@ -121,6 +121,78 @@ def teinte_de(a):
     return urllib.parse.unquote_plus(m.group(1)) if m else ""
 
 
+def traiter(page, a, avant, i=0, par_mac=False):
+    """Lit UN article et décide de l'alerte. Rend (nouvelle mémoire ou None, site bloqué ?, alerte éteinte ?).
+    Utilisé par le robot GitHub ET par le relais Mac (relais_mac.py)."""
+    print(f"→ {a.get('nom') or avant.get('nom') or a['url'][:60]} ({a.get('option', '')})")
+    try:
+        reponse = page.goto(a["url"], wait_until="domcontentloaded", timeout=45_000)
+        page.wait_for_timeout(4000)
+    except Exception as e:
+        print(f"  page impossible à ouvrir ({e.__class__.__name__})")
+        if not avant.get("statut"):  # nouvel article : on le dit à la page, pour ne pas la laisser attendre
+            return dict(avant, statut="inconnu", precision="page impossible à ouvrir", depuis=maintenant()), False, False
+        return None, False, False
+    code = reponse.status if reponse else 0
+    if not par_mac:
+        try:  # la photo sert juste à vérifier : elle ne doit jamais bloquer le robot
+            CAPTURES.mkdir(exist_ok=True)
+            page.screenshot(path=str(CAPTURES / f"article-{i + 1}.png"), timeout=10_000)
+        except Exception:
+            print("  (capture d'écran ratée, on continue)")
+    if sites.page_bloquee(page.title(), code):
+        print(f"  ⛔ Le site a refusé l’accès au robot (code {code})")
+        return dict(avant, statut="bloque", precision="le site bloque les robots",
+                    depuis=avant.get("depuis") if avant.get("statut") == "bloque" else maintenant()), True, False
+
+    # Le bon lecteur selon le site : MAC (appris) ou universel (fiche standard)
+    infos = sites.lire(a["url"], page.content(), a.get("option", ""), teinte_de(a))
+    statut = infos["statut"]
+    print(f"  statut : {statut}")
+    nouveau = dict(avant, statut=statut)
+    if avant.get("statut") != statut:
+        nouveau["depuis"] = maintenant()
+    nouveau.pop("verifie_le", None)
+    # Le nom, la photo, la marque et le prix servent à la page wishlist en ligne.
+    for cle in ("nom", "photo", "precision", "marque", "prix"):
+        if infos.get(cle):
+            nouveau[cle] = infos[cle]
+    if par_mac:
+        nouveau["par_mac"] = datetime.now(timezone.utc).isoformat()   # « lu par mon Mac » (relais Mac)
+    else:
+        nouveau.pop("par_mac", None)
+
+    eteinte = False
+    revenu = avant.get("statut") == sites.RUPTURE and statut == sites.DISPO
+    if a.get("crush_alert") and statut == sites.DISPO and (revenu or not avant.get("alerte_envoyee")):
+        texte = message(a, nouveau.get("nom", ""))
+        telegram = envoyer_telegram(texte)
+        email = envoyer_email(a, texte)
+        print(f"  💌 Crush Alert : Telegram={'oui' if telegram else 'non'}, e-mail={'oui' if email else 'non'}")
+        if telegram or email:
+            nouveau["alerte_envoyee"] = True
+            # Mission accomplie : Crush Alert s'éteint toute seule pour cet article.
+            a["crush_alert"] = False
+            nouveau["eteinte_le"] = maintenant()
+            eteinte = True
+            print("  🔕 Crush Alert éteinte toute seule (message envoyé)")
+    # On efface la coche « déjà prévenue » quand l'article repart en rupture,
+    # ou quand Crush Alert est éteinte : si je la rallume, le robot est prêt à prévenir.
+    if statut == sites.RUPTURE or not a.get("crush_alert"):
+        nouveau["alerte_envoyee"] = False
+    return nouveau, False, eteinte
+
+
+def lu_par_mac_recemment(avant, minutes=90):
+    """Le relais Mac a lu cet article il y a moins d'1 h 30 : le robot GitHub ne le relit pas
+    (le site le bloquerait et effacerait la bonne lecture du Mac)."""
+    try:
+        quand = datetime.fromisoformat(avant.get("par_mac", ""))
+    except ValueError:
+        return False
+    return (datetime.now(timezone.utc) - quand).total_seconds() < minutes * 60
+
+
 def main():
     wishlist = lire_json(WISHLIST, {"articles": []})
     articles = wishlist["articles"]
@@ -135,61 +207,15 @@ def main():
         page = navigateur.new_page(locale="fr-FR", viewport={"width": 1280, "height": 900})
         for i, a in enumerate(articles):
             avant = etat.get(a["url"], {})
-            print(f"→ {a.get('nom') or avant.get('nom') or a['url'][:60]} ({a.get('option', '')})")
-            try:
-                reponse = page.goto(a["url"], wait_until="domcontentloaded", timeout=45_000)
-                page.wait_for_timeout(4000)
-            except Exception as e:
-                print(f"  page impossible à ouvrir ({e.__class__.__name__})")
-                if not avant.get("statut"):  # nouvel article : on le dit à la page, pour ne pas la laisser attendre
-                    etat[a["url"]] = dict(avant, statut="inconnu", precision="page impossible à ouvrir", depuis=maintenant())
+            if lu_par_mac_recemment(avant):
+                print(f"→ {avant.get('nom') or a['url'][:60]} : lu par mon Mac il y a peu (relais Mac), on le laisse")
                 continue
-            code = reponse.status if reponse else 0
-            try:  # la photo sert juste à vérifier : elle ne doit jamais bloquer le robot
-                page.screenshot(path=str(CAPTURES / f"article-{i + 1}.png"), timeout=10_000)
-            except Exception:
-                print("  (capture d'écran ratée, on continue)")
-            if sites.page_bloquee(page.title(), code):
-                print(f"  ⛔ Le site a refusé l’accès au robot (code {code})")
-                etat[a["url"]] = dict(avant, statut="bloque", precision="le site bloque les robots",
-                                      depuis=avant.get("depuis") if avant.get("statut") == "bloque" else maintenant())
-                bloque = True
-                continue
-
-            # Le bon lecteur selon le site : MAC (appris) ou universel (fiche standard)
-            infos = sites.lire(a["url"], page.content(), a.get("option", ""), teinte_de(a))
-            statut = infos["statut"]
-            print(f"  statut : {statut}")
-            # La mémoire ne change que si quelque chose change : pas de sauvegarde inutile.
-            nouveau = dict(avant, statut=statut)
-            if avant.get("statut") != statut:
-                nouveau["depuis"] = maintenant()
-            nouveau.pop("verifie_le", None)
-            # Le nom, la photo, la marque et le prix servent à la page wishlist en ligne.
-            for cle in ("nom", "photo", "precision", "marque", "prix"):
-                if infos.get(cle):
-                    nouveau[cle] = infos[cle]
-
-            revenu = avant.get("statut") == sites.RUPTURE and statut == sites.DISPO
-            if a.get("crush_alert") and statut == sites.DISPO and (revenu or not avant.get("alerte_envoyee")):
-                texte = message(a, nouveau.get("nom", ""))
-                telegram = envoyer_telegram(texte)
-                email = envoyer_email(a, texte)
-                print(f"  💌 Crush Alert : Telegram={'oui' if telegram else 'non'}, e-mail={'oui' if email else 'non'}")
-                if telegram or email:
-                    nouveau["alerte_envoyee"] = True
-                    # Mission accomplie : Crush Alert s'éteint toute seule pour cet article.
-                    # On l'écrit dans la wishlist (le robot ne surveille plus) et dans la mémoire
-                    # (« eteinte_le ») pour que la page éteigne aussi le bouton.
-                    a["crush_alert"] = False
-                    nouveau["eteinte_le"] = maintenant()
-                    eteintes.append(a["url"])
-                    print("  🔕 Crush Alert éteinte toute seule (message envoyé)")
-            # On efface la coche « déjà prévenue » quand l'article repart en rupture,
-            # ou quand Crush Alert est éteinte : si je la rallume, le robot est prêt à prévenir.
-            if statut == sites.RUPTURE or not a.get("crush_alert"):
-                nouveau["alerte_envoyee"] = False
-            etat[a["url"]] = nouveau
+            nouveau, est_bloque, eteinte = traiter(page, a, avant, i)
+            if nouveau is not None:
+                etat[a["url"]] = nouveau
+            bloque = bloque or est_bloque
+            if eteinte:
+                eteintes.append(a["url"])
         navigateur.close()
 
     # On oublie les articles que j'ai retirés de ma wishlist.
