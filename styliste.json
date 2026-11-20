@@ -1,5 +1,5 @@
 {
-  "le": "2026-11-20T12:20:18Z",
+  "le": "2026-11-20T17:12:18Z",
   "style": "Nudes rosés-bruns et vestes sport chic dans des tons terre et olive : du doux, du chic, du désirable.",
   "idees": [
     {
@@ -241,58 +241,49 @@
       "prix": "",
       "genre": "même style",
       "pourquoi": "Rose brun mat et chic, dans l'esprit mauve-brun de ta Modesty."
+    },
+    {
+      "pour_url": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork",
+      "marque": "MAC Cosmetics",
+      "nom": "Lip Pencil (Crayon à Lèvres)",
+      "teinte_ou_couleur": "Whirl",
+      "lien": "https://www.notino.fr/mac/lip-pencil-crayon-a-levres/p-16055661/",
+      "prix": "26 €",
+      "genre": "coup de cœur des filles",
+      "pourquoi": "Le crayon brun rosé culte, très noté, proche de ta Cork."
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
+      "marque": "Marikoo",
+      "nom": "Veste légère à capuche zippée",
+      "teinte_ou_couleur": "Moss green (vert olive)",
+      "lien": "https://www.zalando.fr/marikoo-erdbeere-blouson-moss-green-m5m21g009-m12.html",
+      "prix": "",
+      "genre": "dupe",
+      "pourquoi": "Veste légère zippée vert olive, l'allure de ta veste Alo en petit prix."
     }
   ],
   "secours": [],
   "black_friday": [
     {
-      "marque": "Glossier",
-      "offre": "-25 % du 19 au 30 novembre",
+      "marque": "Sephora",
+      "offre": "-25 % sur le maquillage hors Point Rouge, du 16 au 29 novembre",
       "en_cours": true,
-      "fin": "2026-11-30",
+      "debut": "2026-11-16",
+      "fin": "2026-11-29",
       "code": "",
-      "type": "presse",
-      "source": "https://www.newbeauty.com/view/black-friday-cyber-monday-beauty-sales-2026",
-      "debut": "2026-11-19"
-    },
-    {
-      "marque": "Estée Lauder",
-      "offre": "-30 % sur une sélection de best-sellers (27 et 30 novembre)",
-      "en_cours": false,
-      "fin": "2026-11-30",
-      "code": "",
-      "type": "presse",
-      "source": "https://www.newbeauty.com/view/black-friday-cyber-monday-beauty-sales-2026",
-      "debut": "2026-11-27"
-    },
-    {
-      "marque": "Lululemon",
-      "offre": "Accès anticipé membres sur l'appli, déstockage « We Made Too Much » (pas de remise globale)",
-      "en_cours": true,
-      "fin": "",
-      "code": "",
-      "type": "site de bons plans",
-      "source": "https://pagecrawl.io/blog/lululemon-black-friday-deal-alerts.md",
-      "debut": "2026-11-17"
+      "type": "site de la marque",
+      "source": "https://www.sephora.fr/black-friday-maquillage-25/"
     },
     {
       "marque": "Galeries Lafayette",
-      "offre": "Black Friday dès le 23 novembre, sélection de marques (Maje, Isabel Marant…)",
+      "offre": "Black Friday dès le 23 novembre sur une sélection de marques (Maje, Sandro, Zadig & Voltaire…)",
       "en_cours": false,
+      "debut": "2026-11-23",
       "fin": "",
       "code": "",
       "type": "site de la marque",
-      "source": "https://www.galerieslafayette.com/t/black-friday/fm/le-tanneur",
-      "debut": "2026-11-23"
-    },
-    {
-      "marque": "Farfetch",
-      "offre": "Jusqu'à -50 % sur une sélection + code FFX30 (offre à vérifier)",
-      "en_cours": false,
-      "fin": "",
-      "code": "FFX30",
-      "type": "presse",
-      "source": "https://www.fashionbeans.com/article/black-friday-offers/"
+      "source": "https://www.galerieslafayette.com/t/black-friday/fm/le-tanneur"
     }
   ]
 }
