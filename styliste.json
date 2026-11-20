@@ -1,5 +1,5 @@
 {
-  "le": "2026-11-20T07:02:41Z",
+  "le": "2026-11-20T12:20:18Z",
   "style": "Nudes rosés-bruns et vestes sport chic dans des tons terre et olive : du doux, du chic, du désirable.",
   "idees": [
     {
@@ -231,7 +231,68 @@
       "prix": "",
       "genre": "coup de cœur des filles",
       "pourquoi": "Même coloris Espresso que ta veste, version sherpa douillette."
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
+      "marque": "NARS",
+      "nom": "Powermatte Lip Pigment",
+      "teinte_ou_couleur": "Somebody to Love",
+      "lien": "https://www.notino.fr/nars/powermatte-lip-pigment-rouge-a-levres-liquide-mat-longue-tenue/p-16166620/",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Rose brun mat et chic, dans l'esprit mauve-brun de ta Modesty."
     }
   ],
-  "secours": []
+  "secours": [],
+  "black_friday": [
+    {
+      "marque": "Glossier",
+      "offre": "-25 % du 19 au 30 novembre",
+      "en_cours": true,
+      "fin": "2026-11-30",
+      "code": "",
+      "type": "presse",
+      "source": "https://www.newbeauty.com/view/black-friday-cyber-monday-beauty-sales-2026",
+      "debut": "2026-11-19"
+    },
+    {
+      "marque": "Estée Lauder",
+      "offre": "-30 % sur une sélection de best-sellers (27 et 30 novembre)",
+      "en_cours": false,
+      "fin": "2026-11-30",
+      "code": "",
+      "type": "presse",
+      "source": "https://www.newbeauty.com/view/black-friday-cyber-monday-beauty-sales-2026",
+      "debut": "2026-11-27"
+    },
+    {
+      "marque": "Lululemon",
+      "offre": "Accès anticipé membres sur l'appli, déstockage « We Made Too Much » (pas de remise globale)",
+      "en_cours": true,
+      "fin": "",
+      "code": "",
+      "type": "site de bons plans",
+      "source": "https://pagecrawl.io/blog/lululemon-black-friday-deal-alerts.md",
+      "debut": "2026-11-17"
+    },
+    {
+      "marque": "Galeries Lafayette",
+      "offre": "Black Friday dès le 23 novembre, sélection de marques (Maje, Isabel Marant…)",
+      "en_cours": false,
+      "fin": "",
+      "code": "",
+      "type": "site de la marque",
+      "source": "https://www.galerieslafayette.com/t/black-friday/fm/le-tanneur",
+      "debut": "2026-11-23"
+    },
+    {
+      "marque": "Farfetch",
+      "offre": "Jusqu'à -50 % sur une sélection + code FFX30 (offre à vérifier)",
+      "en_cours": false,
+      "fin": "",
+      "code": "FFX30",
+      "type": "presse",
+      "source": "https://www.fashionbeans.com/article/black-friday-offers/"
+    }
+  ]
 }
