@@ -1,8 +1,8 @@
 {
   "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty": {
-    "statut": "dispo",
+    "statut": "rupture",
     "alerte_envoyee": false,
-    "depuis": "20/11 11:29 (heure UTC)",
+    "depuis": "20/11 13:27 (heure UTC)",
     "nom": "M·A·Cximal Sleek Satin Lipstick",
     "photo": "https://sdcdn.io/mc/mac_sku_NW9M34_3000x3000_0S.png",
     "precision": "teinte « Modesty »",
@@ -46,6 +46,14 @@
     "precision": "teinte « Cork »",
     "marque": "MAC Cosmetics",
     "prix": "26 €",
+    "alerte_envoyee": false
+  },
+  "https://fr.apm.mc/products/bague-maille-marine-y20831ox?variant=59801166774606&country=FR&currency=EUR&utm_medium=product_sync&utm_source=google&utm_content=sag_organic&utm_campaign=sag_organic&utm_source=google&utm_medium=cpc&utm_campaign=shopping&gad_source=1&gad_campaignid=20293895405&gbraid=0AAAAAoJAPj8pTM-JuDB20kvDxyh0CaXHU&gclid=Cj0KCQiA_P_XBhDvARIsALHjSUVbDYf06dst4DzmBJIWpklv2Zq2uWFV0LbVeCGO6CqCOW02WwfHMqkaAvA1EALw_wcB": {
+    "statut": "inconnu",
+    "depuis": "20/11 13:27 (heure UTC)",
+    "nom": "404 Not Found",
+    "photo": "http://us.apm.mc/cdn/shop/files/APM_Monaco_Preview_Hiver.webp?v=1794461711&amp;width=2048",
+    "precision": "pas de fiche standard sur cette page",
     "alerte_envoyee": false
   }
 }
