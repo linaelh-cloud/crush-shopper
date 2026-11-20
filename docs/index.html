@@ -176,6 +176,9 @@ button { font: inherit; color: inherit; }
 .bf-code { border: 1px dashed var(--noir); padding: 3px 9px; background: transparent; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; cursor: pointer; }
 .bf-wl { position: absolute; top: 14px; right: 14px; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; background: var(--noir); color: #f6f1ec; padding: 3px 8px; }
 .bf-carte .alerter { margin-top: auto; }
+.bf-nouveau { align-self: flex-start; background: var(--noir); color: #f6f1ec; padding: 3px 10px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+.bf-carte.neuf { box-shadow: 0 0 0 2px var(--noir) inset; }
+.bf-avant { margin: 0; font-size: 12px; color: var(--gris); font-style: italic; }
 .bf-note { margin: 26px 0 0; font-size: 13px; color: var(--gris); }
 
 /* --- Bouton + pour ajouter --- */
@@ -725,21 +728,24 @@ function dessinerBF() {
   }));
   const cats = ["Toutes", ...(BF.categories || [])];
   document.getElementById("bf-cats").replaceChildren(...cats.map(c => { const b = el("button", "puce" + (bfCat === c ? " on" : ""), c); b.type = "button"; b.onclick = () => { bfCat = c; dessinerBF(); }; return b; }));
-  const etats = ["Tous", "en cours", "à venir", "terminé"];
+  const nbNeufs = (BF.marques || []).filter(m => m.nouveau_le === JOUR()).length;
+  const etats = ["Tous", ...(nbNeufs ? [`Nouveau aujourd'hui (${nbNeufs})`] : []), "en cours", "à venir", "terminé"];
+  if (bfEtat.startsWith("Nouveau") && !nbNeufs) bfEtat = "Tous";
   document.getElementById("bf-etats").replaceChildren(...etats.map(c => { const b = el("button", "puce" + (bfEtat === c ? " on" : ""), c); b.type = "button"; b.onclick = () => { bfEtat = c; dessinerBF(); }; return b; }));
   const mesSites = new Set((liste.articles || []).map(a => siteDe(a.url)).concat((liste.articles || []).map(a => (memoire[a.url] || {}).marque || "")).map(x => (x || "").toLowerCase()));
   const dansMaWL = (m) => m.dans_ma_wishlist || mesSites.has((m.marque || "").toLowerCase()) || mesSites.has((m.site || "").toLowerCase());
   const ordre = { "en cours": 0, "à venir": 1, "terminé": 2 };
-  let ms = (BF.marques || []).map(m => ({ ...m, _etat: etatBF(m), _wl: dansMaWL(m) }))
+  let ms = (BF.marques || []).map(m => ({ ...m, _etat: etatBF(m), _wl: dansMaWL(m), _neuf: m.nouveau_le === JOUR() }))
     .filter(m => bfCat === "Toutes" || m.categorie === bfCat)
-    .filter(m => bfEtat === "Tous" || m._etat === bfEtat)
+    .filter(m => bfEtat === "Tous" || (bfEtat.startsWith("Nouveau") ? m._neuf : m._etat === bfEtat))
     .filter(m => !bfRecherche || [m.marque, m.categorie, m.site, m.offre].join(" ").toLowerCase().includes(bfRecherche));
-  ms.sort((a, b) => (b._wl - a._wl) || (ordre[a._etat] - ordre[b._etat]) || a.marque.localeCompare(b.marque, "fr"));
+  // D'abord ma wishlist, puis les nouvelles offres du jour, puis en cours / à venir / terminé
+  ms.sort((a, b) => (b._wl - a._wl) || (b._neuf - a._neuf) || (ordre[a._etat] - ordre[b._etat]) || a.marque.localeCompare(b.marque, "fr"));
   document.getElementById("bf-nb").textContent = `${ms.length} marque${ms.length > 1 ? "s" : ""}`;
   document.getElementById("bf-grille").replaceChildren(...(ms.length ? ms.map(carteBF) : [el("div", "vide-total", "Aucune marque ne correspond.")]));
 }
 function carteBF(m) {
-  const c = el("article", "bf-carte" + (m._wl ? " wl" : ""));
+  const c = el("article", "bf-carte" + (m._wl ? " wl" : "") + (m._neuf ? " neuf" : ""));
   if (m._wl) c.append(el("span", "bf-wl", "Ma wishlist"));
   const haut = el("div", "bf-haut");
   // Le logo ouvre directement le site de la marque
@@ -750,17 +756,22 @@ function carteBF(m) {
   const t = el("div"); t.append(el("p", "bf-nom", m.marque), el("p", "bf-cat", m.categorie));
   haut.append(logo, t); c.append(haut);
   c.append(el("span", "bf-etat " + m._etat.replace("é", "e").replace(" ", "-"), m._etat));
+  if (m._neuf) c.append(el("span", "bf-nouveau", "✦ Nouveau aujourd'hui"));
   const vu0 = m.vu_sur_le_site || {};
-  const robotAVu = vu0.parle_du_black_friday && (vu0.jusqua || (vu0.reductions || []).length);
-  // Rien d'annoncé dans la presse, mais le robot a vu des promos sur le site : on le dit.
-  c.append(el("p", "bf-offre", m.statut === "non annoncé" && robotAVu ? "Promos Black Friday affichées sur le site" : m.offre));
+  const robotAVu = vu0.parle_du_black_friday && (vu0.phrase || vu0.jusqua || (vu0.reductions || []).length);
+  // Le robot a lu l'offre sur le site : c'est elle qu'on montre en grand (plus fraîche que le texte écrit à la main).
+  if (robotAVu) {
+    c.append(el("p", "bf-offre", vu0.phrase || (vu0.jusqua ? `Jusqu'à ${vu0.jusqua} sur le site` : `${vu0.reductions[0]} sur le site`)));
+    if (m.offre) c.append(el("p", "bf-avant", "Annoncé avant : " + m.offre));
+  } else c.append(el("p", "bf-offre", m.offre));
   const da = m.dates_annonce || {};
   const debut = m.debut || da.debut, fin = m.fin || da.fin;
   if (debut || fin) c.append(el("p", "bf-vu", debut && fin ? `Du ${joliJour(debut)} au ${joliJour(fin)}` : debut ? `À partir du ${joliJour(debut)}` : `Jusqu'au ${joliJour(fin)}`));
   const vu = m.vu_sur_le_site || {};
-  if (vu.bloque) c.append(el("p", "bf-vu", "Le site ne laisse pas entrer le robot : vérifie directement."));
+  const quand = (vu.derniere_bonne_lecture || vu.le || "").slice(0, 5);
+  if (vu.bloque && !robotAVu) c.append(el("p", "bf-vu", "Le site ne laisse pas entrer le robot : vérifie directement."));
   else if (vu.jusqua || (vu.reductions || []).length) {
-    const p = el("p", "bf-vu"); p.append("Vu sur le site : ", el("b", null, vu.jusqua ? "jusqu'à " + vu.jusqua : vu.reductions.slice(0, 3).join(", ")));
+    const p = el("p", "bf-vu"); p.append(`Vu sur le site${quand ? " le " + quand : ""} : `, el("b", null, vu.jusqua ? "jusqu'à " + vu.jusqua : vu.reductions.slice(0, 3).join(", ")));
     c.append(p);
   }
   const codes = [...new Set([...(vu.codes || [])])].filter(x => x.length >= 4);

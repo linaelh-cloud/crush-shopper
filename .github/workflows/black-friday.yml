@@ -5,7 +5,7 @@ name: Robot Black Friday
 on:
   workflow_dispatch:          # le bouton « Run workflow », pour le lancer à la main
   schedule:
-    - cron: "0 6 * * *"       # tous les jours vers 7 h (heure de Paris)
+    - cron: "0 6,12 * * *"    # tous les jours vers 7 h et 13 h (heure de Paris) : les marques lancent aussi leurs offres en journée
 
 permissions:
   contents: write             # pour enregistrer le fichier des promos

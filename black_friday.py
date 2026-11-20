@@ -38,14 +38,34 @@ PAS_DES_CODES = {"promo", "postal", "code", "black", "friday", "offre", "valable
                  "tionnel", "tion", "bague", "bracelet", "stores", "store", "produit", "article", "livraison"}
 
 
+# Les offres qui ne sont PAS des promos Black Friday (bienvenue, newsletter…)
+PAS_UNE_PROMO = re.compile(r"premi[eè]re? (?:achat|commande)|1re commande|newsletter|inscri|e-?mails?|parrain|fid[ée]lit", re.I)
+
+
+def phrase_offre(texte, pourcent):
+    """La phrase du bandeau, comme « -40 % SUR TOUT LE SITE » : courte, avec le % le plus vu."""
+    lignes = [" ".join(l.split()) for l in texte.splitlines()]
+    bonnes = [l for l in lignes if 6 <= len(l) <= 90 and f"{pourcent}" in l and "%" in l and not PAS_UNE_PROMO.search(l)]
+    if not bonnes:
+        return ""
+    # On préfère « -40 % sur… » (le bandeau) aux autres phrases ; puis la plus courte.
+    bonnes.sort(key=lambda l: (not re.search(r"-\s?\d{1,2}\s?%", l), not re.search(r"\bsur\b", l, re.I), len(l)))
+    p = bonnes[0]
+    return p[0].upper() + p[1:].lower() if p.isupper() else p
+
+
 def lire_promos(texte):
     """Trouve les réductions et les codes dans le texte d'une page."""
     jusqua = sorted({int(x) for x in JUSQUA.findall(texte) if 5 <= int(x) <= 90}, reverse=True)
-    tous = [int(x) for x in POURCENT.findall(texte) if 5 <= int(x) <= 90]
+    # On ne compte pas les « -15 % sur votre première commande » (ce n'est pas le Black Friday)
+    propre = "\n".join(l for l in texte.splitlines() if not PAS_UNE_PROMO.search(l))
+    tous = [int(x) for x in POURCENT.findall(propre) if 5 <= int(x) <= 90]
     # Les % les plus fréquents = ceux des bandeaux (pas un seul produit très soldé)
     frequents = sorted(set(tous), key=lambda p: (-tous.count(p), -p))[:4]
     codes = sorted({c for c in CODE.findall(texte) if c.lower() not in PAS_DES_CODES})[:4]
+    le_plus_vu = jusqua[0] if jusqua else (frequents[0] if frequents else None)
     return {
+        "phrase": phrase_offre(propre, le_plus_vu) if le_plus_vu else "",
         "jusqua": f"-{jusqua[0]} %" if jusqua else "",
         "reductions": [f"-{p} %" for p in frequents],
         "codes": codes,
@@ -99,6 +119,23 @@ def etat_du_jour(m, aujourd_hui=None):
     return "à venir"
 
 
+def resume(vu):
+    """Ce qui compte dans une lecture, pour la comparer avec celle de la veille."""
+    if not vu or vu.get("bloque") or vu.get("erreur"):
+        return None
+    return (vu.get("jusqua") or "", tuple(vu.get("reductions") or [])[:1], tuple(vu.get("codes") or []), bool(vu.get("parle_du_black_friday")))
+
+
+def noter_nouveaute(m, ancien, nouveau, jour):
+    """Si l'offre a changé depuis la dernière bonne lecture, on note « nouveau aujourd'hui »."""
+    avant, apres = resume(ancien), resume(nouveau)
+    if apres is None:
+        return
+    promo = bool(nouveau.get("jusqua") or nouveau.get("reductions") or nouveau.get("codes"))
+    if promo and apres != avant:
+        m["nouveau_le"] = jour
+
+
 def maintenant():
     return datetime.now(timezone.utc).strftime("%d/%m/%Y %H:%M UTC")
 
@@ -130,42 +167,77 @@ def main(seulement=()):
     donnees = json.loads(FICHIER.read_text(encoding="utf-8"))
     marques = [m for m in donnees["marques"] if not seulement or m["marque"].lower() in seulement]
     print(f"Le robot va lire {len(marques)} page(s)…")
+    from datetime import date
+    jour = date.today().isoformat()
     with sync_playwright() as pw:
-        # Fenêtre visible : beaucoup de boutiques refusent les navigateurs invisibles.
-        navigateur = pw.chromium.launch(headless=False)
-        page = navigateur.new_page(locale="fr-FR", viewport={"width": 1280, "height": 900})
-        for m in marques:
-            # Si la fenêtre du robot a été fermée (ou Chrome s'est arrêté), on en rouvre une.
-            if not navigateur.is_connected() or page.is_closed():
-                try:
-                    navigateur = pw.chromium.launch(headless=False)
-                except Exception:
-                    pass
-                page = navigateur.new_page(locale="fr-FR", viewport={"width": 1280, "height": 900})
-                print("   (fenêtre du robot rouverte)")
-            vu = {"le": maintenant()}
+        etat = {"navigateur": None, "page": None}
+
+        def nouvelle_page():
+            """(Re)ouvre une fenêtre propre. Utile si Chrome a planté sur la page d'avant."""
             try:
-                reponse = page.goto(m["lien"], wait_until="domcontentloaded", timeout=35_000)
-                page.wait_for_timeout(3500)
-                code = reponse.status if reponse else 0
-                if sites.page_bloquee(page.title(), code) or code >= 400:
-                    vu["bloque"] = True
-                    print(f"⛔ {m['marque']} : le site refuse le robot (code {code}), on n'insiste pas")
-                else:
-                    vu.update(lire_promos(page.inner_text("body")[:60_000]))
-                    print(f"✅ {m['marque']} : jusqu'à {vu['jusqua'] or '?'} | vu : {vu['reductions']} | codes : {vu['codes']} "
-                          f"| Black Friday : {'oui' if vu['parle_du_black_friday'] else 'non'}")
-            except Exception as e:
-                vu["erreur"] = e.__class__.__name__
-                print(f"⚠️ {m['marque']} : page impossible à lire ({vu['erreur']})")
+                if etat["navigateur"]:
+                    etat["navigateur"].close()
+            except Exception:
+                pass
+            # Fenêtre visible : beaucoup de boutiques refusent les navigateurs invisibles.
+            etat["navigateur"] = pw.chromium.launch(headless=False)
+            etat["page"] = etat["navigateur"].new_page(locale="fr-FR", viewport={"width": 1280, "height": 900})
+            return etat["page"]
+
+        def lire(m):
+            page = etat["page"]
+            vu = {"le": maintenant()}
+            reponse = page.goto(m["lien"], wait_until="domcontentloaded", timeout=35_000)
+            page.wait_for_timeout(3500)
+            code = reponse.status if reponse else 0
+            if sites.page_bloquee(page.title(), code) or code >= 400:
+                vu["bloque"] = True
+                print(f"⛔ {m['marque']} : le site refuse le robot (code {code}), on n'insiste pas")
+            else:
+                vu.update(lire_promos(page.inner_text("body")[:60_000]))
+                print(f"✅ {m['marque']} : {vu['phrase'] or '-'} | jusqu'à {vu['jusqua'] or '?'} | vu : {vu['reductions']} "
+                      f"| codes : {vu['codes']} | Black Friday : {'oui' if vu['parle_du_black_friday'] else 'non'}")
+            return vu
+
+        nouvelle_page()
+        for m in marques:
+            ancien = m.get("vu_sur_le_site") or {}
+            vu = None
+            for essai in (1, 2):
+                try:
+                    if etat["page"] is None or etat["page"].is_closed() or not etat["navigateur"].is_connected():
+                        nouvelle_page()
+                    vu = lire(m)
+                    break
+                except Exception as e:
+                    message = " ".join(str(e).split())[:160]
+                    print(f"⚠️ {m['marque']} (essai {essai}) : {e.__class__.__name__} : {message}")
+                    vu = {"le": maintenant(), "erreur": message or e.__class__.__name__}
+                    # Chrome a peut-être planté : on repart d'une fenêtre neuve avant de réessayer.
+                    try:
+                        nouvelle_page()
+                    except Exception as e2:
+                        print(f"   impossible de rouvrir Chrome : {e2}")
+            noter_nouveaute(m, ancien, vu, jour)
+            # Lecture ratée : on garde ce qu'on avait vu la dernière fois (avec sa date), au lieu de tout effacer.
+            if (vu.get("erreur") or vu.get("bloque")) and resume(ancien):
+                vu = {**{k: v for k, v in ancien.items() if k not in ("erreur", "bloque")}, **vu,
+                      "derniere_bonne_lecture": ancien.get("derniere_bonne_lecture") or ancien.get("le")}
             m["vu_sur_le_site"] = vu
             # Les dates sur un site d'annonces (quelles-dates.fr a une page par enseigne)
             if not seulement_dates_off:
-                m["dates_annonce"] = lire_dates_annonce(page, m) or m.get("dates_annonce")
+                try:
+                    m["dates_annonce"] = lire_dates_annonce(etat["page"], m) or m.get("dates_annonce")
+                except Exception:
+                    pass
             m["etat"] = etat_du_jour(m)
             # On enregistre après chaque marque : si le robot s'arrête, rien n'est perdu.
             FICHIER.write_text(json.dumps(donnees, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        navigateur.close()
+        navigateur = etat["navigateur"]
+        try:
+            navigateur.close()
+        except Exception:
+            pass
     donnees["robot_passe_le"] = maintenant()
     FICHIER.write_text(json.dumps(donnees, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("Terminé ✅")
