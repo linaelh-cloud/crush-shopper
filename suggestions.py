@@ -31,6 +31,8 @@ ETAT = DOSSIER / "etat.json"
 SORTIE = DOSSIER / "docs" / "suggestions.json"
 STYLISTE = DOSSIER / "styliste.json"      # les idées écrites par la routine Crush Styliste
 SECOURS = DOSSIER / "docs" / "secours.json"   # photos de secours des articles dont le site bloque le robot
+BF_WEB = DOSSIER / "docs" / "bf-web.json"     # offres Black Friday trouvées par la styliste ailleurs (presse, Insta, TikTok)
+TYPES_SOURCE = {"site de la marque", "presse", "site de bons plans", "Instagram", "TikTok", "newsletter", "autre"}
 EN_TOUT = 40          # idées affichées au maximum
 
 
@@ -124,6 +126,38 @@ def maj_secours(routine, articles):
     SECOURS.write_text(json.dumps(secours, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def maj_bf_web(routine):
+    """Offres Black Friday que mon robot n'a pas pu lire sur le site de la marque (site qui bloque, offre pas
+    encore sur la page…) : Crush Styliste les a trouvées dans la presse, sur Instagram, TikTok ou un site de bons plans.
+    On les range dans docs/bf-web.json (l'appli les affiche avec leur source). On garde une offre 3 jours au plus."""
+    from datetime import datetime, timedelta, timezone
+    trouvees = routine.get("black_friday") or []
+    avant = lire_json(BF_WEB, {})
+    if not trouvees or avant.get("_le") == routine.get("le"):
+        return
+    limite = (datetime.now(timezone.utc) - timedelta(days=3)).date().isoformat()
+    offres = {k: v for k, v in avant.items() if not k.startswith("_") and (v.get("vu_le") or "") >= limite}
+    jour = datetime.now(timezone.utc).date().isoformat()
+    for x in trouvees:
+        marque, offre, source = (x.get("marque") or "").strip(), (x.get("offre") or "").strip(), (x.get("source") or "").strip()
+        # Jamais sans source vérifiable : une offre doit venir d'un lien réel.
+        if not marque or not offre or not source.startswith("http") or len(offre) > 140:
+            continue
+        ancien = offres.get(marque.lower(), {})
+        offres[marque.lower()] = {
+            "marque": marque, "offre": offre, "source": source,
+            "type": x.get("type") if x.get("type") in TYPES_SOURCE else "autre",
+            "en_cours": bool(x.get("en_cours")), "debut": x.get("debut", ""), "fin": x.get("fin", ""),
+            "code": (x.get("code") or "").strip()[:20],
+            "vu_le": jour,
+            # « nouveau » seulement si l'offre a changé depuis la dernière fois
+            "nouveau_le": ancien.get("nouveau_le", "") if ancien.get("offre") == offre else jour,
+        }
+        print(f"📰 Black Friday {marque} : {offre} ({offres[marque.lower()]['type']})")
+    offres["_le"] = routine.get("le", "")
+    BF_WEB.write_text(json.dumps(offres, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def main():
     liste = lire_json(WISHLIST, {"articles": []})
     articles, marques_aimees = liste.get("articles", []), liste.get("marques_aimees", [])
@@ -133,6 +167,7 @@ def main():
     # A. De nouvelles idées de la routine Crush Styliste ?
     routine = lire_json(STYLISTE, {})
     maj_secours(routine, articles)
+    maj_bf_web(routine)
     nouvelles = bool(routine.get("idees")) and routine.get("le") != avant.get("styliste_le")
     if not nouvelles and not ia.active():
         if "suggestions" not in avant:

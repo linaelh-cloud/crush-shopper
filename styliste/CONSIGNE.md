@@ -46,6 +46,25 @@ mon appli n'a ni sa photo ni son nom. Pour CHACUN de ces articles :
   `"note": "ce lien n'est pas la page d'un produit"` sans `lien`.
 Range-les dans `"secours"` (voir le format ci-dessous). Mon robot ouvrira ces liens pour récupérer la photo.
 
+## 2 ter. Black Friday : compléter les offres que mon robot n'a pas trouvées
+Mon robot lit chaque jour les sites des marques de `docs/black-friday.json`. Dans ce fichier, pour chaque marque,
+`vu_sur_le_site` dit ce qu'il a lu : s'il y a `"bloque": true`, ou pas de `phrase`, ou `parle_du_black_friday: false`,
+c'est qu'il **n'a pas trouvé l'offre Black Friday**. Pour ces marques, cherche l'offre **de 2026** ailleurs :
+- la **presse** et les magazines (Elle, Marie Claire, Glamour, Cosmopolitan, Madmoizelle, Le Parisien…) ;
+- les **sites de bons plans** (Dealabs, quelles-dates.fr, Radins, Ma Reduc, iGraal…) ;
+- les **publications Instagram et TikTok** de la marque ou de créatrices beauté/mode (celles que tu vois dans tes
+  résultats de recherche : cherche « [marque] black friday 2026 instagram », « … tiktok ») ;
+- la newsletter ou l'annonce de la marque reprise par un article.
+Ordre de priorité : les marques de ma wishlist et de `marques_aimees`, puis la catégorie Maquillage / Soin, puis les autres.
+Fais **au moins 8 recherches** et trouve jusqu'à **25 marques** par passage (en commençant par celles que tu n'as pas
+faites au passage précédent, dans ton ancien `styliste.json`).
+Règles :
+- **Seulement des infos de 2026** (date de l'article ou de la publication en novembre 2026). Les offres 2025 → ignore.
+- **Toujours une source** : le lien exact de l'article / la publication où tu l'as lu. Jamais d'offre inventée ou supposée.
+- `offre` = courte et précise, comme un bandeau : « -30 % sur tout le site », « 3 achetés = le 4e offert », « jusqu'à -50 % sur une sélection ».
+- `en_cours` = true seulement si la source dit que l'offre a déjà commencé ; sinon mets `debut` (AAAA-MM-JJ) si la date est annoncée.
+- Si tu ne trouves rien de sûr pour une marque, ne la mets pas.
+
 ## 3. Ranger tes idées
 Écris le fichier `styliste.json` (à la racine du dépôt), exactement dans ce format :
 
@@ -63,6 +82,18 @@ Range-les dans `"secours"` (voir le format ci-dessous). Mon robot ouvrira ces li
       "prix": "38 €",
       "genre": "dupe | tendance | même style | coup de cœur des filles",
       "pourquoi": "15 mots maximum, en tutoiement, précis (ex. « Le dupe TikTok de ta Modesty, même brun rosé »)"
+    }
+  ],
+  "black_friday": [
+    {
+      "marque": "Sephora (EXACTEMENT le nom de docs/black-friday.json)",
+      "offre": "-30 % sur tout le site",
+      "en_cours": true,
+      "debut": "2026-11-20",
+      "fin": "2026-11-30",
+      "code": "",
+      "type": "presse | site de bons plans | Instagram | TikTok | site de la marque | newsletter | autre",
+      "source": "https://… (le lien exact où tu l'as lu)"
     }
   ],
   "secours": [

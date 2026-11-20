@@ -169,9 +169,9 @@ button { font: inherit; color: inherit; }
 .bf-etat { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; padding: 3px 10px; background: var(--carte); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
 .bf-etat::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #c9902d; }
 .bf-etat.en-cours::before { background: var(--vert); } .bf-etat.termine::before { background: #a39a92; }
-.bf-offre { margin: 2px 0 0; font-family: var(--font-titre); font-weight: 400; font-size: 26px; line-height: 1.18; color: var(--noir); }
+.bf-offre { margin: 4px 0 2px; font-family: var(--font-titre); font-weight: 400; font-size: 32px; line-height: 1.12; color: var(--noir); }
 .bf-offre::first-letter { text-transform: uppercase; }
-@media (max-width: 700px) { .bf-offre { font-size: 24px; } }
+@media (max-width: 700px) { .bf-offre { font-size: 30px; } }
 .bf-vu { margin: 0; font-size: 13px; color: var(--gris); }
 .bf-vu b { color: var(--noir); font-weight: 500; }
 .bf-codes { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -696,9 +696,14 @@ function guetterLeRobot() { reveilJusqua = Date.now() + 4 * 60000; planifier(150
 document.addEventListener("visibilitychange", () => { if (!document.hidden && !occupe) charger(); });
 // ================================================================ Onglet BLACK FRIDAY
 // Les promos viennent du fichier black-friday.json, rempli par le robot (black_friday.py).
-let BF = null, bfCat = "Toutes", bfEtat = "Tous", bfRecherche = "";
+let BF = null, BFWEB = {}, bfCat = "Toutes", bfEtat = "Tous", bfRecherche = "";
 const JOUR = () => new Date().toISOString().slice(0, 10);
 const joliJour = (iso) => iso ? new Date(iso + "T12:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" }) : "";
+function robotAVu(m) {
+  const v = m.vu_sur_le_site || {};
+  return !!(v.parle_du_black_friday && (v.phrase || v.jusqua || (v.reductions || []).length));
+}
+function offreWeb(m) { return robotAVu(m) ? null : (BFWEB || {})[(m.marque || "").toLowerCase()] || null; }
 function etatBF(m) {
   // Même règle que le robot : terminé si la date de fin est passée ; en cours si le site affiche ses promos ;
   // en cours si c'est officiel et qu'on est dans les dates ; sinon à venir.
@@ -706,12 +711,17 @@ function etatBF(m) {
   const debut = m.debut || da.debut || "", fin = m.fin || da.fin || "";
   if (fin && j > fin) return "terminé";
   if (vu.parle_du_black_friday && (vu.jusqua || (vu.reductions || []).length)) return "en cours";
+  const w = offreWeb(m);
+  if (w && w.en_cours && !(w.fin && j > w.fin)) return "en cours";
   if (debut && j >= debut && (!fin || j <= fin) && m.statut === "officiel") return "en cours";
   return "à venir";
 }
 async function chargerBF() {
   try { BF = await (await fetch("black-friday.json?t=" + Date.now(), { cache: "no-store" })).json(); }
   catch (e) { BF = null; }
+  // Les offres trouvées par Crush Styliste ailleurs (presse, Instagram, TikTok, bons plans)
+  try { BFWEB = await (await fetch("bf-web.json?t=" + Date.now(), { cache: "no-store" })).json(); }
+  catch (e) { BFWEB = {}; }
   dessinerBF();
 }
 function dessinerBF() {
@@ -730,14 +740,15 @@ function dessinerBF() {
   }));
   const cats = ["Toutes", ...(BF.categories || [])];
   document.getElementById("bf-cats").replaceChildren(...cats.map(c => { const b = el("button", "puce" + (bfCat === c ? " on" : ""), c); b.type = "button"; b.onclick = () => { bfCat = c; dessinerBF(); }; return b; }));
-  const nbNeufs = (BF.marques || []).filter(m => m.nouveau_le === JOUR()).length;
+  const estNeuf = (m) => m.nouveau_le === JOUR() || (offreWeb(m) || {}).nouveau_le === JOUR();
+  const nbNeufs = (BF.marques || []).filter(estNeuf).length;
   const etats = ["Tous", ...(nbNeufs ? [`Nouveau aujourd'hui (${nbNeufs})`] : []), "en cours", "à venir", "terminé"];
   if (bfEtat.startsWith("Nouveau") && !nbNeufs) bfEtat = "Tous";
   document.getElementById("bf-etats").replaceChildren(...etats.map(c => { const b = el("button", "puce" + (bfEtat === c ? " on" : ""), c); b.type = "button"; b.onclick = () => { bfEtat = c; dessinerBF(); }; return b; }));
   const mesSites = new Set((liste.articles || []).map(a => siteDe(a.url)).concat((liste.articles || []).map(a => (memoire[a.url] || {}).marque || "")).map(x => (x || "").toLowerCase()));
   const dansMaWL = (m) => m.dans_ma_wishlist || mesSites.has((m.marque || "").toLowerCase()) || mesSites.has((m.site || "").toLowerCase());
   const ordre = { "en cours": 0, "à venir": 1, "terminé": 2 };
-  let ms = (BF.marques || []).map(m => ({ ...m, _etat: etatBF(m), _wl: dansMaWL(m), _neuf: m.nouveau_le === JOUR() }))
+  let ms = (BF.marques || []).map(m => ({ ...m, _etat: etatBF(m), _wl: dansMaWL(m), _neuf: estNeuf(m) }))
     .filter(m => bfCat === "Toutes" || m.categorie === bfCat)
     .filter(m => bfEtat === "Tous" || (bfEtat.startsWith("Nouveau") ? m._neuf : m._etat === bfEtat))
     .filter(m => !bfRecherche || [m.marque, m.categorie, m.site, m.offre].join(" ").toLowerCase().includes(bfRecherche));
@@ -760,10 +771,17 @@ function carteBF(m) {
   c.append(el("span", "bf-etat " + m._etat.replace("é", "e").replace(" ", "-"), m._etat));
   if (m._neuf) c.append(el("span", "bf-nouveau", "✦ Nouveau aujourd'hui"));
   const vu0 = m.vu_sur_le_site || {};
-  const robotAVu = vu0.parle_du_black_friday && (vu0.phrase || vu0.jusqua || (vu0.reductions || []).length);
+  const web = offreWeb(m);
   // Le robot a lu l'offre sur le site : c'est elle qu'on montre en grand (plus fraîche que le texte écrit à la main).
-  if (robotAVu) {
+  if (robotAVu(m)) {
     c.append(el("p", "bf-offre", vu0.phrase || (vu0.jusqua ? `Jusqu'à ${vu0.jusqua} sur le site` : `${vu0.reductions[0]} sur le site`)));
+    if (m.offre) c.append(el("p", "bf-avant", "Annoncé avant : " + m.offre));
+  } else if (web) {
+    // Pas lu sur le site, mais trouvé par ma styliste dans la presse, sur Insta, TikTok…
+    c.append(el("p", "bf-offre", web.offre));
+    const src = el("p", "bf-vu"); const a = el("a", null, web.type === "autre" ? "sur le web" : web.type === "presse" ? "dans la presse" : "sur " + web.type);
+    a.href = web.source; a.target = "_blank"; a.rel = "noopener";
+    src.append("✦ Trouvé par ta styliste ", a, ` le ${joliJour(web.vu_le)}`); c.append(src);
     if (m.offre) c.append(el("p", "bf-avant", "Annoncé avant : " + m.offre));
   } else c.append(el("p", "bf-offre", m.offre));
   const da = m.dates_annonce || {};
@@ -771,12 +789,12 @@ function carteBF(m) {
   if (debut || fin) c.append(el("p", "bf-vu", debut && fin ? `Du ${joliJour(debut)} au ${joliJour(fin)}` : debut ? `À partir du ${joliJour(debut)}` : `Jusqu'au ${joliJour(fin)}`));
   const vu = m.vu_sur_le_site || {};
   const quand = (vu.derniere_bonne_lecture || vu.le || "").slice(0, 5);
-  if (vu.bloque && !robotAVu) c.append(el("p", "bf-vu", "Le site ne laisse pas entrer le robot : vérifie directement."));
+  if (vu.bloque && !robotAVu(m) && !web) c.append(el("p", "bf-vu", "Le site ne laisse pas entrer le robot : vérifie directement."));
   else if (vu.jusqua || (vu.reductions || []).length) {
     const p = el("p", "bf-vu"); p.append(`Vu sur le site${quand ? " le " + quand : ""} : `, el("b", null, vu.jusqua ? "jusqu'à " + vu.jusqua : vu.reductions.slice(0, 3).join(", ")));
     c.append(p);
   }
-  const codes = [...new Set([...(vu.codes || [])])].filter(x => x.length >= 4);
+  const codes = [...new Set([...(vu.codes || []), ...(web && web.code ? [web.code] : [])])].filter(x => x.length >= 4);
   if (codes.length) {
     const z = el("div", "bf-codes");
     codes.forEach(code => { const b = el("button", "bf-code", code); b.type = "button"; b.title = "Copier le code";
