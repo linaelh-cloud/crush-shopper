@@ -1,17 +1,7 @@
 {
-  "le": "2026-11-19T07:02:44Z",
-  "style": "Nudes rosés-bruns et veste sport chic dans des tons terre : du doux, du chic, du désirable.",
+  "le": "2026-11-20T01:17:56Z",
+  "style": "Nudes rosés-bruns et vestes sport chic dans des tons terre et olive : du doux, du chic, du désirable.",
   "idees": [
-    {
-      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
-      "marque": "Guerlain",
-      "nom": "Rouge G Satin",
-      "teinte_ou_couleur": "06 Le Rose Brun",
-      "lien": "https://www.nocibe.fr/fr/p/3001043139",
-      "prix": "43 €",
-      "genre": "même style",
-      "pourquoi": "Satin rosé-brun très proche de ta Modesty, en version luxe rechargeable."
-    },
     {
       "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
       "marque": "Charlotte Tilbury",
@@ -23,14 +13,54 @@
       "pourquoi": "Le nude rosé culte, version medium un peu plus chaude, comme Modesty."
     },
     {
-      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
-      "marque": "Dior",
-      "nom": "Rouge Dior La Recharge Satin",
-      "teinte_ou_couleur": "100 Nude Look",
-      "lien": "https://www.nocibe.fr/dior-rouge-dior-la-recharge-recharge-de-rouge-a-levres-couleur-couture-4-finis-100-nude-look-satin-s280440",
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
+      "marque": "Yves Saint Laurent",
+      "nom": "Rouge Pur Couture satin",
+      "teinte_ou_couleur": "N12 Nude Instinct",
+      "lien": "https://www.printemps.com/fr/fr/yves-saint-laurent-pur-couture-rouge-a-levres-fini-satin-n12-nude-instinct-7716430",
       "prix": "",
       "genre": "même style",
+      "pourquoi": "Satin nude chic et confortable, même esprit rosé que ta Modesty."
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
+      "marque": "Armani Beauty",
+      "nom": "Lip Power",
+      "teinte_ou_couleur": "113 Nude Pink",
+      "lien": "https://www.notino.fr/armani/beauty-lip-power-rouge-a-levres-cremeux/",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Rose nude crémeux et lumineux, très proche du rosé de Modesty."
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
+      "marque": "Clinique",
+      "nom": "Pop Longwear Lipstick",
+      "teinte_ou_couleur": "33 Mocha Pop",
+      "lien": "https://www.printemps.com/fr/fr/clinique-clinique-pop-rouge-a-levres-longue-tenue-fini-brillant-satine-et-mat-18-chili-pop-mat-8491158",
+      "prix": "",
+      "genre": "coup de cœur des filles",
+      "pourquoi": "Le Mocha Pop rosé-brun, souvent cité comme dupe de MAC."
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
+      "marque": "Dior",
+      "nom": "Rouge Dior",
+      "teinte_ou_couleur": "100 Nude Look satin",
+      "lien": "https://www.notino.fr/dior/rouge-dior-rouge-a-levres-longue-tenue-rechargeable-6966020/",
+      "prix": "42,50 €",
+      "genre": "même style",
       "pourquoi": "Nude Dior en satin, ta marque aimée, même esprit que Fleshpot."
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
+      "marque": "Armani Beauty",
+      "nom": "Lip Power Matte",
+      "teinte_ou_couleur": "111 True",
+      "lien": "https://www.notino.fr/armani/beauty-lip-powe-matte-rouge-a-levres-mat/",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Nude chaud et élégant, dans la famille de Fleshpot."
     },
     {
       "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
@@ -40,7 +70,57 @@
       "lien": "https://www.maccosmetics.fr/product/m-a-cximal-rouge-a-levres-mat-soyeux",
       "prix": "29 €",
       "genre": "coup de cœur des filles",
-      "pourquoi": "Beige chaud culte chez MAC, à porter comme ta Fleshpot en rupture."
+      "pourquoi": "Beige chaud culte chez MAC, à porter comme ta Fleshpot."
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
+      "marque": "Clinique",
+      "nom": "Pop Longwear Lipstick Shine",
+      "teinte_ou_couleur": "01 Nude Pop",
+      "lien": "https://www.notino.fr/clinique/pop-longwear-lipstick-shine-rouge-a-levres-brillant/",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Nude chair lumineux et confortable, version brillante de Fleshpot."
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
+      "marque": "Bobbi Brown",
+      "nom": "Art Stick",
+      "teinte_ou_couleur": "Rich Nude",
+      "lien": "https://www.lookfantastic.fr/p/bobbi-brown-art-stick-various-shades/11519306/",
+      "prix": "",
+      "genre": "tendance",
+      "pourquoi": "Crayon-rouge nude chaud, effet lèvres naturelles comme Fleshpot."
+    },
+    {
+      "pour_url": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork",
+      "marque": "MAC Cosmetics",
+      "nom": "Crayon à Lèvres",
+      "teinte_ou_couleur": "Chestnut",
+      "lien": "https://www.maccosmetics.fr/product/crayon-a-levres?shade=Chestnut",
+      "prix": "26 €",
+      "genre": "même style",
+      "pourquoi": "Le brun profond voisin de Cork, disponible quand Cork est en rupture."
+    },
+    {
+      "pour_url": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork",
+      "marque": "Bobbi Brown",
+      "nom": "Art Stick",
+      "teinte_ou_couleur": "Rose Brown",
+      "lien": "https://www.lookfantastic.fr/p/bobbi-brown-art-stick-various-shades/11519306/",
+      "prix": "",
+      "genre": "tendance",
+      "pourquoi": "Brun rosé tendance 2026, à porter comme ton Cork."
+    },
+    {
+      "pour_url": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork",
+      "marque": "Yves Saint Laurent",
+      "nom": "Rouge Volupté Shine",
+      "teinte_ou_couleur": "122 Brun Sulpice",
+      "lien": "https://www.lookfantastic.fr/p/yves-saint-laurent-rouge-volupte-shine-lipstick-3.2g-various-shades/12771547/",
+      "prix": "",
+      "genre": "tendance",
+      "pourquoi": "Le brun chic de la saison, même famille chaude que Cork."
     },
     {
       "pour_url": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
@@ -48,9 +128,40 @@
       "nom": "Pace Breaker veste de survêtement",
       "teinte_ou_couleur": "Sassy Sage / Olive",
       "lien": "https://www.zalando.fr/lululemon-pace-breaker-veste-de-survetement-sassy-sage-lls42f01h-n11.html",
-      "prix": "168 €",
+      "prix": "",
       "genre": "même style",
-      "pourquoi": "Veste zippée sport légère, ta marque aimée, dans un vert olive."
+      "pourquoi": "Veste lululemon dans un vert sauge-olive, ta marque aimée."
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
+      "marque": "Nike",
+      "nom": "Sportswear veste coupe-vent",
+      "teinte_ou_couleur": "Light army / Medium olive",
+      "lien": "https://www.zalando.fr/nike-sportswear-veste-legere-light-armymedium-oliveblack-ni122t0cb-m11.html",
+      "prix": "71,95 €",
+      "genre": "même style",
+      "pourquoi": "Même vert olive en veste zippée légère, plus accessible."
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app",
+      "marque": "lululemon",
+      "nom": "Define Cropped Nulu",
+      "teinte_ou_couleur": "Noir",
+      "lien": "https://www.zalando.fr/lululemon-sweat-zippe-black-lls41g00r-q11.html",
+      "prix": "128 €",
+      "genre": "dupe",
+      "pourquoi": "Le dupe cropped zippé le plus cité de la Scholar Knit."
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app",
+      "marque": "Alo Yoga",
+      "nom": "Airbrush Corset Full Zip Jacket",
+      "teinte_ou_couleur": "Noir",
+      "lien": "https://www.aloyoga.com/fr-fr/products/w4529r-airbrush-winter-warm-corset-full-zip-jacket-black",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Autre veste zippée cropped Alo, taille marquée comme ta Scholar."
     }
-  ]
+  ],
+  "secours": []
 }
