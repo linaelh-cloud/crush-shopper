@@ -37,7 +37,7 @@
   },
   "galeries lafayette": {
     "marque": "Galeries Lafayette",
-    "offre": "Black Friday dès le 23 novembre, sélection de marques (Maje, Isabel Marant…)",
+    "offre": "Black Friday dès le 23 novembre sur une sélection de marques (Maje, Sandro, Zadig & Voltaire…)",
     "source": "https://www.galerieslafayette.com/t/black-friday/fm/le-tanneur",
     "type": "site de la marque",
     "en_cours": false,
@@ -59,5 +59,17 @@
     "vu_le": "2026-11-20",
     "nouveau_le": "2026-11-20"
   },
-  "_le": "2026-11-20T12:20:18Z"
+  "sephora": {
+    "marque": "Sephora",
+    "offre": "-25 % sur le maquillage hors Point Rouge, du 16 au 29 novembre",
+    "source": "https://www.sephora.fr/black-friday-maquillage-25/",
+    "type": "site de la marque",
+    "en_cours": true,
+    "debut": "2026-11-16",
+    "fin": "2026-11-29",
+    "code": "",
+    "vu_le": "2026-11-20",
+    "nouveau_le": "2026-11-20"
+  },
+  "_le": "2026-11-20T17:12:18Z"
 }

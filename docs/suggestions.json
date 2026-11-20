@@ -17,16 +17,16 @@
       "statut": "dispo"
     },
     {
-      "nom": "Lip Power - 113 Nude Pink",
-      "lien": "https://www.notino.fr/armani/beauty-lip-power-rouge-a-levres-cremeux/",
-      "photo": "https://cdn.notinoimg.com/order_2k/armani/3614272649415_01-o/lip-power___241003.jpg",
-      "prix": "36 €",
-      "marque": "Armani Beauty",
+      "nom": "Rouge Dior - 100 Nude Look satin",
+      "lien": "https://www.notino.fr/dior/rouge-dior-rouge-a-levres-longue-tenue-rechargeable-6966020/",
+      "photo": "https://cdn.notinoimg.com/order_2k/dior/3348901658775_01/rouge-dior___231219.jpg",
+      "prix": "57,50 €",
+      "marque": "Dior",
       "boutique": "notino.fr",
       "genre": "même style",
-      "raison": "Rose nude crémeux et lumineux, très proche du rosé de Modesty.",
+      "raison": "Nude Dior en satin, ta marque aimée, même esprit que Fleshpot.",
       "choisi_par_ia": true,
-      "pour": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
+      "pour": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
       "categorie": "Beauté",
       "statut": "dispo"
     },
@@ -169,9 +169,23 @@
       "pour": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork",
       "categorie": "Beauté",
       "statut": "dispo"
+    },
+    {
+      "nom": "Veste légère à capuche zippée - Moss green (vert olive)",
+      "lien": "https://www.zalando.fr/marikoo-erdbeere-blouson-moss-green-m5m21g009-m12.html",
+      "photo": "https://img01.ztat.net/article/spp-media-p1/a1b224f07d694bbb8411fbde6f01dfbb/b6d5eca59a464a93a997a1566673aa0e.jpg?imwidth=200&filter=packshot",
+      "prix": "",
+      "marque": "Marikoo",
+      "boutique": "zalando.fr",
+      "genre": "dupe",
+      "raison": "Veste légère zippée vert olive, l'allure de ta veste Alo en petit prix.",
+      "choisi_par_ia": true,
+      "pour": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
+      "categorie": "Mode",
+      "statut": "dispo"
     }
   ],
   "empreinte": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork#Cork|https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711#Taille L|https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app#S|https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot#Teinte Fleshpot|https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty#Teinte Modesty|Alo,Lululemon,Dior",
-  "styliste_le": "2026-11-20T12:20:18Z",
-  "mise_a_jour": "20/11/2026 12:22 UTC"
+  "styliste_le": "2026-11-20T17:12:18Z",
+  "mise_a_jour": "20/11/2026 17:14 UTC"
 }
