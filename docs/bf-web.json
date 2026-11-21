@@ -61,15 +61,15 @@
   },
   "sephora": {
     "marque": "Sephora",
-    "offre": "-25 % sur le maquillage hors Point Rouge, du 16 au 29 novembre",
+    "offre": "-25 % sur tout le maquillage hors Point Rouge",
     "source": "https://www.sephora.fr/black-friday-maquillage-25/",
     "type": "site de la marque",
     "en_cours": true,
     "debut": "2026-11-16",
     "fin": "2026-11-29",
     "code": "",
-    "vu_le": "2026-11-20",
-    "nouveau_le": "2026-11-20"
+    "vu_le": "2026-11-21",
+    "nouveau_le": "2026-11-21"
   },
   "kérastase": {
     "marque": "Kérastase",
@@ -83,5 +83,17 @@
     "vu_le": "2026-11-21",
     "nouveau_le": "2026-11-21"
   },
-  "_le": "2026-11-21T07:11:43Z"
+  "charlotte tilbury": {
+    "marque": "Charlotte Tilbury",
+    "offre": "Jusqu'à -30 % sur une sélection Black Friday",
+    "source": "https://charlottetilbury.com/fr/secrets/secrets-maquillage-offres-beaute-black-friday",
+    "type": "site de la marque",
+    "en_cours": false,
+    "debut": "",
+    "fin": "",
+    "code": "",
+    "vu_le": "2026-11-21",
+    "nouveau_le": "2026-11-21"
+  },
+  "_le": "2026-11-21T17:11:36Z"
 }
