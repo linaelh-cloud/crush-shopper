@@ -71,5 +71,17 @@
     "vu_le": "2026-11-20",
     "nouveau_le": "2026-11-20"
   },
-  "_le": "2026-11-20T17:12:18Z"
+  "kérastase": {
+    "marque": "Kérastase",
+    "offre": "-25 % sur l'huile Gloss Absolu",
+    "source": "https://www.sephora.fr/black-friday-soin-cheveux-all/",
+    "type": "autre",
+    "en_cours": true,
+    "debut": "2026-11-16",
+    "fin": "2026-11-30",
+    "code": "",
+    "vu_le": "2026-11-21",
+    "nouveau_le": "2026-11-21"
+  },
+  "_le": "2026-11-21T07:11:43Z"
 }
