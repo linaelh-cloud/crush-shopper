@@ -68,32 +68,80 @@
     "debut": "2026-11-16",
     "fin": "2026-11-29",
     "code": "",
-    "vu_le": "2026-11-21",
+    "vu_le": "2026-11-22",
     "nouveau_le": "2026-11-21"
   },
   "kérastase": {
     "marque": "Kérastase",
-    "offre": "-25 % sur l'huile Gloss Absolu",
+    "offre": "-25 % sur une sélection (Sérum de Nuit, Elixir Ultime, Masquintense, huile Gloss Absolu)",
     "source": "https://www.sephora.fr/black-friday-soin-cheveux-all/",
-    "type": "autre",
+    "type": "site de la marque",
     "en_cours": true,
     "debut": "2026-11-16",
     "fin": "2026-11-30",
     "code": "",
-    "vu_le": "2026-11-21",
-    "nouveau_le": "2026-11-21"
+    "vu_le": "2026-11-22",
+    "nouveau_le": "2026-11-22"
   },
   "charlotte tilbury": {
     "marque": "Charlotte Tilbury",
-    "offre": "Jusqu'à -30 % sur une sélection Black Friday",
-    "source": "https://charlottetilbury.com/fr/secrets/secrets-maquillage-offres-beaute-black-friday",
+    "offre": "-25 % sur tout le site (bandeau du site)",
+    "source": "https://www.charlottetilbury.com/fr",
     "type": "site de la marque",
-    "en_cours": false,
+    "en_cours": true,
     "debut": "",
     "fin": "",
     "code": "",
-    "vu_le": "2026-11-21",
-    "nouveau_le": "2026-11-21"
+    "vu_le": "2026-11-22",
+    "nouveau_le": "2026-11-22"
   },
-  "_le": "2026-11-21T17:11:36Z"
+  "benefit": {
+    "marque": "Benefit",
+    "offre": "-25 % sur une sélection de produits et coffrets maquillage",
+    "source": "https://www.sephora.fr/black-friday-maquillage-25/",
+    "type": "site de la marque",
+    "en_cours": true,
+    "debut": "2026-11-16",
+    "fin": "2026-11-29",
+    "code": "",
+    "vu_le": "2026-11-22",
+    "nouveau_le": "2026-11-22"
+  },
+  "dyson": {
+    "marque": "Dyson",
+    "offre": "Jusqu'à -30 % sur une sélection (chez Sephora)",
+    "source": "https://www.sephora.fr/black-friday-all/?listview=true",
+    "type": "site de la marque",
+    "en_cours": true,
+    "debut": "2026-11-16",
+    "fin": "2026-11-30",
+    "code": "",
+    "vu_le": "2026-11-22",
+    "nouveau_le": "2026-11-22"
+  },
+  "adidas": {
+    "marque": "adidas",
+    "offre": "Jusqu'à -50 % pendant le Black Friday",
+    "source": "https://21run.com/blog/fr/black-friday",
+    "type": "site de bons plans",
+    "en_cours": false,
+    "debut": "2026-11-19",
+    "fin": "2026-11-30",
+    "code": "",
+    "vu_le": "2026-11-22",
+    "nouveau_le": "2026-11-22"
+  },
+  "histoire d'or": {
+    "marque": "Histoire d'Or",
+    "offre": "Jusqu'à -50 % femme, homme et montres + livraison offerte",
+    "source": "https://www.histoiredor.com/fr_FR/c/black-friday/",
+    "type": "site de la marque",
+    "en_cours": true,
+    "debut": "",
+    "fin": "",
+    "code": "",
+    "vu_le": "2026-11-22",
+    "nouveau_le": "2026-11-22"
+  },
+  "_le": "2026-11-22T07:10:36Z"
 }
