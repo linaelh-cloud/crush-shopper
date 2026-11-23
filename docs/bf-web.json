@@ -61,7 +61,7 @@
   },
   "sephora": {
     "marque": "Sephora",
-    "offre": "-25 % sur tout le maquillage hors Point Rouge",
+    "offre": "-25 % sur tout le maquillage (hors Point Rouge)",
     "source": "https://www.sephora.fr/black-friday-maquillage-25/",
     "type": "site de la marque",
     "en_cours": true,
@@ -69,7 +69,7 @@
     "fin": "2026-11-29",
     "code": "",
     "vu_le": "2026-11-23",
-    "nouveau_le": "2026-11-21"
+    "nouveau_le": "2026-11-23"
   },
   "kérastase": {
     "marque": "Kérastase",
@@ -143,5 +143,5 @@
     "vu_le": "2026-11-23",
     "nouveau_le": "2026-11-22"
   },
-  "_le": "2026-11-23T07:14:19Z"
+  "_le": "2026-11-23T17:12:51Z"
 }
