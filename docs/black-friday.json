@@ -45,7 +45,7 @@
       "lien": "https://www.benefitcosmetics.com/fr-fr",
       "site": "benefitcosmetics.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:12 UTC",
+        "le": "23/11/2026 12:57 UTC",
         "phrase": "Jusqu'à -30% sur TOUT !",
         "jusqua": "-30 %",
         "reductions": [
@@ -56,7 +56,9 @@
         "codes": [
           "CADEAUX"
         ],
-        "parle_du_black_friday": true
+        "parle_du_black_friday": true,
+        "bloque": true,
+        "derniere_bonne_lecture": "23/11/2026 07:12 UTC"
       },
       "dates_annonce": null,
       "etat": "en cours",
@@ -73,7 +75,7 @@
       "lien": "https://www.charlottetilbury.com/fr",
       "site": "charlottetilbury.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:12 UTC",
+        "le": "23/11/2026 12:57 UTC",
         "phrase": "-25 % sur tout !*",
         "jusqua": "-25 %",
         "reductions": [
@@ -100,8 +102,12 @@
       "lien": "https://fentybeauty.com",
       "site": "fentybeauty.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:12 UTC",
-        "bloque": true
+        "le": "23/11/2026 12:57 UTC",
+        "phrase": "",
+        "jusqua": "",
+        "reductions": [],
+        "codes": [],
+        "parle_du_black_friday": true
       },
       "dates_annonce": null,
       "etat": "à venir"
@@ -117,8 +123,12 @@
       "lien": "https://hudabeauty.com",
       "site": "hudabeauty.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:12 UTC",
-        "bloque": true
+        "le": "23/11/2026 12:58 UTC",
+        "phrase": "",
+        "jusqua": "",
+        "reductions": [],
+        "codes": [],
+        "parle_du_black_friday": false
       },
       "dates_annonce": null,
       "etat": "à venir"
@@ -134,7 +144,7 @@
       "lien": "https://www.kikocosmetics.com/fr-fr/",
       "site": "kikocosmetics.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:12 UTC",
+        "le": "23/11/2026 12:58 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -155,14 +165,12 @@
       "lien": "https://kyliecosmetics.com",
       "site": "kyliecosmetics.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:12 UTC",
+        "le": "23/11/2026 12:58 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
         "codes": [],
-        "parle_du_black_friday": false,
-        "bloque": true,
-        "derniere_bonne_lecture": "22/11/2026 12:40 UTC"
+        "parle_du_black_friday": false
       },
       "dates_annonce": null,
       "etat": "à venir"
@@ -179,7 +187,7 @@
       "site": "maccosmetics.fr",
       "dans_ma_wishlist": true,
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:13 UTC",
+        "le": "23/11/2026 12:58 UTC",
         "phrase": "-40 % sur tout le site",
         "jusqua": "",
         "reductions": [
@@ -203,7 +211,7 @@
       "lien": "https://www.nyxcosmetics.fr",
       "site": "nyxcosmetics.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:13 UTC",
+        "le": "23/11/2026 12:58 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -220,8 +228,12 @@
       "lien": "https://www.rarebeauty.com",
       "site": "rarebeauty.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:13 UTC",
-        "bloque": true
+        "le": "23/11/2026 12:58 UTC",
+        "phrase": "",
+        "jusqua": "",
+        "reductions": [],
+        "codes": [],
+        "parle_du_black_friday": true
       },
       "dates_annonce": null,
       "etat": "à venir"
@@ -237,7 +249,7 @@
       "lien": "https://www.sephora.fr/black-friday/",
       "site": "sephora.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:13 UTC",
+        "le": "23/11/2026 12:58 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -254,7 +266,7 @@
       "lien": "https://www.toofaced.com",
       "site": "toofaced.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:13 UTC",
+        "le": "23/11/2026 12:58 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -275,7 +287,7 @@
       "lien": "https://www.douglas.fr",
       "site": "douglas.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:13 UTC",
+        "le": "23/11/2026 12:58 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -292,25 +304,21 @@
       "lien": "https://www.flaconi.fr",
       "site": "flaconi.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:13 UTC",
-        "phrase": "Jusqu'à -12 % EXTRA sur vos favoris beauté",
-        "jusqua": "-12 %",
+        "le": "23/11/2026 12:59 UTC",
+        "phrase": "Jusqu'à -13 % sur votre catégorie préférée",
+        "jusqua": "-13 %",
         "reductions": [
           "-49 %",
-          "-35 %",
-          "-30 %",
-          "-44 %"
+          "-42 %",
+          "-38 %",
+          "-32 %"
         ],
-        "codes": [
-          "Glisser"
-        ],
-        "parle_du_black_friday": true,
-        "bloque": true,
-        "derniere_bonne_lecture": "22/11/2026 12:41 UTC"
+        "codes": [],
+        "parle_du_black_friday": true
       },
       "dates_annonce": null,
       "etat": "en cours",
-      "nouveau_le": "2026-11-22"
+      "nouveau_le": "2026-11-23"
     },
     {
       "marque": "Incenza",
@@ -323,7 +331,7 @@
       "lien": "https://www.incenza.com",
       "site": "incenza.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:13 UTC",
+        "le": "23/11/2026 12:59 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -344,7 +352,7 @@
       "lien": "https://www.marionnaud.fr",
       "site": "marionnaud.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:14 UTC",
+        "le": "23/11/2026 12:59 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -361,7 +369,7 @@
       "lien": "https://www.nocibe.fr/fr/c/black-friday/28",
       "site": "nocibe.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:14 UTC",
+        "le": "23/11/2026 12:59 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -378,8 +386,8 @@
       "lien": "https://www.notino.fr/black-friday/",
       "site": "notino.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:14 UTC",
-        "phrase": "Vendredi Noir : jusqu’à -35 %",
+        "le": "23/11/2026 12:59 UTC",
+        "phrase": "Black Friday : jusqu’à -35 %",
         "jusqua": "-35 %",
         "reductions": [
           "-35 %"
@@ -404,7 +412,7 @@
       "lien": "https://www.passionbeaute.fr/black-friday.html",
       "site": "passionbeaute.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:14 UTC",
+        "le": "23/11/2026 12:59 UTC",
         "phrase": "Black Friday 2026 : jusqu'à -70% sur les parfums, soins et maquillage",
         "jusqua": "-70 %",
         "reductions": [
@@ -433,17 +441,17 @@
       "lien": "https://fr.primor.eu/fr_fr/c/black-friday",
       "site": "fr.primor.eu",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:14 UTC",
+        "le": "23/11/2026 12:59 UTC",
         "phrase": "",
         "jusqua": "-86 %",
         "reductions": [
           "-45 %",
-          "-12 %",
           "-54 %",
-          "-43 %"
+          "-43 %",
+          "-55 %"
         ],
         "codes": [
-          "BLACK12"
+          "BLACK10"
         ],
         "parle_du_black_friday": true
       },
@@ -462,7 +470,7 @@
       "lien": "https://fr.caudalie.com",
       "site": "fr.caudalie.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:14 UTC",
+        "le": "23/11/2026 12:59 UTC",
         "phrase": "Jusqu'à -50% sur une sélection de produits",
         "jusqua": "-50 %",
         "reductions": [
@@ -489,7 +497,7 @@
       "lien": "https://www.clarins.fr",
       "site": "clarins.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:14 UTC",
+        "le": "23/11/2026 13:00 UTC",
         "phrase": "Profitez de -30% pour tout achat* sur le site !",
         "jusqua": "",
         "reductions": [
@@ -514,7 +522,7 @@
       "lien": "https://www.drunkelephant.fr",
       "site": "drunkelephant.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:14 UTC",
+        "le": "23/11/2026 13:00 UTC",
         "phrase": "-25% sur tout ce que vous aimez. Et jusqu'à -50% sur la sélection Last Chance.*",
         "jusqua": "-50 %",
         "reductions": [
@@ -540,7 +548,7 @@
       "lien": "https://www.esteelauder.fr",
       "site": "esteelauder.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
+        "le": "23/11/2026 13:00 UTC",
         "phrase": "-35% sur tout le site et recevez un coffret cadeau d’une",
         "jusqua": "",
         "reductions": [
@@ -564,14 +572,12 @@
       "lien": "https://www.glossier.com",
       "site": "glossier.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
+        "le": "23/11/2026 13:00 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
         "codes": [],
-        "parle_du_black_friday": true,
-        "bloque": true,
-        "derniere_bonne_lecture": "22/11/2026 12:43 UTC"
+        "parle_du_black_friday": true
       },
       "dates_annonce": null,
       "etat": "à venir"
@@ -587,7 +593,7 @@
       "lien": "https://www.laroche-posay.fr",
       "site": "laroche-posay.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
+        "le": "23/11/2026 13:00 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -604,20 +610,20 @@
       "lien": "https://www.lookfantastic.fr",
       "site": "lookfantastic.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
+        "le": "23/11/2026 13:00 UTC",
         "phrase": "Jusq'à -30% sur la marque, y compris les sérums best-sellers.",
         "jusqua": "-30 %",
         "reductions": [
-          "-30 %"
+          "-30 %",
+          "-25 %",
+          "-40 %"
         ],
-        "codes": [
-          "DIMANCHE"
-        ],
+        "codes": [],
         "parle_du_black_friday": true
       },
       "dates_annonce": null,
       "etat": "en cours",
-      "nouveau_le": "2026-11-22"
+      "nouveau_le": "2026-11-23"
     },
     {
       "marque": "Nuxe",
@@ -630,12 +636,21 @@
       "lien": "https://fr.nuxe.com",
       "site": "fr.nuxe.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
-        "bloque": true
+        "le": "23/11/2026 13:00 UTC",
+        "phrase": "Black Friday : -25% sur tout le site*",
+        "jusqua": "",
+        "reductions": [
+          "-25 %",
+          "-20 %",
+          "-15 %",
+          "-10 %"
+        ],
+        "codes": [],
+        "parle_du_black_friday": true
       },
       "dates_annonce": null,
-      "etat": "à venir",
-      "nouveau_le": "2026-11-20"
+      "etat": "en cours",
+      "nouveau_le": "2026-11-23"
     },
     {
       "marque": "Rhode",
@@ -648,8 +663,12 @@
       "lien": "https://www.rhodeskin.com",
       "site": "rhodeskin.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
-        "bloque": true
+        "le": "23/11/2026 13:00 UTC",
+        "phrase": "",
+        "jusqua": "",
+        "reductions": [],
+        "codes": [],
+        "parle_du_black_friday": false
       },
       "dates_annonce": null,
       "etat": "à venir"
@@ -665,8 +684,12 @@
       "lien": "https://soldejaneiro.com",
       "site": "soldejaneiro.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
-        "bloque": true
+        "le": "23/11/2026 13:00 UTC",
+        "phrase": "",
+        "jusqua": "",
+        "reductions": [],
+        "codes": [],
+        "parle_du_black_friday": true
       },
       "dates_annonce": null,
       "etat": "à venir"
@@ -682,7 +705,7 @@
       "lien": "https://www.typology.com",
       "site": "typology.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
+        "le": "23/11/2026 13:01 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -703,14 +726,14 @@
       "lien": "https://www.yves-rocher.fr/black-friday/c/black-friday",
       "site": "yves-rocher.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
+        "le": "23/11/2026 13:01 UTC",
         "phrase": "Jusqu'à -50% sur une sélection*",
         "jusqua": "-50 %",
         "reductions": [
           "-50 %",
           "-25 %",
           "-42 %",
-          "-39 %"
+          "-33 %"
         ],
         "codes": [],
         "parle_du_black_friday": true
@@ -730,7 +753,7 @@
       "lien": "https://www.dyson.fr/discover/actualites/dernieres-nouvelles/dates-black-friday",
       "site": "dyson.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:15 UTC",
+        "le": "23/11/2026 13:01 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -747,7 +770,7 @@
       "lien": "https://www.ghdhair.com/fr",
       "site": "ghdhair.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:16 UTC",
+        "le": "23/11/2026 13:01 UTC",
         "phrase": "-30% sur les brosses soufflantes",
         "jusqua": "-30 %",
         "reductions": [
@@ -774,7 +797,7 @@
       "lien": "https://www.kerastase.fr",
       "site": "kerastase.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:16 UTC",
+        "le": "23/11/2026 13:01 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -791,12 +814,14 @@
       "lien": "https://olaplex.fr",
       "site": "olaplex.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:16 UTC",
+        "le": "23/11/2026 13:01 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
         "codes": [],
-        "parle_du_black_friday": false
+        "parle_du_black_friday": false,
+        "bloque": true,
+        "derniere_bonne_lecture": "23/11/2026 07:16 UTC"
       },
       "dates_annonce": null,
       "etat": "à venir"
@@ -812,7 +837,7 @@
       "lien": "https://www.calzedonia.com/fr/",
       "site": "calzedonia.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:16 UTC",
+        "le": "23/11/2026 13:01 UTC",
         "phrase": "Black friday : tout à -20%",
         "jusqua": "",
         "reductions": [
@@ -837,7 +862,7 @@
       "lien": "https://www.darjeeling.fr/categorie/offre/black-friday",
       "site": "darjeeling.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:16 UTC",
+        "le": "23/11/2026 13:01 UTC",
         "phrase": "BLACK FRIDAY: Jusqu'à -50% dès 2 articles",
         "jusqua": "-50 %",
         "reductions": [
@@ -864,7 +889,7 @@
       "lien": "https://www.etam.com",
       "site": "etam.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:16 UTC",
+        "le": "23/11/2026 13:01 UTC",
         "phrase": "la 3ème à -50%",
         "jusqua": "",
         "reductions": [
@@ -888,7 +913,7 @@
       "lien": "https://www.intimissimi.com/fr/",
       "site": "intimissimi.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:16 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -909,7 +934,7 @@
       "lien": "https://www.undiz.com",
       "site": "undiz.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:16 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -935,7 +960,7 @@
       "lien": "https://www.victoriassecret.com/fr/",
       "site": "victoriassecret.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:17 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -956,7 +981,7 @@
       "lien": "https://womensecret.com/fr/fr",
       "site": "womensecret.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:17 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "Hasta -50%",
         "jusqua": "",
         "reductions": [
@@ -985,7 +1010,7 @@
       "lien": "https://www.agatha.fr",
       "site": "agatha.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:17 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1006,7 +1031,7 @@
       "lien": "https://www.analuisa.com",
       "site": "analuisa.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:17 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1027,7 +1052,7 @@
       "lien": "https://fr.apm.mc",
       "site": "fr.apm.mc",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:17 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1054,7 +1079,7 @@
       "lien": "https://www.histoiredor.com",
       "site": "histoiredor.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:17 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1075,7 +1100,7 @@
       "lien": "https://mejuri.com",
       "site": "mejuri.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:17 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1096,11 +1121,12 @@
       "lien": "https://fr.pandora.net",
       "site": "fr.pandora.net",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:17 UTC",
+        "le": "23/11/2026 13:02 UTC",
         "phrase": "Black friday jusqu’à -30%*",
         "jusqua": "-30 %",
         "reductions": [
-          "-30 %"
+          "-30 %",
+          "-10 %"
         ],
         "codes": [],
         "parle_du_black_friday": true
@@ -1120,7 +1146,7 @@
       "lien": "https://www.pdpaola.com/fr",
       "site": "pdpaola.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:17 UTC",
+        "le": "23/11/2026 13:03 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1141,7 +1167,7 @@
       "lien": "https://www.swarovski.com/fr-FR/",
       "site": "swarovski.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:18 UTC",
+        "le": "23/11/2026 13:03 UTC",
         "phrase": "Jusqu’à -30 % sur une sélection de pièces*",
         "jusqua": "-30 %",
         "reductions": [
@@ -1165,7 +1191,7 @@
       "lien": "https://fr.coach.com",
       "site": "fr.coach.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:18 UTC",
+        "le": "23/11/2026 13:03 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1186,7 +1212,7 @@
       "lien": "https://www.longchamp.com/fr/fr/",
       "site": "longchamp.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:18 UTC",
+        "le": "23/11/2026 13:03 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1207,7 +1233,7 @@
       "lien": "https://www.michaelkors.fr",
       "site": "michaelkors.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:18 UTC",
+        "le": "23/11/2026 13:03 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1224,7 +1250,7 @@
       "lien": "https://www.polene-paris.com/fr",
       "site": "polene-paris.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:18 UTC",
+        "le": "23/11/2026 13:03 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1241,7 +1267,7 @@
       "lien": "https://www.aboutyou.fr",
       "site": "aboutyou.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:18 UTC",
+        "le": "23/11/2026 13:03 UTC",
         "phrase": "Extra : Jusqu'à 70% de réduction sur les Black Deals !",
         "jusqua": "-70 %",
         "reductions": [
@@ -1266,7 +1292,7 @@
       "site": "aloyoga.com",
       "dans_ma_wishlist": true,
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:18 UTC",
+        "le": "23/11/2026 13:03 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1287,7 +1313,7 @@
       "lien": "https://www.asos.com/fr/",
       "site": "asos.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:18 UTC",
+        "le": "23/11/2026 13:03 UTC",
         "phrase": "-10% pour les étudiants",
         "jusqua": "",
         "reductions": [
@@ -1314,7 +1340,7 @@
       "lien": "https://www.bershka.com/fr/",
       "site": "bershka.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:19 UTC",
+        "le": "23/11/2026 13:04 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1335,7 +1361,7 @@
       "lien": "https://www2.hm.com/fr_fr/",
       "site": "www2.hm.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:19 UTC",
+        "le": "23/11/2026 13:04 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1352,7 +1378,7 @@
       "lien": "https://shop.mango.com/fr",
       "site": "shop.mango.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:19 UTC",
+        "le": "23/11/2026 13:04 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1369,7 +1395,7 @@
       "lien": "https://www.massimodutti.com/fr/",
       "site": "massimodutti.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:19 UTC",
+        "le": "23/11/2026 13:04 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1390,7 +1416,7 @@
       "lien": "https://www.pullandbear.com/fr/",
       "site": "pullandbear.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:19 UTC",
+        "le": "23/11/2026 13:04 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1411,12 +1437,21 @@
       "lien": "https://www.rouje.com",
       "site": "rouje.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:19 UTC",
-        "bloque": true
+        "le": "23/11/2026 13:04 UTC",
+        "phrase": "Rouje friday : jusqu'à -40%",
+        "jusqua": "-40 %",
+        "reductions": [
+          "-20 %",
+          "-30 %",
+          "-40 %",
+          "-15 %"
+        ],
+        "codes": [],
+        "parle_du_black_friday": false
       },
       "dates_annonce": null,
       "etat": "à venir",
-      "nouveau_le": "2026-11-21"
+      "nouveau_le": "2026-11-23"
     },
     {
       "marque": "Shein",
@@ -1429,7 +1464,7 @@
       "lien": "https://fr.shein.com",
       "site": "fr.shein.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:19 UTC",
+        "le": "23/11/2026 13:04 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1450,7 +1485,7 @@
       "lien": "https://www.stradivarius.com/fr/",
       "site": "stradivarius.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:19 UTC",
+        "le": "23/11/2026 13:04 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1471,7 +1506,7 @@
       "lien": "https://www.sezane.com/fr",
       "site": "sezane.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:19 UTC",
+        "le": "23/11/2026 13:04 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1488,7 +1523,7 @@
       "lien": "https://www.uniqlo.com/fr/fr/",
       "site": "uniqlo.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:20 UTC",
+        "le": "23/11/2026 13:05 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1505,14 +1540,14 @@
       "lien": "https://www.zalando.fr/black-friday/",
       "site": "zalando.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:20 UTC",
+        "le": "23/11/2026 13:05 UTC",
         "phrase": "🛍️✨ La semaine du BLACK FRIDAY jusqu'à -70%* : NOUVELLE OFFRE, nouveaux trésors 👉",
         "jusqua": "-70 %",
         "reductions": [
-          "-45 %",
           "-20 %",
-          "-35 %",
-          "-25 %"
+          "-25 %",
+          "-45 %",
+          "-35 %"
         ],
         "codes": [],
         "parle_du_black_friday": true
@@ -1532,7 +1567,7 @@
       "lien": "https://www.zara.com/fr/",
       "site": "zara.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:20 UTC",
+        "le": "23/11/2026 13:05 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1553,7 +1588,7 @@
       "lien": "https://www.adidas.fr",
       "site": "adidas.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:20 UTC",
+        "le": "23/11/2026 13:05 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1570,14 +1605,14 @@
       "lien": "https://www.courir.com/fr/c/sneakers-friday/",
       "site": "courir.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:20 UTC",
+        "le": "23/11/2026 13:05 UTC",
         "phrase": "Jusqu'à -31%",
         "jusqua": "-31 %",
         "reductions": [
+          "-25 %",
           "-29 %",
           "-39 %",
-          "-25 %",
-          "-44 %"
+          "-31 %"
         ],
         "codes": [],
         "parle_du_black_friday": true
@@ -1597,7 +1632,7 @@
       "lien": "https://eu.gymshark.com",
       "site": "eu.gymshark.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:20 UTC",
+        "le": "23/11/2026 13:05 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1618,15 +1653,16 @@
       "lien": "https://www.lululemon.fr/fr-fr/c/black-friday",
       "site": "lululemon.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:20 UTC",
+        "le": "23/11/2026 13:05 UTC",
         "phrase": "",
-        "jusqua": "",
+        "jusqua": "-50 %",
         "reductions": [],
         "codes": [],
         "parle_du_black_friday": true
       },
       "dates_annonce": null,
-      "etat": "à venir"
+      "etat": "en cours",
+      "nouveau_le": "2026-11-23"
     },
     {
       "marque": "Nike",
@@ -1639,7 +1675,7 @@
       "lien": "https://www.nike.com/fr/",
       "site": "nike.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:20 UTC",
+        "le": "23/11/2026 13:06 UTC",
         "phrase": "Jusqu'à -40 %",
         "jusqua": "-40 %",
         "reductions": [
@@ -1663,7 +1699,7 @@
       "lien": "https://www.24s.com/fr-fr/",
       "site": "24s.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:21 UTC",
+        "le": "23/11/2026 13:06 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1685,7 +1721,7 @@
       "lien": "https://ba-sh.com/fr/",
       "site": "ba-sh.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:21 UTC",
+        "le": "23/11/2026 13:06 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1702,7 +1738,7 @@
       "lien": "https://www.bhv.fr",
       "site": "bhv.fr",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:21 UTC",
+        "le": "23/11/2026 13:06 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1719,7 +1755,7 @@
       "lien": "https://fr.claudiepierlot.com",
       "site": "fr.claudiepierlot.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:21 UTC",
+        "le": "23/11/2026 13:06 UTC",
         "phrase": "Jusqu’à -40% sur une sélection*",
         "jusqua": "-40 %",
         "reductions": [
@@ -1744,12 +1780,12 @@
       "lien": "https://www.farfetch.com/stories/black-friday",
       "site": "farfetch.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:21 UTC",
+        "le": "23/11/2026 13:06 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [
           "-20 %",
-          "-25 %",
+          "-10 %",
           "-40 %",
           "-30 %"
         ],
@@ -1771,7 +1807,7 @@
       "lien": "https://www.galerieslafayette.com",
       "site": "galerieslafayette.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:21 UTC",
+        "le": "23/11/2026 13:06 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1788,8 +1824,12 @@
       "lien": "https://www.isabelmarant.com/fr/",
       "site": "isabelmarant.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:21 UTC",
-        "bloque": true
+        "le": "23/11/2026 13:07 UTC",
+        "phrase": "",
+        "jusqua": "",
+        "reductions": [],
+        "codes": [],
+        "parle_du_black_friday": false
       },
       "dates_annonce": null,
       "etat": "à venir"
@@ -1805,7 +1845,7 @@
       "lien": "https://www.luisaviaroma.com/fr-fr/",
       "site": "luisaviaroma.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:21 UTC",
+        "le": "23/11/2026 13:07 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1822,7 +1862,7 @@
       "lien": "https://fr.maje.com",
       "site": "fr.maje.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:22 UTC",
+        "le": "23/11/2026 13:07 UTC",
         "phrase": "Jusqu'à -40% sur la sélection",
         "jusqua": "-40 %",
         "reductions": [
@@ -1848,7 +1888,7 @@
       "lien": "https://www.mytheresa.com/fr/fr/",
       "site": "mytheresa.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:22 UTC",
+        "le": "23/11/2026 13:07 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1869,7 +1909,7 @@
       "lien": "https://www.net-a-porter.com/fr-fr/",
       "site": "net-a-porter.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:22 UTC",
+        "le": "23/11/2026 13:07 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1886,7 +1926,7 @@
       "lien": "https://www.placedestendances.com",
       "site": "placedestendances.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:22 UTC",
+        "le": "23/11/2026 13:07 UTC",
         "bloque": true
       },
       "dates_annonce": null,
@@ -1903,7 +1943,7 @@
       "lien": "https://www.printemps.com",
       "site": "printemps.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:22 UTC",
+        "le": "23/11/2026 13:07 UTC",
         "phrase": "Jusqu'à -50%*",
         "jusqua": "-50 %",
         "reductions": [
@@ -1913,7 +1953,9 @@
           "-20 %"
         ],
         "codes": [],
-        "parle_du_black_friday": true
+        "parle_du_black_friday": true,
+        "bloque": true,
+        "derniere_bonne_lecture": "23/11/2026 07:22 UTC"
       },
       "dates_annonce": null,
       "etat": "en cours",
@@ -1930,7 +1972,7 @@
       "lien": "https://fr.sandro-paris.com",
       "site": "fr.sandro-paris.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:22 UTC",
+        "le": "23/11/2026 13:07 UTC",
         "phrase": "Jusqu’à -40%*",
         "jusqua": "-40 %",
         "reductions": [
@@ -1954,7 +1996,7 @@
       "lien": "https://www.ssense.com/fr-fr",
       "site": "ssense.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:22 UTC",
+        "le": "23/11/2026 13:07 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -1975,7 +2017,7 @@
       "lien": "https://www.thekooples.com/fr/",
       "site": "thekooples.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:22 UTC",
+        "le": "23/11/2026 13:07 UTC",
         "phrase": "",
         "jusqua": "-70 %",
         "reductions": [
@@ -1999,7 +2041,7 @@
       "lien": "https://www.theoutnet.com/fr-fr/",
       "site": "theoutnet.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:22 UTC",
+        "le": "23/11/2026 13:08 UTC",
         "phrase": "",
         "jusqua": "",
         "reductions": [],
@@ -2020,12 +2062,12 @@
       "lien": "https://zadig-et-voltaire.com/fr/",
       "site": "zadig-et-voltaire.com",
       "vu_sur_le_site": {
-        "le": "23/11/2026 07:23 UTC",
+        "le": "23/11/2026 13:08 UTC",
         "bloque": true
       },
       "dates_annonce": null,
       "etat": "à venir"
     }
   ],
-  "robot_passe_le": "23/11/2026 07:23 UTC"
+  "robot_passe_le": "23/11/2026 13:08 UTC"
 }
