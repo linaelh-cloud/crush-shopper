@@ -1,75 +1,15 @@
 {
-  "glossier": {
-    "marque": "Glossier",
-    "offre": "-25 % du 19 au 30 novembre",
-    "source": "https://www.newbeauty.com/view/black-friday-cyber-monday-beauty-sales-2026",
-    "type": "presse",
-    "en_cours": true,
-    "debut": "2026-11-19",
-    "fin": "2026-11-30",
-    "code": "",
-    "vu_le": "2026-11-20",
-    "nouveau_le": "2026-11-20"
-  },
-  "estée lauder": {
-    "marque": "Estée Lauder",
-    "offre": "-30 % sur une sélection de best-sellers (27 et 30 novembre)",
-    "source": "https://www.newbeauty.com/view/black-friday-cyber-monday-beauty-sales-2026",
-    "type": "presse",
-    "en_cours": false,
-    "debut": "2026-11-27",
-    "fin": "2026-11-30",
-    "code": "",
-    "vu_le": "2026-11-20",
-    "nouveau_le": "2026-11-20"
-  },
-  "lululemon": {
-    "marque": "Lululemon",
-    "offre": "Accès anticipé membres sur l'appli, déstockage « We Made Too Much » (pas de remise globale)",
-    "source": "https://pagecrawl.io/blog/lululemon-black-friday-deal-alerts.md",
-    "type": "site de bons plans",
-    "en_cours": true,
-    "debut": "2026-11-17",
-    "fin": "",
-    "code": "",
-    "vu_le": "2026-11-20",
-    "nouveau_le": "2026-11-20"
-  },
-  "galeries lafayette": {
-    "marque": "Galeries Lafayette",
-    "offre": "Black Friday dès le 23 novembre sur une sélection de marques (Maje, Sandro, Zadig & Voltaire…)",
-    "source": "https://www.galerieslafayette.com/t/black-friday/fm/le-tanneur",
-    "type": "site de la marque",
-    "en_cours": false,
-    "debut": "2026-11-23",
-    "fin": "",
-    "code": "",
-    "vu_le": "2026-11-20",
-    "nouveau_le": "2026-11-20"
-  },
-  "farfetch": {
-    "marque": "Farfetch",
-    "offre": "Jusqu'à -50 % sur une sélection + code FFX30 (offre à vérifier)",
-    "source": "https://www.fashionbeans.com/article/black-friday-offers/",
-    "type": "presse",
-    "en_cours": false,
-    "debut": "",
-    "fin": "",
-    "code": "FFX30",
-    "vu_le": "2026-11-20",
-    "nouveau_le": "2026-11-20"
-  },
   "sephora": {
     "marque": "Sephora",
-    "offre": "-25 % sur tout le maquillage (hors Point Rouge)",
+    "offre": "-25 % sur tout le maquillage hors Point Rouge",
     "source": "https://www.sephora.fr/black-friday-maquillage-25/",
     "type": "site de la marque",
     "en_cours": true,
     "debut": "2026-11-16",
     "fin": "2026-11-29",
     "code": "",
-    "vu_le": "2026-11-23",
-    "nouveau_le": "2026-11-23"
+    "vu_le": "2026-11-24",
+    "nouveau_le": "2026-11-24"
   },
   "kérastase": {
     "marque": "Kérastase",
@@ -143,5 +83,5 @@
     "vu_le": "2026-11-23",
     "nouveau_le": "2026-11-22"
   },
-  "_le": "2026-11-23T17:12:51Z"
+  "_le": "2026-11-24T17:13:01Z"
 }
