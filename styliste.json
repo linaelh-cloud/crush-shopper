@@ -1,6 +1,6 @@
 {
-  "le": "2026-11-24T07:12:07Z",
-  "style": "Tu aimes les nudes rosés satinés et le sportswear chic aux tons terre et olive, avec une coupe cropped.",
+  "le": "2026-11-24T17:13:01Z",
+  "style": "Tu aimes les nudes rosés satinés, les bruns 90s et le sportswear chic aux tons terre et olive, en coupe cropped.",
   "idees": [
     {
       "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
@@ -25,12 +25,42 @@
     {
       "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
       "marque": "Charlotte Tilbury",
+      "nom": "Matte Revolution",
+      "teinte_ou_couleur": "Pillow Talk",
+      "lien": "https://www.charlottetilbury.com/fr/product/matte-revolution-lipstick-pillowtalk",
+      "prix": "38 €",
+      "genre": "tendance",
+      "pourquoi": "Le rose nude culte, proche de ta Modesty, tenue 10 h"
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
+      "marque": "NARS",
+      "nom": "Afterglow Lip Balm",
+      "teinte_ou_couleur": "Dolce Vita",
+      "lien": "https://www.narscosmetics.fr/fr/dolce-vita-afterglow-lip-balm/0607845013563.html",
+      "prix": "35 €",
+      "genre": "même style",
+      "pourquoi": "Baume rose poudré, la version fondante de ta Modesty"
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
+      "marque": "Yves Saint Laurent",
+      "nom": "Rouge Pur Couture",
+      "teinte_ou_couleur": "N10 Nude Stiletto",
+      "lien": "https://www.notino.fr/yves-saint-laurent/rouge-pur-couture-rouge-a-levres/",
+      "prix": "",
+      "genre": "coup de cœur des filles",
+      "pourquoi": "Nude satiné chic, 16 h de tenue, même esprit que Modesty"
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Modesty",
+      "marque": "Charlotte Tilbury",
       "nom": "Pillow Talk Iconic Lip + Cheek Kit",
       "teinte_ou_couleur": "Pillow Talk Original",
       "lien": "https://www.charlottetilbury.com/fr/product/pillow-talk-lip-cheek-secrets",
       "prix": "36 €",
       "genre": "tendance",
-      "pourquoi": "Le nude-rose culte, proche de ta Modesty, avec le crayon assorti"
+      "pourquoi": "Nude-rose culte avec crayon assorti, proche de ta Modesty"
     },
     {
       "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
@@ -44,23 +74,13 @@
     },
     {
       "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
-      "marque": "Charlotte Tilbury",
-      "nom": "Mini Pillow Talk Lip Kit",
-      "teinte_ou_couleur": "Pillow Talk",
-      "lien": "https://www.charlottetilbury.com/fr/product/mini-pillow-talk-lip-kit",
-      "prix": "",
-      "genre": "tendance",
-      "pourquoi": "Rose-nude best-seller, mini format pour tester avant le grand"
-    },
-    {
-      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
       "marque": "MAC Cosmetics",
       "nom": "M·A·Cximal Sleek Satin Lipstick",
       "teinte_ou_couleur": "Creme D'Nude",
       "lien": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Creme%20D'Nude",
       "prix": "29 €",
       "genre": "même style",
-      "pourquoi": "Même formule satinée que ta Fleshpot, beige rosé encore plus doux"
+      "pourquoi": "Même formule satinée que ta Fleshpot, beige rosé plus doux"
     },
     {
       "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
@@ -70,7 +90,37 @@
       "lien": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Peachstock",
       "prix": "29 €",
       "genre": "même style",
-      "pourquoi": "Même formule que ta Fleshpot, version nude pêche plus chaude"
+      "pourquoi": "Même formule que ta Fleshpot, nude pêche un peu plus chaud"
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
+      "marque": "Charlotte Tilbury",
+      "nom": "K.I.S.S.I.N.G",
+      "teinte_ou_couleur": "Nude Kate",
+      "lien": "https://www.charlottetilbury.com/fr/product/k-i-s-s-i-n-g-nude-kate",
+      "prix": "",
+      "genre": "tendance",
+      "pourquoi": "Nude clair rosé satiné, cousin direct de ta Fleshpot"
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
+      "marque": "Yves Saint Laurent",
+      "nom": "Rouge Pur Couture",
+      "teinte_ou_couleur": "N5 Tribute Nude",
+      "lien": "https://www.notino.fr/yves-saint-laurent/rouge-pur-couture-rouge-a-levres/",
+      "prix": "",
+      "genre": "coup de cœur des filles",
+      "pourquoi": "Nude satiné beige rosé, ultra porté, même famille que Fleshpot"
+    },
+    {
+      "pour_url": "https://www.maccosmetics.fr/product/m-a-cximal-sleek-satin-lipstick?shade=Fleshpot",
+      "marque": "Dior",
+      "nom": "Rouge Dior (recharge)",
+      "teinte_ou_couleur": "100 Nude Look",
+      "lien": "https://www.dior.com/fr_fr/products/beauty-Y0996177-rouge-dior-la-recharge-recharge-de-rouge-a-levres-aux-4-finis-couture-satin-mat-metallique-nouveau-velours",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Beige doux avec une pointe de rose, ta Fleshpot en version Dior"
     },
     {
       "pour_url": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork",
@@ -93,6 +143,36 @@
       "pourquoi": "Brun rosé cannelle, plus doux que Cork pour un effet 90s"
     },
     {
+      "pour_url": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork",
+      "marque": "Dior",
+      "nom": "Rouge Dior Contour",
+      "teinte_ou_couleur": "510 Wild Brown",
+      "lien": "https://www.dior.com/fr_fr/products/beauty-Y0771350-dior-contour-crayon-contour-des-levres-sans-transfert-couleur-couture-intense-longue-tenue",
+      "prix": "",
+      "genre": "tendance",
+      "pourquoi": "Crayon brun sans transfert 8 h, ta Cork version Dior"
+    },
+    {
+      "pour_url": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork",
+      "marque": "NARS",
+      "nom": "Afterglow Lip Balm",
+      "teinte_ou_couleur": "Crush",
+      "lien": "https://www.narscosmetics.fr/fr/afterglow-lip-balm/999NAC0000069.html",
+      "prix": "",
+      "genre": "coup de cœur des filles",
+      "pourquoi": "Baume brun latte, le look 90s de Cork en version gloss"
+    },
+    {
+      "pour_url": "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork",
+      "marque": "Lisa Eldridge",
+      "nom": "Sculpt and Shade Lip Pencil",
+      "teinte_ou_couleur": "2N Medium Cork",
+      "lien": "https://www.lisaeldridge.com/products/sculpt-and-shade-lip-pencil-shade-2n",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Brun liège aux sous-tons neutres, très proche de Cork"
+    },
+    {
       "pour_url": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
       "marque": "Alo Yoga",
       "nom": "Cropped Fan Favorite Full Zip Jacket",
@@ -100,7 +180,7 @@
       "lien": "https://www.aloyoga.com/fr-fr/products/w4778r-cropped-fan-favorite-full-zip-jacket-olive-tree",
       "prix": "",
       "genre": "même style",
-      "pourquoi": "Même vert Olive Tree que ta veste, en coupe cropped, en stock"
+      "pourquoi": "Même vert Olive Tree que ta veste, en coupe cropped"
     },
     {
       "pour_url": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
@@ -111,6 +191,76 @@
       "prix": "",
       "genre": "coup de cœur des filles",
       "pourquoi": "Le hoodie oversize culte d'Alo, dans ton Olive Tree"
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
+      "marque": "Alo Yoga",
+      "nom": "Work It Bomber",
+      "teinte_ou_couleur": "Green Olive",
+      "lien": "https://www.aloyoga.com/fr-fr/products/w4689r-work-it-bomber-green-olive",
+      "prix": "",
+      "genre": "tendance",
+      "pourquoi": "Bomber oversize vert olive, à porter zippé ou épaules dégagées"
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
+      "marque": "Alo Yoga",
+      "nom": "Cropped AloBreezy Full-Zip Hoodie",
+      "teinte_ou_couleur": "Spruce Green",
+      "lien": "https://www.aloyoga.com/fr-fr/products/w3923r-cropped-breezy-full-zip-hoodie-spruce-green",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Zip cropped dans un vert profond, même esprit sportswear chic"
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
+      "marque": "Alo Yoga",
+      "nom": "Performance On-The-Go Jacket",
+      "teinte_ou_couleur": "Green Olive",
+      "lien": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-green-olive",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Ta veste en Green Olive, plus facile à trouver en stock"
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/m4187r-performance-on-the-go-jacket-olive-tree?variant=50661911396711",
+      "marque": "lululemon",
+      "nom": "Define Jacket *Luon",
+      "teinte_ou_couleur": "True Navy",
+      "lien": "https://www.lululemon.fr/en-fr/p/define-jacket-luon/prod5020054.html",
+      "prix": "128 €",
+      "genre": "coup de cœur des filles",
+      "pourquoi": "La veste zippée culte de lululemon, même coupe près du corps"
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app",
+      "marque": "lululemon",
+      "nom": "Define Cropped Jacket *Nulu",
+      "teinte_ou_couleur": "Espresso",
+      "lien": "https://www.lululemon.fr/en-fr/p/define-cropped-jacket-nulu/149451420.html",
+      "prix": "128 €",
+      "genre": "même style",
+      "pourquoi": "Veste cropped Espresso, même marron que ta Scholar"
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app",
+      "marque": "lululemon",
+      "nom": "Define Jacket *Nulu",
+      "teinte_ou_couleur": "Espresso",
+      "lien": "https://www.lululemon.fr/en-fr/p/define-jacket-nulu/153875457.html",
+      "prix": "118 €",
+      "genre": "même style",
+      "pourquoi": "La Define classique en Espresso, très douce et zippée"
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app",
+      "marque": "Alo Yoga",
+      "nom": "Cropped Break Line Bomber Jacket",
+      "teinte_ou_couleur": "Espresso",
+      "lien": "https://www.aloyoga.com/fr-fr/products/w4514r-cropped-break-line-bomber-jacket-espresso",
+      "prix": "",
+      "genre": "tendance",
+      "pourquoi": "Bomber cropped Espresso, même marron profond que ta Scholar"
     },
     {
       "pour_url": "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app",
@@ -125,24 +275,35 @@
     {
       "pour_url": "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app",
       "marque": "Alo Yoga",
-      "nom": "Faux Leather Cropped Premier Bomber",
-      "teinte_ou_couleur": "Espresso",
-      "lien": "https://www.aloyoga.com/fr-fr/products/w4618r-faux-leather-cropped-premier-bomber-espresso",
-      "prix": "",
-      "genre": "tendance",
-      "pourquoi": "Bomber cropped Espresso en faux cuir, très vu cet hiver"
-    },
-    {
-      "pour_url": "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app",
-      "marque": "Alo Yoga",
       "nom": "Cropped Full Throttle Moto Jacket",
       "teinte_ou_couleur": "Espresso",
       "lien": "https://www.aloyoga.com/fr-fr/products/w4533r-cropped-full-throttle-moto-jacket-espresso",
       "prix": "",
       "genre": "tendance",
       "pourquoi": "Veste moto cropped Espresso, même couleur que ta Scholar"
+    },
+    {
+      "pour_url": "https://www.aloyoga.com/fr-fr/products/w4601r-scholar-knit-cropped-full-zip-jacket-espresso?utm_source=share&utm_campaign=pdp&utm_medium=ios_app",
+      "marque": "Alo Yoga",
+      "nom": "Elemental Full-Zip Jacket",
+      "teinte_ou_couleur": "Espresso",
+      "lien": "https://www.aloyoga.com/fr-fr/products/m4185r-elemental-full-zip-jacket-espresso",
+      "prix": "",
+      "genre": "même style",
+      "pourquoi": "Doudoune légère zippée Espresso pour le quotidien"
     }
   ],
-  "black_friday": [],
+  "black_friday": [
+    {
+      "marque": "Sephora",
+      "offre": "-25 % sur tout le maquillage hors Point Rouge",
+      "en_cours": true,
+      "debut": "2026-11-16",
+      "fin": "2026-11-29",
+      "code": "",
+      "type": "site de la marque",
+      "source": "https://www.sephora.fr/black-friday-maquillage-25/"
+    }
+  ],
   "secours": []
 }
