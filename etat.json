@@ -39,8 +39,8 @@
     "alerte_envoyee": false
   },
   "https://m.maccosmetics.fr/product/crayon-a-levres?shade=Cork": {
-    "statut": "dispo",
-    "depuis": "20/11 21:31 (heure UTC)",
+    "statut": "rupture",
+    "depuis": "25/11 08:57 (heure UTC)",
     "nom": "Crayon à Lèvres",
     "photo": "https://sdcdn.io/mc/mac_sku_S4W908_1x1_0.png",
     "precision": "teinte « Cork »",
