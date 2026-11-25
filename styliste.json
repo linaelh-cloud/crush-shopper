@@ -1,5 +1,5 @@
 {
-  "le": "2026-11-24T17:13:01Z",
+  "le": "2026-11-25T07:10:40Z",
   "style": "Tu aimes les nudes rosés satinés, les bruns 90s et le sportswear chic aux tons terre et olive, en coupe cropped.",
   "idees": [
     {
@@ -303,6 +303,26 @@
       "code": "",
       "type": "site de la marque",
       "source": "https://www.sephora.fr/black-friday-maquillage-25/"
+    },
+    {
+      "marque": "Kérastase",
+      "offre": "-25 % sur une sélection de produits Kérastase (ex. Gloss Absolu) chez Sephora",
+      "en_cours": true,
+      "debut": "2026-11-16",
+      "fin": "2026-11-30",
+      "code": "",
+      "type": "autre",
+      "source": "https://www.sephora.fr/black-friday-soin-cheveux-all/"
+    },
+    {
+      "marque": "ghd",
+      "offre": "-25 % sur la marque ghd (hors collection Cashmere de Noël) chez Sephora",
+      "en_cours": true,
+      "debut": "2026-11-16",
+      "fin": "2026-11-30",
+      "code": "",
+      "type": "autre",
+      "source": "https://www.sephora.fr/black-friday-soin-cheveux-all/"
     }
   ],
   "secours": []
