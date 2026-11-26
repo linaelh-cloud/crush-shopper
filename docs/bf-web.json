@@ -8,7 +8,7 @@
     "debut": "2026-11-16",
     "fin": "2026-11-29",
     "code": "",
-    "vu_le": "2026-11-25",
+    "vu_le": "2026-11-26",
     "nouveau_le": "2026-11-24"
   },
   "kérastase": {
@@ -20,20 +20,20 @@
     "debut": "2026-11-16",
     "fin": "2026-11-30",
     "code": "",
-    "vu_le": "2026-11-25",
+    "vu_le": "2026-11-26",
     "nouveau_le": "2026-11-25"
   },
   "charlotte tilbury": {
     "marque": "Charlotte Tilbury",
-    "offre": "-25 % sur tout le site (bandeau du site)",
-    "source": "https://www.charlottetilbury.com/fr",
-    "type": "site de la marque",
-    "en_cours": true,
-    "debut": "",
+    "offre": "jusqu'à -30 % sur tout pendant le « Vendredi Fou »",
+    "source": "https://www.parisselectbook.com/2026/11/10/le-black-friday-beaute-2026-demarre-le-23-novembre-et-trois-maisons-concentrent-les-vraies-remises/",
+    "type": "presse",
+    "en_cours": false,
+    "debut": "2026-11-23",
     "fin": "",
     "code": "",
-    "vu_le": "2026-11-23",
-    "nouveau_le": "2026-11-22"
+    "vu_le": "2026-11-26",
+    "nouveau_le": "2026-11-26"
   },
   "benefit": {
     "marque": "Benefit",
@@ -49,15 +49,15 @@
   },
   "dyson": {
     "marque": "Dyson",
-    "offre": "Jusqu'à -30 % sur une sélection (chez Sephora)",
-    "source": "https://www.sephora.fr/black-friday-all/?listview=true",
-    "type": "site de la marque",
+    "offre": "Offre sur une sélection de produits Dyson chez Sephora",
+    "source": "https://www.sephora.fr/black-friday-soin-cheveux-all/",
+    "type": "autre",
     "en_cours": true,
     "debut": "2026-11-16",
     "fin": "2026-11-30",
     "code": "",
-    "vu_le": "2026-11-23",
-    "nouveau_le": "2026-11-22"
+    "vu_le": "2026-11-26",
+    "nouveau_le": "2026-11-26"
   },
   "adidas": {
     "marque": "adidas",
@@ -92,8 +92,20 @@
     "debut": "2026-11-16",
     "fin": "2026-11-30",
     "code": "",
-    "vu_le": "2026-11-25",
+    "vu_le": "2026-11-26",
     "nouveau_le": "2026-11-25"
   },
-  "_le": "2026-11-25T17:11:29Z"
+  "yves rocher": {
+    "marque": "Yves Rocher",
+    "offre": "-50 % sur les articles de la page spéciale Black Friday",
+    "source": "https://www.parisselectbook.com/2026/11/10/le-black-friday-beaute-2026-demarre-le-23-novembre-et-trois-maisons-concentrent-les-vraies-remises/",
+    "type": "presse",
+    "en_cours": false,
+    "debut": "",
+    "fin": "",
+    "code": "",
+    "vu_le": "2026-11-26",
+    "nouveau_le": "2026-11-26"
+  },
+  "_le": "2026-11-26T07:10:57Z"
 }
