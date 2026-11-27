@@ -1,5 +1,5 @@
 {
-  "le": "2026-11-27T07:10:45Z",
+  "le": "2026-11-27T17:11:03Z",
   "style": "Tu aimes les nudes rosés satinés, les bruns 90s et le sportswear chic aux tons terre et olive, en coupe cropped.",
   "idees": [
     {
@@ -393,6 +393,26 @@
       "code": "",
       "type": "autre",
       "source": "https://www.sephora.fr/black-friday-soin-cheveux-all/"
+    },
+    {
+      "marque": "ba&sh",
+      "offre": "jusqu'à -50 % sur une sélection (La Vallée Village)",
+      "en_cours": true,
+      "debut": "2026-11-21",
+      "fin": "2026-11-30",
+      "code": "",
+      "type": "autre",
+      "source": "https://www.thebicestercollection.com/la-vallee-village/fr/offres/black-friday"
+    },
+    {
+      "marque": "Alo Yoga",
+      "offre": "-10 % sur tout le catalogue pour les nouveaux clients (code parrainage)",
+      "en_cours": false,
+      "debut": "",
+      "fin": "",
+      "code": "",
+      "type": "site de bons plans",
+      "source": "https://www.lesavisdemilie.fr/?p=9236"
     }
   ],
   "secours": []
