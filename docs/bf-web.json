@@ -71,5 +71,29 @@
     "vu_le": "2026-11-27",
     "nouveau_le": "2026-11-26"
   },
-  "_le": "2026-11-27T07:10:45Z"
+  "ba&sh": {
+    "marque": "ba&sh",
+    "offre": "jusqu'à -50 % sur une sélection (La Vallée Village)",
+    "source": "https://www.thebicestercollection.com/la-vallee-village/fr/offres/black-friday",
+    "type": "autre",
+    "en_cours": true,
+    "debut": "2026-11-21",
+    "fin": "2026-11-30",
+    "code": "",
+    "vu_le": "2026-11-27",
+    "nouveau_le": "2026-11-27"
+  },
+  "alo yoga": {
+    "marque": "Alo Yoga",
+    "offre": "-10 % sur tout le catalogue pour les nouveaux clients (code parrainage)",
+    "source": "https://www.lesavisdemilie.fr/?p=9236",
+    "type": "site de bons plans",
+    "en_cours": false,
+    "debut": "",
+    "fin": "",
+    "code": "",
+    "vu_le": "2026-11-27",
+    "nouveau_le": "2026-11-27"
+  },
+  "_le": "2026-11-27T17:11:03Z"
 }
